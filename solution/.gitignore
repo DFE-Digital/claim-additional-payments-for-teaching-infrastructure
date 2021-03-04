@@ -1,11 +1,7 @@
-﻿################################################################################
-# This .gitignore file was automatically created by Microsoft(R) Visual Studio.
-################################################################################
-
-/.vs
+﻿/.vs
 /dqt.datalayer/obj
 /dqt.domain/obj
 /claim-additional-payments-for-teaching-qts-api/obj
-/claim-additional-payments-for-teaching-qts-api/bin/Debug/netcoreapp3.1
-/dqt.domain/bin/Debug/netcoreapp3.1
-/dqt.datalayer/bin/Debug/netcoreapp3.1
+/claim-additional-payments-for-teaching-qts-api/bin
+/dqt.domain/bin
+/dqt.datalayer/bin
