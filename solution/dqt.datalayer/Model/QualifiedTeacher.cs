@@ -1,9 +1,12 @@
 ﻿using System;
+using System.ComponentModel.DataAnnotations;
 
-namespace dqt.datalayer
+namespace dqt.datalayer.Model
 {
     public class QualifiedTeacher
     {
+        [Key]
+        public int Id { get; set; }
         public string TeacherReferenceNumber { get; set; }
 
         public string FullName { get; set; }

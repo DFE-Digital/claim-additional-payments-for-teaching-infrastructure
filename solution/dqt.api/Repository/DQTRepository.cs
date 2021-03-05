@@ -1,4 +1,5 @@
-﻿using dqt.datalayer;
+﻿using dqt.datalayer.Database;
+using dqt.datalayer.Model;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -14,7 +15,7 @@ namespace dqt.api.Repository
         }
         public List<QualifiedTeacher> GetQualifiedTeacherRecords()
         {
-            return _context.QualifiedTeachers.ToList();
+            return null;
         }
     }
 }

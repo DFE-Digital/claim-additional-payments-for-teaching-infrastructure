@@ -1,9 +1,9 @@
 ﻿using System;
 using Microsoft.Azure.Functions.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection;
-using dqt.datalayer;
 using Microsoft.EntityFrameworkCore;
 using dqt.api.Repository;
+using dqt.datalayer.Database;
 
 [assembly: FunctionsStartup(typeof(dqt.api.Startup))]
 namespace dqt.api
