@@ -20,7 +20,7 @@
     <PackageReference Include="Npgsql.EntityFrameworkCore.PostgreSQL" Version="3.1.11" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\dqt.datalayer\dqt.datalayer.csproj" />
+    <ProjectReference Include="..\dqt.domain\dqt.domain.csproj" />
   </ItemGroup>
   <ItemGroup>
     <None Update="host.json">

@@ -13,7 +13,7 @@ namespace dqt.datalayer.Migrations
                 columns: table => new
                 {
                     Id = table.Column<int>(nullable: false)
-                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
+                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.SerialColumn),
                     TeacherReferenceNumber = table.Column<string>(nullable: true),
                     FullName = table.Column<string>(nullable: true),
                     Email = table.Column<string>(nullable: true),

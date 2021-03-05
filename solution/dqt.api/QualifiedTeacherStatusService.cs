@@ -5,19 +5,18 @@ using Microsoft.Azure.WebJobs;
 using Microsoft.Azure.WebJobs.Extensions.Http;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Logging;
-using System.Linq;
-using dqt.datalayer;
-using dqt.api.Repository;
+using dqt.domain;
+using Newtonsoft.Json;
 
 namespace dqt.api
 {
     public class QualifiedTeacherStatusService
     {
-        private readonly IRepository _repository;
+        private readonly IQualifiedTeachersService qtsService;
 
-        public QualifiedTeacherStatusService(IRepository repository)
-        {
-            _repository = repository;
+        public QualifiedTeacherStatusService(IQualifiedTeachersService qtsService)
+        { 
+            this.qtsService = qtsService;
         }
 
         [FunctionName("qualified-teacher-status")]
@@ -28,7 +27,9 @@ namespace dqt.api
             log.LogInformation("C# HTTP trigger function processed a request.");
             string requestBody = await new StreamReader(req.Body).ReadToEndAsync();
 
-            var results = _repository.GetQualifiedTeacherRecords();
+            dynamic data = JsonConvert.DeserializeObject(requestBody);
+
+            var results = await qtsService.GetQualifiedTeacherRecords("TRN1234", "NI1234");
             return new JsonResult(results);
         }
     }

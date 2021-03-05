@@ -1,9 +1,11 @@
 ﻿using System;
 using Microsoft.Azure.Functions.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection;
-using Microsoft.EntityFrameworkCore;
-using dqt.api.Repository;
+using Microsoft.EntityFrameworkCore; 
 using dqt.datalayer.Database;
+using dqt.domain;
+using dqt.datalayer.Repository;
+using dqt.datalayer.Model;
 
 [assembly: FunctionsStartup(typeof(dqt.api.Startup))]
 namespace dqt.api
@@ -16,7 +18,8 @@ namespace dqt.api
                 options.UseNpgsql(Environment.GetEnvironmentVariable("DatabaseConnectionString")));
 
             builder.Services.AddLogging();
-            builder.Services.AddSingleton<IRepository, DQTRepository>();
+            builder.Services.AddTransient<IQualifiedTeachersService, QualifiedTeachersService>();
+            builder.Services.AddTransient<IRepository<QualifiedTeacher>, QualifiedTeachersRepository>();
         }
     }
 }

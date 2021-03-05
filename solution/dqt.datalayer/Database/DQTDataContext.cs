@@ -1,6 +1,5 @@
 ﻿using dqt.datalayer.Model;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.Design;
 using Newtonsoft.Json.Linq;
 using System.IO;
 using System.Reflection;
@@ -28,6 +27,11 @@ namespace dqt.datalayer.Database
                 optionsBuilder.UseNpgsql(connectionstring);
             }
 #endif
+        }
+
+        protected override void OnModelCreating(ModelBuilder modelBuilder)
+        {
+            modelBuilder.UseSerialColumns(); 
         }
     }
 }

@@ -10,14 +10,14 @@ using dqt.datalayer.Database;
 namespace dqt.datalayer.Migrations
 {
     [DbContext(typeof(DQTDataContext))]
-    [Migration("20210305084612_IntialTableCreation")]
+    [Migration("20210305092538_IntialTableCreation")]
     partial class IntialTableCreation
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn)
+                .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.SerialColumn)
                 .HasAnnotation("ProductVersion", "3.1.12")
                 .HasAnnotation("Relational:MaxIdentifierLength", 63);
 
@@ -26,7 +26,7 @@ namespace dqt.datalayer.Migrations
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("integer")
-                        .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn);
+                        .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.SerialColumn);
 
                     b.Property<string>("ClientReference")
                         .HasColumnType("text");
