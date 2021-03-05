@@ -20,21 +20,10 @@ output "secrets_rg_name" {
   description = "Resource Group name"
 }
 
-output "secrets_tmp_rg_name" {
-  value       = azurerm_resource_group.rg_creation["secretstmp"].name
-  description = "Resource Group name"
-}
-
 output "func_rg_name" {
   value       = azurerm_resource_group.rg_creation["funcapp"].name
   description = "Resource Group name"
 }
-
-# # infradev is managed in seperately 
-# output "infra_rg_name" {
-#   value       = "s118d01-infradev"
-#   description = "infradev RG used for infrastrcuture items in development/PoC"
-# }
 
 output "rg_location" {
   value       = var.region

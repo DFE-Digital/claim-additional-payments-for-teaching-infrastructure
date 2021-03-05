@@ -26,20 +26,6 @@ resource "azurerm_storage_account" "core_secret_01" {
   )
 }
 
-resource "azurerm_storage_account" "core_secret_tmp_01" {
-  #name = format("%s%s", trim(local.small_name, "-"), "stor")
-  name                     = format("%s%s", format("%s%s%s", substr(var.secrets_tmp_rg_name, 0, 7), substr(var.secrets_tmp_rg_name, 8, 7), substr(var.secrets_tmp_rg_name, 16, 3)), "storage")
-  location                 = var.rg_location
-  resource_group_name      = var.secrets_tmp_rg_name
-  account_tier             = "Standard"
-  account_replication_type = "GRS"
-
-  tags = merge({
-    },
-    var.common_tags
-  )
-}
-
 resource "azurerm_storage_account" "funcappsa" {
   #name = format("%s%s", trim(local.small_name, "-"), "fapp")
   name                     = format("%s%s", format("%s%s", substr(var.func_rg_name, 0, 7), substr(var.func_rg_name, 8, 7)), "fapp")

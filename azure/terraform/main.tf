@@ -14,13 +14,12 @@ module "resource_group" {
 
 #storage account
 module "storage_account" {
-  source              = "./modules/storageaccount"
-  core_rg_name        = module.resource_group.core_rg_name
-  secrets_rg_name     = module.resource_group.secrets_rg_name
-  secrets_tmp_rg_name = module.resource_group.secrets_tmp_rg_name
-  func_rg_name        = module.resource_group.func_rg_name
-  rg_location         = module.resource_group.rg_location
-  common_tags         = module.env_vars.common_tags
+  source          = "./modules/storageaccount"
+  core_rg_name    = module.resource_group.core_rg_name
+  secrets_rg_name = module.resource_group.secrets_rg_name
+  func_rg_name    = module.resource_group.func_rg_name
+  rg_location     = module.resource_group.rg_location
+  common_tags     = module.env_vars.common_tags
 }
 
 #networking
