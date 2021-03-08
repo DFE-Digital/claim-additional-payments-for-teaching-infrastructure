@@ -6,6 +6,6 @@ namespace dqt.domain
 {
     public interface IQualifiedTeachersService
     {
-        Task<IEnumerable<QualifiedTeacher>> GetQualifiedTeacherRecords(string trn, string natonalInsurance);
+        Task<IEnumerable<QualifiedTeacher>> GetQualifiedTeacherRecords(string teacherReferenceNumber, string nationalInsurance);
     }
 }

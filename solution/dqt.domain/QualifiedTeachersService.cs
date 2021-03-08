@@ -15,13 +15,13 @@ namespace dqt.domain
             _qualifiedTeachersRepository = repo;
         }
 
-        public async Task<IEnumerable<QualifiedTeacher>> GetQualifiedTeacherRecords(string teacherReferenceNumber, string natonalInsuranceNumber)
+        public async Task<IEnumerable<QualifiedTeacher>> GetQualifiedTeacherRecords(string teacherReferenceNumber, string nationalInsuranceNumber)
         {
             var qts = await _qualifiedTeachersRepository.FindAsync(x => x.TeacherReferenceNumber == teacherReferenceNumber);
             
             if (!qts.Any())
             {
-                qts = await _qualifiedTeachersRepository.FindAsync(x => x.NationalInsuranceNumber == natonalInsuranceNumber);
+                qts = await _qualifiedTeachersRepository.FindAsync(x => x.NationalInsuranceNumber == nationalInsuranceNumber);
             }
 
             return qts;
