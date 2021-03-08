@@ -14,18 +14,19 @@ module "resource_group" {
 
 #storage account
 module "storage_account" {
-  source          = "./modules/storageaccount"
-  core_rg_name    = module.resource_group.core_rg_name
+  source = "./modules/storageaccount"
+  #  core_rg_name    = module.resource_group.core_rg_name
   secrets_rg_name = module.resource_group.secrets_rg_name
-  func_rg_name    = module.resource_group.func_rg_name
-  rg_location     = module.resource_group.rg_location
-  common_tags     = module.env_vars.common_tags
+  #  secrets_tmp_rg_name = module.resource_group.secrets_tmp_rg_name
+  func_rg_name = module.resource_group.func_rg_name
+  rg_location  = module.resource_group.rg_location
+  common_tags  = module.env_vars.common_tags
 }
 
 #networking
 module "network" {
-  source           = "./modules/network"
-  core_rg_name     = module.resource_group.core_rg_name
+  source = "./modules/network"
+  #  core_rg_name     = module.resource_group.core_rg_name
   projcore_rg_name = module.resource_group.projcore_rg_name
   rg_location      = module.resource_group.rg_location
   common_tags      = module.env_vars.common_tags
@@ -33,10 +34,10 @@ module "network" {
 
 # subnet section
 module "subnet" {
-  source              = "./modules/subnet"
-  core_rg_name        = module.resource_group.core_rg_name
-  projcore_rg_name    = module.resource_group.projcore_rg_name
-  core_vn_01_name     = module.network.core_vn_01_name
+  source = "./modules/subnet"
+  #  core_rg_name        = module.resource_group.core_rg_name
+  projcore_rg_name = module.resource_group.projcore_rg_name
+  #  core_vn_01_name     = module.network.core_vn_01_name
   projcore_vn_01_name = module.network.projcore_vn_01_name
   rg_location         = module.resource_group.rg_location
   common_tags         = module.env_vars.common_tags
@@ -53,39 +54,39 @@ module "network_profile" {
   depends_on = [module.subnet]
 }
 
-# route table section
-module "route_table" {
-  source       = "./modules/route_table"
-  core_rg_name = module.resource_group.core_rg_name
-  core_sn_id   = module.subnet.core_sn_id
-  rg_location  = module.resource_group.rg_location
-  common_tags  = module.env_vars.common_tags
-}
+# # route table section
+# module "route_table" {
+#   source = "./modules/route_table"
+#   core_rg_name = module.resource_group.core_rg_name
+#   core_sn_id   = module.subnet.core_sn_id
+#   rg_location = module.resource_group.rg_location
+#   common_tags = module.env_vars.common_tags
+# }
 
-# NSG
-module "network_security_group" {
-  source          = "./modules/nsg"
-  core_rg_name    = module.resource_group.core_rg_name
-  core_vn_01_name = module.network.core_vn_01_name
-  rg_location     = module.resource_group.rg_location
-  common_tags     = module.env_vars.common_tags
+# # NSG
+# module "network_security_group" {
+#   source          = "./modules/nsg"
+#   core_rg_name    = module.resource_group.core_rg_name
+#   core_vn_01_name = module.network.core_vn_01_name
+#   rg_location     = module.resource_group.rg_location
+#   common_tags     = module.env_vars.common_tags
 
-  depends_on = [module.subnet]
-}
+#   depends_on = [module.subnet]
+# }
 
 # recover_services
 module "recovery_services_vault" {
-  source       = "./modules/recovery_services_vault"
-  core_rg_name = module.resource_group.core_rg_name
-  rg_location  = module.resource_group.rg_location
-  common_tags  = module.env_vars.common_tags
+  source           = "./modules/recovery_services_vault"
+  projcore_rg_name = module.resource_group.projcore_rg_name
+  rg_location      = module.resource_group.rg_location
+  common_tags      = module.env_vars.common_tags
 
 }
 
 #key vault
 module "key_vault" {
-  source                 = "./modules/key_vault"
-  core_rg_name           = module.resource_group.core_rg_name
+  source = "./modules/key_vault"
+  #  core_rg_name           = module.resource_group.core_rg_name
   secrets_rg_name        = module.resource_group.secrets_rg_name
   projcore_default_sn_id = module.subnet.projcore_sn_default_id
   rg_location            = module.resource_group.rg_location
@@ -94,20 +95,20 @@ module "key_vault" {
 
 # log analytics
 module "log_analytics" {
-  source       = "./modules/log_analytics"
-  core_rg_name = module.resource_group.core_rg_name
-  rg_location  = module.resource_group.rg_location
-  common_tags  = module.env_vars.common_tags
+  source           = "./modules/log_analytics"
+  projcore_rg_name = module.resource_group.projcore_rg_name
+  rg_location      = module.resource_group.rg_location
+  common_tags      = module.env_vars.common_tags
 }
 
 #sentinal
 module "sentinel" {
-  source       = "./modules/sentinel"
-  core_rg_name = module.resource_group.core_rg_name
-  la_id        = module.log_analytics.la_id
-  la_name      = module.log_analytics.la_name
-  rg_location  = module.resource_group.rg_location
-  common_tags  = module.env_vars.common_tags
+  source           = "./modules/sentinel"
+  projcore_rg_name = module.resource_group.projcore_rg_name
+  la_id            = module.log_analytics.la_id
+  la_name          = module.log_analytics.la_name
+  rg_location      = module.resource_group.rg_location
+  common_tags      = module.env_vars.common_tags
 }
 
 # app insights
