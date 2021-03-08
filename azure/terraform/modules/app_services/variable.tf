@@ -40,3 +40,10 @@ variable "common_tags" {
 # locals {
 #   calculated_local_value = uuid()
 # }
+
+locals {
+  verify_entity_id   = "development.additional-teaching-payment.education.gov.uk"
+  verify_environment = "INTEGRATION"
+}
+
+

@@ -7,18 +7,18 @@
 #   description = "This is mandatory as there is no default declaration"
 # }
 
-variable "core_rg_name" {
-  type        = string
-  description = "Core resource group for the key vault"
-}
+# variable "core_rg_name" {
+#   type        = string
+#   description = "Core resource group for the key vault"
+# }
 variable "projcore_rg_name" {
   type        = string
   description = "Project Core resource group for the key vault"
 }
-variable "core_vn_01_name" {
-  type        = string
-  description = "Core network for the key vault"
-}
+# variable "core_vn_01_name" {
+#   type        = string
+#   description = "Core network for the key vault"
+# }
 variable "projcore_vn_01_name" {
   type        = string
   description = "Project Core network for the key vault"

@@ -27,3 +27,15 @@ variable "common_tags" {
   type        = map(string)
   description = "Map of the mandatory standard DfE tags"
 }
+
+# ---------------------------------------------------------------------------------------------------------------------
+# LOCAL CALCULATED
+# ---------------------------------------------------------------------------------------------------------------------
+# locals {
+#   calculated_local_value = uuid()
+# }
+
+locals {
+  verify_entity_id   = "development.additional-teaching-payment.education.gov.uk"
+  verify_environment = "INTEGRATION"
+}

@@ -7,10 +7,10 @@
 #   description = "This is mandatory as there is no default declaration"
 # }
 
-variable "core_rg_name" {
-  type        = string
-  description = "Core resource group for the key vault"
-}
+# variable "core_rg_name" {
+#   type        = string
+#   description = "Core resource group for the key vault"
+# }
 variable "secrets_rg_name" {
   type        = string
   description = "Secrets resource group for the key vault"
@@ -46,5 +46,5 @@ variable "common_tags" {
 # }
 
 locals {
-  small_name = format("%s%s", substr(var.core_rg_name, 0, 7), substr(var.core_rg_name, 8, 8)) # temp fix due to -infradev being in RG name during dev
+  small_name = format("%s%s", substr(var.secrets_rg_name, 0, 7), substr(var.secrets_rg_name, 8, 8)) # temp fix due to -infradev being in RG name during dev
 }

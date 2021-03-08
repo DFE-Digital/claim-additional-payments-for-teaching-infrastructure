@@ -5,10 +5,10 @@ output "app_rg_name" {
   description = "Resource Group name"
 }
 
-output "core_rg_name" {
-  value       = azurerm_resource_group.rg_creation["core"].name
-  description = "Resource Group name"
-}
+# output "core_rg_name" {
+#   value       = azurerm_resource_group.rg_creation["core"].name
+#   description = "Resource Group name"
+# }
 
 output "projcore_rg_name" {
   value       = azurerm_resource_group.rg_creation["projcore"].name
@@ -19,6 +19,11 @@ output "secrets_rg_name" {
   value       = azurerm_resource_group.rg_creation["secrets"].name
   description = "Resource Group name"
 }
+
+# output "secrets_tmp_rg_name" {
+#   value       = azurerm_resource_group.rg_creation["secretstmp"].name
+#   description = "Resource Group name"
+# }
 
 output "func_rg_name" {
   value       = azurerm_resource_group.rg_creation["funcapp"].name

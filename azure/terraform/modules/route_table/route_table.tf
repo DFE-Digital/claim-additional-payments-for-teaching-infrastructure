@@ -5,7 +5,8 @@ resource "azurerm_route_table" "core_rt_01" {
   disable_bgp_route_propagation = false
 
   route {
-    name           = "DFE_LONDON_RAS"
+    name = "DFE_LONDON_RAS"
+    #address_prefix = "10.27.0.0/20"
     address_prefix = "192.168.0.0/20"
     next_hop_type  = "VNetLocal"
   }

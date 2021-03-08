@@ -7,14 +7,18 @@
 #   description = "This is mandatory as there is no default declaration"
 # }
 
-variable "core_rg_name" {
-  type        = string
-  description = "Core resource group for the storage accounts"
-}
+# variable "core_rg_name" {
+#   type        = string
+#   description = "Core resource group for the storage accounts"
+# }
 variable "secrets_rg_name" {
   type        = string
   description = "Secrets resource group for the storage accounts"
 }
+# variable "secrets_tmp_rg_name" {
+#   type        = string
+#   description = "Secrets temp resource group for storage accounts"
+# }
 variable "func_rg_name" {
   type        = string
   description = "Function app resource group for the storage accounts"
@@ -36,5 +40,5 @@ variable "common_tags" {
 #   calculated_local_value = uuid()
 # }
 locals {
-  small_name = format("%s%s", substr(var.core_rg_name, 0, 7), substr(var.core_rg_name, 8, 8)) # temp fix due to -infradev being in RG name during dev
+  small_name = format("%s%s", substr(var.secrets_rg_name, 0, 7), substr(var.secrets_rg_name, 8, 8)) # temp fix due to -infradev being in RG name during dev
 }

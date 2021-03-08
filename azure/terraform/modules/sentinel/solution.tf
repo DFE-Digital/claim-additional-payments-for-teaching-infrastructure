@@ -10,7 +10,7 @@ resource "azurerm_log_analytics_solution" "solution" {
 
   solution_name         = each.value.solution_name
   location              = var.rg_location
-  resource_group_name   = var.core_rg_name
+  resource_group_name   = var.projcore_rg_name
   workspace_resource_id = var.la_id
   workspace_name        = var.la_name
 

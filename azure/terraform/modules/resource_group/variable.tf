@@ -36,9 +36,11 @@ variable "res_groups" {
     alerts     = "alerts",
     alertsplat = "alerts-platform",
     app        = "app",
-    core       = "core",
-    projcore   = "ProjectCore",
-    secrets    = "secrets",
-    funcapp    = "funcapp"
+    # core       = "core",
+    #    dec        = "dec",
+    projcore = "ProjectCore",
+    secrets  = "secrets",
+    #    secretstmp = "secrets-tmp"
+    funcapp = "funcapp"
   }
 }
