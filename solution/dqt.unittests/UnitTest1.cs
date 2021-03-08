@@ -10,5 +10,10 @@ namespace dqt.unittests
         {
             Assert.True(true);
         }
+        [Fact]
+        public void Test2()
+        {
+            Assert.True(true);
+        }
     }
 }
