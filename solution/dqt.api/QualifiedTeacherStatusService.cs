@@ -27,9 +27,9 @@ namespace dqt.api
             log.LogInformation("C# HTTP trigger function processed a request.");
             string requestBody = await new StreamReader(req.Body).ReadToEndAsync();
 
-            dynamic data = JsonConvert.DeserializeObject(requestBody);
+            var request = JsonConvert.DeserializeObject<ExistingQualifiedTeacherRequest>(requestBody);
 
-            var results = await qtsService.GetQualifiedTeacherRecords("TRN1234", "NI1234");
+            var results = await qtsService.GetQualifiedTeacherRecords(request.TeacherReferenceNumber, request.NINumber);
             return new JsonResult(results);
         }
     }
