@@ -3,7 +3,7 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 16
 VisualStudioVersion = 16.0.30907.101
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "claim-additional-payments-for-teaching-qts-api", "claim-additional-payments-for-teaching-qts-api\claim-additional-payments-for-teaching-qts-api.csproj", "{3434623F-C309-474B-8942-8B5A0CDBB9B8}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "dqt.api", "dqt.api\dqt.api.csproj", "{3434623F-C309-474B-8942-8B5A0CDBB9B8}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "dqt.domain", "dqt.domain\dqt.domain.csproj", "{D48496A7-17D3-4B2F-A142-93ADF8B7F7E7}"
 EndProject
