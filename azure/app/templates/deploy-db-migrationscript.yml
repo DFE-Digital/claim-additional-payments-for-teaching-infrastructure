@@ -1,0 +1,65 @@
+parameters:
+  - name: subscription_name
+    type: string
+  - name: datalayer_project_directory
+    type: string
+  - name: connectionString_secretname
+    type: string
+  - name: vmImage
+    type: string
+    default: "windows-latest"
+  - name: run_after
+    type: object
+    default: []
+
+jobs:
+  - job: job_publish_database
+    displayName: Deploy database schema changes
+    dependsOn: ${{ parameters.run_after }}
+
+    pool:
+      vmImage: ${{ parameters.vmImage }}
+
+    variables:
+      - group: ${{parameters.environment_id}}
+
+    steps:
+      - task: FileTransform@1
+        inputs:
+          folderPath: "$(System.DefaultWorkingDirectory)/"
+          fileType: "json"
+          targetFiles: "**/local.settings.json"
+
+      - task: DotNetCoreCLI@2
+        displayName: "Initialize EntityframeworkCore"
+        inputs:
+          command: "custom"
+          custom: tool
+          arguments: "install --global dotnet-ef"
+
+      # - task: DotNetCoreCLI@2
+      #   displayName: dotnet restore
+      #   inputs:
+      #     command: restore
+      #     projects: "${{parameters.datalayer_project_directory}}/*.csproj"
+      #     feedsToUse: "config"
+      #     includeNuGetOrg: true
+      #     nugetConfigPath: "${{parameters.nuget_config_path}}"
+
+      - task: DotNetCoreCLI@2
+        displayName: "Create migration script"
+        inputs:
+          command: custom
+          custom: ef
+          arguments: "migrations script -i -o migration.sql"
+          workingDirectory: ${{ parameters.datalayer_project_directory }}
+
+      - task: SqlAzureDacpacDeployment@1
+        displayName: Publish the database changes
+        inputs:
+          azureSubscription: "${{ parameters.subscription_name }}"
+          AuthenticationType: "connectionString"
+          ConnectionString: "$(${{ parameters.connectionString_secretname }})"
+          deployType: "SqlTask"
+          SqlFile: "${{ parameters.datalayer_project_directory }}/migration.sql"
+          IpDetectionMethod: "AutoDetect"

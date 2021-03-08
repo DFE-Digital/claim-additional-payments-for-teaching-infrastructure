@@ -1,19 +1,46 @@
-# Starter pipeline
-# Start with a minimal pipeline that you can customize to build and deploy your code.
-# Add steps that build, run tests, deploy, and more:
-# https://aka.ms/yaml
-
+# specific path build
 trigger:
-- master
+  branches:
+    include:
+    - master
+    - feature/*
+  paths: 
+    exclude:
+    - README.md
 
-pool:
-  vmImage: ubuntu-latest
+parameters:
+  - name: deployment_target
+    displayName: Deploy
+    type: string
+    default: dev1
+    values: 
+    - development
+    - production
+    - none
 
-steps:
-- script: echo Hello, world!
-  displayName: 'Run a one-line script'
-
-- script: |
-    echo Add other tasks to build, test, and deploy your project.
-    echo See https://aka.ms/yaml
-  displayName: 'Run a multi-line script'
+variables:
+  # Base configuration
+  # Add OS naming convention variables here.
+  - name: system_identifier
+    value: s118
+  - name: system_purpose
+    value: 'teacherpaymentsservice'
+  - name: sln_artifact_name
+    value: 'drop-sln'
+  - name: build_configuration
+    value: 'Release'
+ 
+stages:
+- stage: stage_build
+  displayName: 'Build and Publish'
+  jobs:
+  - template: job/publish-os-solution.yml  
+    parameters:  
+      build_configuration: '${{variables.build_configuration}}'
+      solution_path: 'solution/claim-additional-payments-for-teaching-qts-api.sln'
+      project_path: 'solution/dqt.api/*/*.csproj'     
+      test_projects_path: 'solution/*Tests/*.csproj'  
+      nuget_config_path: 'solutions/doms/nuget.config'
+      infra_artifact_name: '${{ variables.sln_artifact_name }}'
+      sonar_key_prefix: '${{ variables.os_system_id }}'
+      sonar_key_suffix: '${{ variables.os_purpose }}'
