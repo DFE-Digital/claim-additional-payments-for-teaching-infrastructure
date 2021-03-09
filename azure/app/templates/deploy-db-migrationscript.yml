@@ -5,6 +5,10 @@ parameters:
     type: string
   - name: connectionString_secretname
     type: string
+  - name: nuget_config_path
+    type: string
+  - name: variable_group_name
+    type: string
   - name: vmImage
     type: string
     default: "windows-latest"
@@ -21,7 +25,7 @@ jobs:
       vmImage: ${{ parameters.vmImage }}
 
     variables:
-      - group: ${{parameters.environment_id}}
+      - group: ${{parameters.variable_group_name}}
 
     steps:
       - task: FileTransform@1
@@ -37,14 +41,14 @@ jobs:
           custom: tool
           arguments: "install --global dotnet-ef"
 
-      # - task: DotNetCoreCLI@2
-      #   displayName: dotnet restore
-      #   inputs:
-      #     command: restore
-      #     projects: "${{parameters.datalayer_project_directory}}/*.csproj"
-      #     feedsToUse: "config"
-      #     includeNuGetOrg: true
-      #     nugetConfigPath: "${{parameters.nuget_config_path}}"
+      - task: DotNetCoreCLI@2
+        displayName: dotnet restore
+        inputs:
+          command: restore
+          projects: "${{parameters.datalayer_project_directory}}/*.csproj"
+          feedsToUse: "config"
+          includeNuGetOrg: true
+          nugetConfigPath: "${{parameters.nuget_config_path}}"
 
       - task: DotNetCoreCLI@2
         displayName: "Create migration script"

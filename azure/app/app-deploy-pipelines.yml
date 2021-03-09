@@ -43,3 +43,18 @@ stages:
       solution_path: 'solution/claim-additional-payments-for-teaching-qts-api.sln'          
       test_projects_path: 'solution/*tests/*.csproj'
       nuget_config_path: 'solution/nuget.config'
+
+- stage: stage_deploy_development
+  displayName: 'Deploy development'
+  condition: eq('${{ parameters.deployment_target}}', 'development')
+  jobs: 
+  - templates: jobs/deploy-resources.yml
+    parameters:
+      subscription_identifier: 's118'
+      subscription_purpose: 'teacherpaymentsservice-development'
+      environment_id: 'd01'
+      nuget_config_path: 'solution/nuget.config'
+      connectionString_secretname: 'Values.DQTDbConnectionString'
+      datalayer_project_directory: 'solution/dqt.datalayer'
+      vmImage: 'windows-latest'
+      run_after: stage_build

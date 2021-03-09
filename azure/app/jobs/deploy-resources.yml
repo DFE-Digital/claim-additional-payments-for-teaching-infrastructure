@@ -1,0 +1,33 @@
+parameters:
+ - name: subscription_identifier
+   type: string
+ - name: subscription_purpose
+   type: string
+ - name: environment_id
+   type: string
+ - name: subscription_name
+   type: string
+ - name: nuget_config_path
+   type: string
+ - name: connectionString_secretname 
+   type: string
+ - name: datalayer_project_directory
+   tyep: string
+ - name: vmImage 
+   type: string 
+
+variables:
+ - name: subscription_name
+   value: '${{parameters.subscription_identifier}}-${{parameters.subscription_purpose}}'
+
+jobs:
+
+# Deploy Database changes
+- template: templates/deploy-db-migrationscript.yml
+  parameters:
+    subscription_name:  '${{ variables.subscription_name }}' # 's118-teacherpaymentsservice-development'
+    datalayer_project_directory: '${{ parameters.datalayer_project_directory }}'
+    connectionString_secretname: '${{ parameters.connectionString_secretname }}'
+    nuget_config_path: '${{ parameters.nuget_config_path }}'
+    variable_group_name: 'dqt-${{ parameters.environment_id}}'
+    vmImage: '${{ parameteres.vmImage }}'
