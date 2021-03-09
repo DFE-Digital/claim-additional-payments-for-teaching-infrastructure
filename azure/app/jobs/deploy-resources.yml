@@ -5,8 +5,6 @@ parameters:
    type: string
  - name: environment_id
    type: string
- - name: subscription_name
-   type: string
  - name: nuget_config_path
    type: string
  - name: connectionString_secretname 
