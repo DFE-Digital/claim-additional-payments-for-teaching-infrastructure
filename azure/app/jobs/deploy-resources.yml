@@ -16,16 +16,12 @@ parameters:
  - name: vmImage 
    type: string 
 
-variables:
- - name: subscription_name
-   value: '${{parameters.subscription_identifier}}-${{parameters.subscription_purpose}}'
-
 jobs:
 
 # Deploy Database changes
 - template: ../templates/deploy-db-migrationscript.yml
   parameters:
-    subscription_name:  '${{ variables.subscription_name }}' # 's118-teacherpaymentsservice-development'
+    subscription_name:  '${{parameters.subscription_identifier}}-${{parameters.subscription_purpose}}' # 's118-teacherpaymentsservice-development'
     datalayer_project_directory: '${{ parameters.datalayer_project_directory }}'
     connectionString_secretname: '${{ parameters.connectionString_secretname }}'
     nuget_config_path: '${{ parameters.nuget_config_path }}'
