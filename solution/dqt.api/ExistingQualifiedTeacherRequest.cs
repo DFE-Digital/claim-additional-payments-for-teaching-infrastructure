@@ -13,7 +13,5 @@ namespace dqt.api
         public DateTime DateOfBirth { get; set; }
 
         public string NINumber { get; set; }
-
-        public string ClientReference { get; set; }
     }
 }

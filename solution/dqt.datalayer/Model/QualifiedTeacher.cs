@@ -27,7 +27,5 @@ namespace dqt.datalayer.Model
         public string HigherEducationSubjectCode { get; set; }
 
         public string InitialTeacherTrainingSubjectCode { get; set; }
-
-        public string ClientReference { get; set; }
     }
 }
