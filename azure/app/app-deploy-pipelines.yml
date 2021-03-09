@@ -1,12 +1,13 @@
 # specific path build
 trigger:
-  branches:
-    include:
-    - master
-    - feature/*
-  paths: 
-    exclude:
-    - README.md
+  - none
+  # branches:
+  #   include:
+  #   - master
+  #   - feature/*
+  # paths: 
+  #   exclude:
+  #   - README.md
 
 parameters:
   - name: deployment_target
@@ -42,5 +43,3 @@ stages:
       test_projects_path: 'solution/*Tests/*.csproj'  
       nuget_config_path: 'solutions/doms/nuget.config'
       infra_artifact_name: '${{ variables.sln_artifact_name }}'
-      sonar_key_prefix: '${{ variables.os_system_id }}'
-      sonar_key_suffix: '${{ variables.os_purpose }}'
