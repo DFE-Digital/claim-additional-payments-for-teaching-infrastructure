@@ -27,4 +27,4 @@ jobs:
     connectionString_secretname: '${{ parameters.connectionString_secretname }}'
     nuget_config_path: '${{ parameters.nuget_config_path }}'
     variable_group_name: 'dqt-${{ parameters.environment_id}}'
-    vmImage: '${{ parameteres.vmImage }}'
+    vmImage: '${{ parameters.vmImage }}'
