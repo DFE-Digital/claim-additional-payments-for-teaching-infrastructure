@@ -35,7 +35,7 @@ stages:
 - stage: stage_build
   displayName: 'Build and Publish'
   jobs:
-  - template: templates/publish-os-solution.yml  
+  - template: templates/publish-solution.yml  
     parameters:  
       sln_artifact_name: '${{ variables.sln_artifact_name }}'
       build_configuration: '${{variables.build_configuration}}'
