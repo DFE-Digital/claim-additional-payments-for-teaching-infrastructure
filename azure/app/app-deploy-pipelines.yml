@@ -42,3 +42,4 @@ stages:
       project_path: 'solution/dqt.api/*.csproj' 
       solution_path: 'solution/claim-additional-payments-for-teaching-qts-api.sln'          
       test_projects_path: 'solution/*tests/*.csproj'
+      nuget_config_path: 'solution/nuget.config'

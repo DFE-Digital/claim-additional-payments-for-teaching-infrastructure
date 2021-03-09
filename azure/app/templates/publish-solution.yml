@@ -9,6 +9,8 @@ parameters:
     type: string
   - name: test_projects_path
     type: string
+  - name: nuget_config_path
+    type: string
   - name: vmImage
     type: string
     default: "windows-latest"
@@ -25,6 +27,7 @@ jobs:
         inputs:
           command: restore
           projects: "${{parameters.project_path}}"
+          nugetConfigPath: "${{parameters.nuget_config_path}}"
           feedsToUse: "config"
           includeNuGetOrg: true
 
