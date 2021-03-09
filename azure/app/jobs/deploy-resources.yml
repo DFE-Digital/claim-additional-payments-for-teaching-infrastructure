@@ -23,7 +23,7 @@ variables:
 jobs:
 
 # Deploy Database changes
-- template: templates/deploy-db-migrationscript.yml
+- template: ../templates/deploy-db-migrationscript.yml
   parameters:
     subscription_name:  '${{ variables.subscription_name }}' # 's118-teacherpaymentsservice-development'
     datalayer_project_directory: '${{ parameters.datalayer_project_directory }}'

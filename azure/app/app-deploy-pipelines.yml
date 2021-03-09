@@ -48,7 +48,7 @@ stages:
   displayName: 'Deploy development'
   condition: eq('${{ parameters.deployment_target}}', 'development')
   jobs: 
-  - templates: jobs/deploy-resources.yml
+  - template: jobs/deploy-resources.yml
     parameters:
       subscription_identifier: 's118'
       subscription_purpose: 'teacherpaymentsservice-development'
