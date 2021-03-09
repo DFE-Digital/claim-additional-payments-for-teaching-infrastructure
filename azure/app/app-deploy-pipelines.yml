@@ -35,7 +35,7 @@ stages:
 - stage: stage_build
   displayName: 'Build and Publish'
   jobs:
-  - template: job/publish-os-solution.yml  
+  - template: templates/publish-os-solution.yml  
     parameters:  
       build_configuration: '${{variables.build_configuration}}'
       solution_path: 'solution/claim-additional-payments-for-teaching-qts-api.sln'
