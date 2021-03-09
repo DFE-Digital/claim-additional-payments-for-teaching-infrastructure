@@ -40,6 +40,6 @@ stages:
       build_configuration: '${{variables.build_configuration}}'
       solution_path: 'solution/claim-additional-payments-for-teaching-qts-api.sln'
       project_path: 'solution/dqt.api/*/*.csproj'     
-      test_projects_path: 'solution/*Tests/*.csproj'  
+      test_projects_path: 'solution/*tests/*.csproj'  
       nuget_config_path: 'solutions/doms/nuget.config'
       infra_artifact_name: '${{ variables.sln_artifact_name }}'
