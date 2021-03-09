@@ -12,7 +12,10 @@ parameters:
  - name: datalayer_project_directory
    type: string
  - name: vmImage 
-   type: string 
+   type: string
+ - name: run_after
+   type: object
+   default: []
 
 jobs:
 
