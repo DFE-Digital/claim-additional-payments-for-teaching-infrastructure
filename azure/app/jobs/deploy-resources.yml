@@ -12,7 +12,7 @@ parameters:
  - name: connectionString_secretname 
    type: string
  - name: datalayer_project_directory
-   tyep: string
+   type: string
  - name: vmImage 
    type: string 
 
