@@ -7,16 +7,19 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Logging;
 using dqt.domain;
 using Newtonsoft.Json;
+using System;
+using System.Linq;
 
 namespace dqt.api
 {
     public class QualifiedTeacherStatusService
     {
-        private readonly IQualifiedTeachersService qtsService;
+        private const string AUTH_HEADER = "Authorization";
+        private readonly IQualifiedTeachersService _qtsService;
 
         public QualifiedTeacherStatusService(IQualifiedTeachersService qtsService)
         { 
-            this.qtsService = qtsService;
+            _qtsService = qtsService;
         }
 
         [FunctionName("qualified-teacher-status")]
@@ -25,12 +28,36 @@ namespace dqt.api
             ILogger log)
         {
             log.LogInformation("C# HTTP trigger function processed a request.");
+
+            if (!req.Headers.ContainsKey(AUTH_HEADER)
+                || req.Headers[AUTH_HEADER] != Environment.GetEnvironmentVariable("APIKey"))
+            {
+                return new UnauthorizedResult();
+            }
+
             string requestBody = await new StreamReader(req.Body).ReadToEndAsync();
+            try
+            {
+                var request = JsonConvert.DeserializeObject<ExistingQualifiedTeacherRequest>(requestBody);
 
-            dynamic data = JsonConvert.DeserializeObject(requestBody);
+                if (request == null || string.IsNullOrWhiteSpace(request.TeacherReferenceNumber))
+                {
+                    return new BadRequestObjectResult("TeacherReferenceNumber is mandatory");
+                }
 
-            var results = await qtsService.GetQualifiedTeacherRecords("TRN1234", "NI1234");
-            return new JsonResult(results);
+                var results = await _qtsService.GetQualifiedTeacherRecords(request.TeacherReferenceNumber, request.NINumber);
+
+                if (!results.Any())
+                {
+                    return new NotFoundObjectResult("No records found");
+                }
+
+                return new OkObjectResult(results);
+            }
+            catch (JsonException)
+            {
+                return new BadRequestObjectResult("Bad request data");
+            }
         }
     }
 }
