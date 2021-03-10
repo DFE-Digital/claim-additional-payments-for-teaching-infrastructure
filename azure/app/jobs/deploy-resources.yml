@@ -1,0 +1,53 @@
+parameters:
+ - name: service_connection_name
+   type: string
+ - name: subscription_identifier
+   type: string
+ - name: subscription_purpose
+   type: string
+ - name: environment_id
+   type: string
+ - name: nuget_config_path
+   type: string
+ - name: connectionString_secretname 
+   type: string
+ - name: datalayer_project_directory
+   type: string
+ - name: sln_artifact_name
+   type: string
+ - name: vmImage 
+   type: string
+ - name: run_after
+   type: object
+   default: []
+
+jobs:
+
+# Deploy Database changes
+- template: ../templates/deploy-db-migrationscript.yml
+  parameters:
+    service_connection_name:  '${{ parameters.service_connection_name }}' # 's118-teacherpaymentsservice-development'
+    datalayer_project_directory: '${{ parameters.datalayer_project_directory }}'
+    connectionString_secretname: '${{ parameters.connectionString_secretname }}'
+    nuget_config_path: '${{ parameters.nuget_config_path }}'
+    variable_group_name: 'dqt-${{ parameters.environment_id}}'
+    vmImage: '${{ parameters.vmImage }}'
+
+
+# Deploy Funtions to Function app
+- template: ../templates/deploy-appservice-content.yml
+  parameters:
+    service_connection_name: '${{ parameters.service_connection_name }}'
+    environment_id: '${{parameters.environment_id}}'
+    functionapp_name: '${{ parameters.subscription_identifier }}${{parameters.environment_id}}funcappfapp'  
+    function_package_zip_name: 'dqt.api'
+    location: 'West Europe'
+    sln_artifact_name: '${{ parameters.sln_artifact_name }}'    
+    webapp_kind: 'Function'
+    create_functionapp_keys: true 
+    functionapp_key_name: DQTFunctionAppKey
+    functionapp_resourcegroup: '${{ parameters.subscription_identifier }}${{parameters.environment_id}}-funcapp'
+    keyvault_name: '${{parameters.subscription_identifier }}${{parameters.environment_id}}-secrets-kv'
+    keyvault_secret_name: DQTFunctionAppKey 
+    #run_after: deploy_resources_database
+   
