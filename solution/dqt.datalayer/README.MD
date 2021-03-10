@@ -10,4 +10,3 @@
 		- EntityFrameworkCore\Add-Migration 'MigrationNameHere'
 	- Update the Databse
 		- EntityFrameworkCore\Update-Database
-

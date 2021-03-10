@@ -40,12 +40,12 @@ namespace dqt.api
             {
                 var request = JsonConvert.DeserializeObject<ExistingQualifiedTeacherRequest>(requestBody);
 
-                if (request == null || string.IsNullOrWhiteSpace(request.TeacherReferenceNumber))
+                if (request == null || string.IsNullOrWhiteSpace(request.TRN))
                 {
                     return new BadRequestObjectResult("TeacherReferenceNumber is mandatory");
                 }
 
-                var results = await _qtsService.GetQualifiedTeacherRecords(request.TeacherReferenceNumber, request.NINumber);
+                var results = await _qtsService.GetQualifiedTeacherRecords(request.TRN, request.NINumber);
 
                 if (!results.Any())
                 {
