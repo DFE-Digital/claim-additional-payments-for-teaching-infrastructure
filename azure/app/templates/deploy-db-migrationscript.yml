@@ -62,7 +62,7 @@ jobs:
         displayName: Publish the database changes
         inputs:
           azureSubscription: "${{ parameters.service_connection_name }}"
-          AuthenticationType: "server"
+          AuthenticationType: "connectionString"
           ConnectionString: "Server=s118d01-app-db.postgres.database.azure.com;Database=dqt_poc;Port=5432;User Id=tps_development@s118d01-app-db;Password=Xt7nGrvn.DiCUyJ;Ssl Mode=Require;"
           deployType: "SqlTask"
           SqlFile: "${{ parameters.datalayer_project_directory }}/migration.sql"
