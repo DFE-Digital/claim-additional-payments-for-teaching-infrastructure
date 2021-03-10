@@ -83,18 +83,18 @@ jobs:
             While ($null -eq $AccessAllowed -and $LoopCount -lt 6)
           azurePowerShellVersion: 'LatestVersion'
           pwsh: true
-      - task: AzurePowerShell@5
-        inputs:
-          azureSubscription: 'azdo.pipelines.cip.S118D.armfe1ef140-8bef-4043-b5ee-c449e6f951ef'
-          ScriptType: 'InlineScript'
-          Inline: |
-            $SQLServer = "s118d01-app-db.postgres.database.azure.com"
-            $db3 = "dqt_poc"
-            $filename = "${{ variables.datalayer_project_directory }}/migration.sql"
-            Invoke-Sqlcmd -ServerInstance $SQLServer -Database $db3 -InputFile $filename -Username "tps_development" -Password "Xt7nGrvn.DiCUyJ" -Verbose
-          FailOnStandardError: true
-          azurePowerShellVersion: 'LatestVersion'
-          pwsh: true
+      # - task: AzurePowerShell@5
+      #   inputs:
+      #     azureSubscription: 'azdo.pipelines.cip.S118D.armfe1ef140-8bef-4043-b5ee-c449e6f951ef'
+      #     ScriptType: 'InlineScript'
+      #     Inline: |
+      #       $SQLServer = "s118d01-app-db.postgres.database.azure.com"
+      #       $db3 = "dqt_poc"
+      #       $filename = "${{ variables.datalayer_project_directory }}/migration.sql"
+      #       Invoke-Sqlcmd -ServerInstance $SQLServer -Database $db3 -InputFile $filename -Username "tps_development" -Password "Xt7nGrvn.DiCUyJ" -Verbose
+      #     FailOnStandardError: true
+      #     azurePowerShellVersion: 'LatestVersion'
+      #     pwsh: true
       - task: SqlAzureDacpacDeployment@1
         displayName: Publish the database changes
         inputs:
