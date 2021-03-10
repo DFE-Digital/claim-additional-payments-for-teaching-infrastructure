@@ -35,7 +35,7 @@ jobs:
 
 
 # Deploy Funtions to Function app
-- template: ../templates/deploy-appservice-content.yml@templates
+- template: ../templates/deploy-appservice-content.yml
   parameters:
     service_connection_name: '${{ parameters.service_connection_name }}'
     environment_id: '${{parameters.environment_id}}'
