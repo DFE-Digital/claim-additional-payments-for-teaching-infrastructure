@@ -62,8 +62,11 @@ jobs:
         displayName: Publish the database changes
         inputs:
           azureSubscription: "${{ parameters.service_connection_name }}"
-          AuthenticationType: "connectionString"
-          ConnectionString: "$(${{ parameters.connectionString_secretname }})"
+          AuthenticationType: "server"
+          ServerName: "$(Values.DatabaseServerName)"
+          DatabaseName: "$(Values.DatabaseName)"
+          SqlUsername: "$(Values.DatabaseServerName)"
+          SqlPassword: "$(Values.DatabasePassword)"
           deployType: "SqlTask"
           SqlFile: "${{ parameters.datalayer_project_directory }}/migration.sql"
           IpDetectionMethod: "AutoDetect"

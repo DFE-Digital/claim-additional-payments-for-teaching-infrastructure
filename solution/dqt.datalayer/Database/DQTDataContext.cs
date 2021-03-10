@@ -29,7 +29,7 @@ namespace dqt.datalayer.Database
                 var username = jObject["Values"]["DatabaseUsername"].ToString();
                 var password = jObject["Values"]["DatabasePassword"].ToString();
 
-                var connectionstring = @$" Server={server};Database={database};Port=5432;User Id={username};Password={password};Ssl Mode=Require;";
+                var connectionstring = @$"Server={server};Database={database};Port=5432;User Id={username};Password={password};Ssl Mode=Require;";
                 optionsBuilder.UseNpgsql(connectionstring);
             }
 #endif
