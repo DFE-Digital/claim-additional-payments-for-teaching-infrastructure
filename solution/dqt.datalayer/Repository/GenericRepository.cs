@@ -1,9 +1,9 @@
-﻿using Microsoft.EntityFrameworkCore;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Linq.Expressions; 
+using System.Linq.Expressions;
 using System.Threading.Tasks;
+using Microsoft.EntityFrameworkCore;
 
 namespace dqt.datalayer.Repository
 {
@@ -20,7 +20,7 @@ namespace dqt.datalayer.Repository
 
         public async Task<IEnumerable<T>> FindAsync(Expression<Func<T, bool>> predicate)
         {
-            return await Context.Set<T>().AsQueryable().Where(predicate).ToListAsync();
+            return await Task.FromResult(Context.Set<T>().Where(predicate));
         }
     }
 }
