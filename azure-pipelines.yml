@@ -4,7 +4,7 @@ jobs:
     displayName: Deploy database schema changes 
 
     pool:
-      vmImage: ${{ parameters.vmImage }}
+      vmImage: windows-latest
 
     variables:
       - group: dqt-d01
@@ -13,9 +13,7 @@ jobs:
       - name: datalayer_project_directory
         value: solution/dqt.datalayer 
       - name: nuget_config_path
-        value: solution/nuget.config 
-      - name: vmImage
-        value: windows-latest 
+        value: solution/nuget.config  
 
     steps:
       - task: FileTransform@1
@@ -35,10 +33,10 @@ jobs:
         displayName: dotnet restore
         inputs:
           command: restore
-          projects: "${{parameters.datalayer_project_directory}}/*.csproj"
+          projects: "${{variables.datalayer_project_directory}}/*.csproj"
           feedsToUse: "config"
           includeNuGetOrg: true
-          nugetConfigPath: "${{parameters.nuget_config_path}}"
+          nugetConfigPath: "${{variables.nuget_config_path}}"
 
       - task: DotNetCoreCLI@2
         displayName: "Create migration script"
@@ -46,7 +44,7 @@ jobs:
           command: custom
           custom: ef
           arguments: "migrations script -i -o migration.sql"
-          workingDirectory: ${{ parameters.datalayer_project_directory }}
+          workingDirectory: ${{ variables.datalayer_project_directory }}
 
       - task: AzurePowerShell@5
         displayName: "Open PostgreSQL Firewall"
@@ -78,14 +76,14 @@ jobs:
       - task: SqlAzureDacpacDeployment@1
         displayName: Publish the database changes
         inputs:
-          azureSubscription: "${{ parameters.service_connection_name }}"
+          azureSubscription: "${{ variables.service_connection_name }}"
           AuthenticationType: "server"
           ServerName: "s118d01-app-db.postgres.database.azure.com"
           DatabaseName: "dqt_poc"
           SqlUsername: "tps_development"
           SqlPassword: "Xt7nGrvn.DiCUyJ"
           deployType: "SqlTask"
-          SqlFile: "${{ parameters.datalayer_project_directory }}/migration.sql"
+          SqlFile: "${{ variables.datalayer_project_directory }}/migration.sql"
           IpDetectionMethod: "AutoDetect"
 
       - task: AzurePowerShell@5
