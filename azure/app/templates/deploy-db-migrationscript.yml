@@ -58,10 +58,6 @@ jobs:
           arguments: "migrations script -i -o migration.sql"
           workingDirectory: ${{ parameters.datalayer_project_directory }}
 
-      - publish: ${{ parameters.datalayer_project_directory }}
-        displayName: Publish dotnet core project
-        artifact: "drop-sql"
-
       - task: AzurePowerShell@5
         displayName: "Open PostgreSQL Firewall"
         inputs:
