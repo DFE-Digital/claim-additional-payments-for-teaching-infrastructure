@@ -112,4 +112,4 @@ jobs:
                 }
             Write-Output 'Removing Deployment PostGres Deployment Firewall rule...'
             Remove-AzPostgreSqlFirewallRule -Name deployment_rule -ResourceGroupName 's118d01-app' -ServerName $PostGres.Name
-         azurePowerShellVersion: "LatestVersion"
+          azurePowerShellVersion: "LatestVersion"
