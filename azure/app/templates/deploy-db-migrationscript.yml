@@ -61,7 +61,7 @@ jobs:
       - task: SqlAzureDacpacDeployment@1
         displayName: Publish the database changes
         inputs:
-          azureSubscription: "${{ parameters.subscription_name }}"
+          azureSubscription: "${{ parameters.service_connection_name }}"
           AuthenticationType: "connectionString"
           ConnectionString: "$(${{ parameters.connectionString_secretname }})"
           deployType: "SqlTask"
