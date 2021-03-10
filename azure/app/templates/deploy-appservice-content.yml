@@ -53,7 +53,7 @@ jobs:
                 Package: "$(Pipeline.WorkSpace)/${{ parameters.sln_artifact_name }}/${{parameters.function_package_zip_name}}.zip"
 
             - ${{ if eq(parameters.create_functionapp_keys, true) }}:
-                - template: /step/add-keys-to-function-app.yml
+                - template: /add-keys-to-function-app.yml
                   parameters:
                     functionapp_name: "${{ parameters.functionapp_name }}"
                     functionapp_resourcegroup: "${{ parameters.functionapp_resourcegroup }}"
