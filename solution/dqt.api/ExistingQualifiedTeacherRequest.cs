@@ -2,7 +2,7 @@
 
 namespace dqt.api
 {
-    internal class ExistingQualifiedTeacherRequest
+    public class ExistingQualifiedTeacherRequest
     {
         public string TRN { get; set; }
 

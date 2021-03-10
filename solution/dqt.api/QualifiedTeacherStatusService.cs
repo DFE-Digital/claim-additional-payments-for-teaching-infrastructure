@@ -58,6 +58,10 @@ namespace dqt.api
             {
                 return new BadRequestObjectResult("Bad request data");
             }
+            catch(Exception ex)
+            {
+                return new ObjectResult(ex.Message) { StatusCode = 500 };
+            }
         }
     }
 }

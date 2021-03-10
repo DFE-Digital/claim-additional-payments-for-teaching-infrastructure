@@ -26,4 +26,8 @@
     <ProjectReference Include="..\dqt.domain\dqt.domain.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="datalayer\" />
+  </ItemGroup>
+
 </Project>
