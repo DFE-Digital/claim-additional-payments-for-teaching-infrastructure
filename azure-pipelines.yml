@@ -1,8 +1,7 @@
 
 jobs:
   - job: job_publish_database
-    displayName: Deploy database schema changes
-    dependsOn: ${{ parameters.run_after }}
+    displayName: Deploy database schema changes 
 
     pool:
       vmImage: ${{ parameters.vmImage }}
