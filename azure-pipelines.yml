@@ -30,6 +30,12 @@ jobs:
           arguments: "install --global dotnet-ef"
 
       - task: DotNetCoreCLI@2
+        inputs:
+          command: 'custom'
+          custom: ef
+          arguments: 'dotnet ef database update -c DQTDataContext -p dqt.datalayer -s dqt.datalayer -v --no-build'
+          
+      - task: DotNetCoreCLI@2
         displayName: dotnet restore
         inputs:
           command: restore
