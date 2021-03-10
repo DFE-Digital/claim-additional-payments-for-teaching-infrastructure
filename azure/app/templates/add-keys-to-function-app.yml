@@ -1,0 +1,23 @@
+parameters:
+  - name: functionapp_name
+    type: string
+  - name: functionapp_key_name
+    type: string
+  - name: functionapp_key_value
+    type: string
+  - name: resourcegroup_name
+    type: string
+  - name: arm_service_connection
+    type: string
+steps:
+  - task: AzureCLI@2
+    displayName: Assign key to function app
+    inputs:
+      azureSubscription: "${{ parameters.arm_service_connection }}"
+      scriptType: pscore
+      scriptLocation: inlineScript
+      inlineScript: |
+        #Get secret value from keyvault from which to use for the new Function App Key (this is proper way to do but keeping it simple for this test)
+         
+        #Create/align Function App Host Key for Function App
+        az functionapp keys set --resource-group ${{ parameters.resourcegroup_name }} --name ${{ parameters.functionapp_name }} --key-name ${{ parameters.functionapp_key_name }} --key-type functionKeys --key-value ${{ parameters.functionapp_key_value }}

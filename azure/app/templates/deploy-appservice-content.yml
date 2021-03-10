@@ -1,0 +1,65 @@
+parameters:
+  - name: service_connection_name
+    type: string
+  - name: environment_id
+    type: string
+  - name: functionapp_name
+    type: string
+  - name: function_package_zip_name
+    type: string
+  - name: location
+    type: string
+  - name: sln_artifact_name
+    type: string
+  - name: webapp_kind
+    type: string
+  - name: create_functionapp_keys
+    type: boolean
+    default: false
+  - name: functionapp_key_name
+    type: string
+  - name: keyvault_name
+    type: string
+  - name: keyvault_secret_name
+    type: string
+  - name: resource_group
+    type: string
+  - name: run_after
+    type: object
+    default: []
+  - name: post_steps
+    type: stepList
+    default: []
+
+jobs:
+  - deployment: "job_deploy_sln_${{ parameters.functionapp_name }}"
+    displayName: "Deploy Solution"
+    environment: "${{ parameters.environment_id }}"
+    pool:
+      vmImage: "windows-latest"
+    dependsOn: ${{ parameters.run_after }}
+    strategy:
+      runOnce:
+        deploy:
+          steps:
+            - task: AzureRmWebAppDeployment@4
+              displayName: "Deploy Functions"
+              inputs:
+                ConnectionType: "AzureRM"
+                ConnectedServiceName: "${{ parameters.service_connection_name }}"
+                WebAppKind: "${{parameters.webapp_kind}}"
+                location: "${{parameters.location}}"
+                WebAppName: "${{ parameters.functionapp_name }}"
+                Package: "$(Pipeline.WorkSpace)/${{ parameters.sln_artifact_name }}/${{parameters.function_package_zip_name}}.zip"
+
+            - ${{ if eq(parameters.create_functionapp_keys, true) }}:
+                - template: /step/add-keys-to-function-app.yml
+                  parameters:
+                    functionapp_name: "${{ parameters.functionapp_name }}"
+                    functionapp_resourcegroup: "${{ parameters.resource_group }}"
+                    functionapp_key_name: "${{ parameters.functionapp_key_name }}"
+                    keyvault_name: "${{ parameters.keyvault_name }}"
+                    keyvault_secret_name: "${{ parameters.keyvault_secret_name }}"
+                    arm_service_connection: "${{ parameters.service_connection_name }}"
+
+            - ${{ parameters.post_steps }}

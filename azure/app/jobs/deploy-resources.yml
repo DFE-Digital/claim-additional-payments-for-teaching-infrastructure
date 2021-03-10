@@ -11,6 +11,8 @@ parameters:
    type: string
  - name: datalayer_project_directory
    type: string
+ - name: sln_artifact_name
+   type: string
  - name: vmImage 
    type: string
  - name: run_after
@@ -28,3 +30,21 @@ jobs:
     nuget_config_path: '${{ parameters.nuget_config_path }}'
     variable_group_name: 'dqt-${{ parameters.environment_id}}'
     vmImage: '${{ parameters.vmImage }}'
+
+
+# Deploy Funtions to Function app
+- template: ../templates/deploy-appservice-content.yml@templates
+  parameters:
+    service_connection_name: ' '
+    environment_id: '${{parameters.environment_id}}'
+    functionapp_name: 's118d01funcappfapp'  
+    function_package_zip_name: 'dqt.api'
+    location: 'West Europe'
+    sln_artifact_name: '${{ parameters.sln_artifact_name }}'    
+    webapp_kind: 'Function'
+    create_functionapp_keys: true 
+    functionapp_key_name: apikey
+    keyvault_name: ''
+    keyvault_secret_name: apikey 
+    #run_after: deploy_resources_database
+   
