@@ -60,6 +60,6 @@ jobs:
                     functionapp_key_name: "${{ parameters.functionapp_key_name }}"
                     keyvault_name: "${{ parameters.keyvault_name }}"
                     keyvault_secret_name: "${{ parameters.keyvault_secret_name }}"
-                    arm_service_connection: "${{ parameters.service_connection_name }}"
+                    service_connection_name: "${{ parameters.service_connection_name }}"
 
             - ${{ parameters.post_steps }}

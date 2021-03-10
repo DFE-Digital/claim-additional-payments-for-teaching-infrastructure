@@ -57,5 +57,6 @@ stages:
       nuget_config_path: 'solution/nuget.config'
       connectionString_secretname: 'Values.DQTDbConnectionString'
       datalayer_project_directory: 'solution/dqt.datalayer'
+      sln_artifact_name: 'drop-sln'
       vmImage: 'windows-latest'
       run_after: stage_build

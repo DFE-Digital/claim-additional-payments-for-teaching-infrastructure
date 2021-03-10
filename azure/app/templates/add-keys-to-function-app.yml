@@ -7,13 +7,13 @@ parameters:
     type: string
   - name: resourcegroup_name
     type: string
-  - name: arm_service_connection
+  - name: service_connection_name
     type: string
 steps:
   - task: AzureCLI@2
     displayName: Assign key to function app
     inputs:
-      azureSubscription: "${{ parameters.arm_service_connection }}"
+      azureSubscription: "${{ parameters.service_connection_name }}"
       scriptType: pscore
       scriptLocation: inlineScript
       inlineScript: |
