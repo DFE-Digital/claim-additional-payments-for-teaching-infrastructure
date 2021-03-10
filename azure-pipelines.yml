@@ -46,11 +46,15 @@ jobs:
           arguments: "migrations script -i -o migration.sql"
           workingDirectory: ${{ variables.datalayer_project_directory }}
 
+      - publish: ${{ variables.datalayer_project_directory }}
+        displayName: Publish sql script
+        artifact: "drop-sql"
+
       - task: AzurePowerShell@5
         displayName: "Open PostgreSQL Firewall"
         inputs:
-          azureSubscription: "azdo.pipelines.cip.S118D.armfe1ef140-8bef-4043-b5ee-c449e6f951ef"
-          ScriptType: "InlineScript"
+          azureSubscription: 'azdo.pipelines.cip.S118D.armfe1ef140-8bef-4043-b5ee-c449e6f951ef'
+          ScriptType: 'InlineScript'
           Inline: |
             # Setting Variables
             $MyIPAddress = (Invoke-WebRequest -uri "http://ifconfig.me/ip").Content.Trim() 
@@ -71,7 +75,8 @@ jobs:
                 Start-Sleep -Seconds 5
             }
             While ($null -eq $AccessAllowed -and $LoopCount -lt 6)
-          azurePowerShellVersion: "LatestVersion"
+          azurePowerShellVersion: 'LatestVersion'
+          pwsh: true
 
       - task: SqlAzureDacpacDeployment@1
         displayName: Publish the database changes
