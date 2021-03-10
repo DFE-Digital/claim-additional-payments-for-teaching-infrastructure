@@ -3,8 +3,6 @@ parameters:
     type: string
   - name: functionapp_key_name
     type: string
-  - name: functionapp_key_value
-    type: string
   - name: functionapp_resourcegroup
     type: string
   - name: keyvault_name
