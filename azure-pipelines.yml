@@ -33,7 +33,7 @@ jobs:
         inputs:
           command: 'custom'
           custom: ef
-          arguments: 'dotnet ef database update -c DQTDataContext -p dqt.datalayer -s dqt.datalayer -v --no-build'
+          arguments: 'dotnet ef database update -c DQTDataContext -p dqt.datalayer -s dqt.datalayer -v --no-build --msbuildprojectextensionspath*'
           
       - task: DotNetCoreCLI@2
         displayName: dotnet restore
