@@ -22,7 +22,7 @@ parameters:
     type: string
   - name: keyvault_secret_name
     type: string
-  - name: resource_group
+  - name: functionapp_resourcegroup
     type: string
   - name: run_after
     type: object
@@ -56,7 +56,7 @@ jobs:
                 - template: /step/add-keys-to-function-app.yml
                   parameters:
                     functionapp_name: "${{ parameters.functionapp_name }}"
-                    functionapp_resourcegroup: "${{ parameters.resource_group }}"
+                    functionapp_resourcegroup: "${{ parameters.functionapp_resourcegroup }}"
                     functionapp_key_name: "${{ parameters.functionapp_key_name }}"
                     keyvault_name: "${{ parameters.keyvault_name }}"
                     keyvault_secret_name: "${{ parameters.keyvault_secret_name }}"

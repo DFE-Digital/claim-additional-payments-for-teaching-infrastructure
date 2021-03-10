@@ -46,6 +46,7 @@ jobs:
     webapp_kind: 'Function'
     create_functionapp_keys: true 
     functionapp_key_name: apikey
+    functionapp_resourcegroup: '${{ parameters.subscription_identifier }}${{parameters.environment_id}}-funcapp'
     keyvault_name: '${{parameters.subscription_identifier }}${{parameters.environment_id}}-secrets-kv'
     keyvault_secret_name: apikey 
     #run_after: deploy_resources_database

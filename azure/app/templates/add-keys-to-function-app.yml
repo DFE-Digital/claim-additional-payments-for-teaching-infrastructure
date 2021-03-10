@@ -5,7 +5,7 @@ parameters:
     type: string
   - name: functionapp_key_value
     type: string
-  - name: resourcegroup_name
+  - name: functionapp_resourcegroup
     type: string
   - name: service_connection_name
     type: string
@@ -20,4 +20,4 @@ steps:
         #Get secret value from keyvault from which to use for the new Function App Key (this is proper way to do but keeping it simple for this test)
          
         #Create/align Function App Host Key for Function App
-        az functionapp keys set --resource-group ${{ parameters.resourcegroup_name }} --name ${{ parameters.functionapp_name }} --key-name ${{ parameters.functionapp_key_name }} --key-type functionKeys --key-value ${{ parameters.functionapp_key_value }}
+        az functionapp keys set --resource-group ${{ parameters.functionapp_resourcegroup }} --name ${{ parameters.functionapp_name }} --key-name ${{ parameters.functionapp_key_name }} --key-type functionKeys --key-value ${{ parameters.functionapp_key_value }}
