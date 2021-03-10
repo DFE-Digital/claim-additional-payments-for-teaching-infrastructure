@@ -1,4 +1,6 @@
 parameters:
+ - name: service_connection_name
+   type: string
  - name: subscription_identifier
    type: string
  - name: subscription_purpose
@@ -24,7 +26,7 @@ jobs:
 # Deploy Database changes
 - template: ../templates/deploy-db-migrationscript.yml
   parameters:
-    subscription_name:  '${{parameters.subscription_identifier}}-${{parameters.subscription_purpose}}' # 's118-teacherpaymentsservice-development'
+    service_connection_name:  '${{ parameters.service_connection_name }}' # 's118-teacherpaymentsservice-development'
     datalayer_project_directory: '${{ parameters.datalayer_project_directory }}'
     connectionString_secretname: '${{ parameters.connectionString_secretname }}'
     nuget_config_path: '${{ parameters.nuget_config_path }}'
@@ -35,16 +37,16 @@ jobs:
 # Deploy Funtions to Function app
 - template: ../templates/deploy-appservice-content.yml@templates
   parameters:
-    service_connection_name: ' '
+    service_connection_name: '${{ parameters.service_connection_name }}'
     environment_id: '${{parameters.environment_id}}'
-    functionapp_name: 's118d01funcappfapp'  
+    functionapp_name: '${{ parameters.subscription_identifier }}${{parameters.environment_id}}funcappfapp'  
     function_package_zip_name: 'dqt.api'
     location: 'West Europe'
     sln_artifact_name: '${{ parameters.sln_artifact_name }}'    
     webapp_kind: 'Function'
     create_functionapp_keys: true 
     functionapp_key_name: apikey
-    keyvault_name: ''
+    keyvault_name: '${{parameters.subscription_identifier }}${{parameters.environment_id}}-secrets-kv'
     keyvault_secret_name: apikey 
     #run_after: deploy_resources_database
    

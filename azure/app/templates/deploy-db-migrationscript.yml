@@ -1,5 +1,5 @@
 parameters:
-  - name: subscription_name
+  - name: service_connection_name
     type: string
   - name: datalayer_project_directory
     type: string
