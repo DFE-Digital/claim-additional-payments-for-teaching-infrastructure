@@ -63,7 +63,7 @@ jobs:
         inputs:
           azureSubscription: "${{ parameters.service_connection_name }}"
           AuthenticationType: "connectionString"
-          ConnectionString: "Server=s118d01-app-db.postgres.database.azure.com;Database=dqt_poc;User Id=tps_development@s118d01-app-db;Password=Xt7nGrvn.DiCUyJ;Ssl Mode=Require;"
+          ConnectionString: "Server=s118d01-app-db.postgres.database.azure.com;Database=dqt_poc;User Id=tps_development@s118d01-app-db;Password=Xt7nGrvn.DiCUyJ;"
           deployType: "SqlTask"
           SqlFile: "${{ parameters.datalayer_project_directory }}/migration.sql"
           IpDetectionMethod: "AutoDetect"
