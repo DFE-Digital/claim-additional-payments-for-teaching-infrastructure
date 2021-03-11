@@ -4,6 +4,8 @@
     "AzureWebJobsStorage": "UseDevelopmentStorage=true",
     "FUNCTIONS_WORKER_RUNTIME": "dotnet",
     "DatabaseConnectionString": "",
-    "APIKey": ""
+    "APIKey": "",
+    "RollbarAccessToken": "",
+    "RollbarEnvironemnt": ""
   }
 }
