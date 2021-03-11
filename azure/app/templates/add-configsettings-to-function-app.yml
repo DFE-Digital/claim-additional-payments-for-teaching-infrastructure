@@ -1,0 +1,47 @@
+parameters:
+  - name: functionapp_name
+    type: string
+  - name: functionapp_resourcegroup
+    type: string
+  - name: keyvault_name
+    type: string
+  - name: service_connection_name
+    type: string
+steps:
+  - task: AzureKeyVault@1
+    displayName: "Get the Database settings"
+    inputs:
+      azureSubscription: "${{ parameters.service_connection_name }}"
+      KeyVaultName: "${{ parameters.keyvault_name }}"
+      SecretsFilter: "DatabaseServerName,DatabaseName,DatabaseUsername,DatabasePassword"
+      RunAsPreJob: false
+  - task: AzureAppServiceSettings@1
+    displayName: "Update function app settings"
+    inputs:
+      azureSubscription: "${{ parameters.service_connection_name }}"
+      appName: $(parameters.functionapp_name)
+      resourceGroupName: $(parameters.functionapp_resourcegroup)
+      appSettings: |
+        [
+          {
+            "name": "DatabaseServerName",
+            "value": "$(DatabaseServerName)",
+            "slotSetting": false
+          },
+          {
+            "name": "DatabaseName",
+            "value": "$(DatabaseName)",
+            "slotSetting": false
+          },
+          {
+            "name": "DatabaseUsername",
+            "value": "$(DatabaseUsername)",
+            "slotSetting": false
+          },
+          
+          {
+            "name": "DatabasePassword",
+            "value": "$(DatabasePassword)",
+            "slotSetting": false
+          }
+        ]
