@@ -52,13 +52,6 @@ jobs:
                 WebAppName: "${{ parameters.functionapp_name }}"
                 Package: "$(Pipeline.WorkSpace)/${{ parameters.sln_artifact_name }}/${{parameters.function_package_zip_name}}.zip"
 
-            - template: add-configsettings-to-function-app.yml
-              parameters:
-                functionapp_name: "${{ parameters.functionapp_name }}"
-                functionapp_resourcegroup: "${{ parameters.functionapp_resourcegroup }}"
-                keyvault_name: "${{ parameters.keyvault_name }}"
-                service_connection_name: "${{ parameters.service_connection_name }}"
-
             - ${{ if eq(parameters.create_functionapp_keys, true) }}:
                 - template: add-keys-to-function-app.yml
                   parameters:

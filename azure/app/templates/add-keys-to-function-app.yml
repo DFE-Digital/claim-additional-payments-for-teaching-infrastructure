@@ -19,8 +19,9 @@ steps:
       ScriptType: "InlineScript"
       Inline: "Install-Module -Name Az.KeyVault -AllowClobber -force"
       azurePowerShellVersion: "LatestVersion"
+
   - task: AzureCLI@2
-    displayName: Assign key to function app
+    displayName: Add firewall rule to keyvault
     inputs:
       azureSubscription: "${{ parameters.service_connection_name }}"
       scriptType: pscore
@@ -31,10 +32,66 @@ steps:
         $MyIPAddress | Out-File -FilePath ./agent.ip
         Add-AzKeyVaultNetworkRule -VaultName ${{ parameters.keyvault_name }} -IpAddressRange $MyIPAddress
 
+  - task: AzureCLI@2
+    displayName: Assign key to function app
+    inputs:
+      azureSubscription: "${{ parameters.service_connection_name }}"
+      scriptType: pscore
+      scriptLocation: inlineScript
+      inlineScript: |
         #Get secret value from keyvault from which to use for the new Function App Key
         $secretvalue = az keyvault secret show --name ${{ parameters.keyvault_secret_name }} --vault-name ${{ parameters.keyvault_name }} --query value -o tsv
             
         #Create/align Function App Host Key for Function App
         az functionapp keys set --resource-group ${{ parameters.functionapp_resourcegroup }} --name ${{ parameters.functionapp_name }} --key-name ${{ parameters.functionapp_key_name }} --key-type functionKeys --key-value $secretvalue
 
-        Remove-AzKeyVaultNetworkRule -VaultName myVault -IpAddressRange  $MyIPAddress
+  - task: AzureKeyVault@1
+    displayName: "Get the Database settings"
+    inputs:
+      azureSubscription: "${{ parameters.service_connection_name }}"
+      KeyVaultName: "${{ parameters.keyvault_name }}"
+      SecretsFilter: "DatabaseServerName,DatabaseName,DatabaseUsername,DatabasePassword"
+      RunAsPreJob: false
+
+  - task: AzureAppServiceSettings@1
+    displayName: "Update function app settings"
+    inputs:
+      azureSubscription: "${{ parameters.service_connection_name }}"
+      appName: $(parameters.functionapp_name)
+      resourceGroupName: $(parameters.functionapp_resourcegroup)
+      appSettings: |
+        [
+          {
+            "name": "DatabaseServerName",
+            "value": "$(DatabaseServerName)",
+            "slotSetting": false
+          },
+          {
+            "name": "DatabaseName",
+            "value": "$(DatabaseName)",
+            "slotSetting": false
+          },
+          {
+            "name": "DatabaseUsername",
+            "value": "$(DatabaseUsername)",
+            "slotSetting": false
+          },
+          
+          {
+            "name": "DatabasePassword",
+            "value": "$(DatabasePassword)",
+            "slotSetting": false
+          }
+        ]
+
+  - task: AzureCLI@2
+    displayName: Remove firewall rules from keyvault
+    inputs:
+      azureSubscription: "${{ parameters.service_connection_name }}"
+      scriptType: pscore
+      scriptLocation: inlineScript
+      inlineScript: |
+        # Setting Variables
+        $MyIPAddress = (Invoke-WebRequest -uri "http://ifconfig.me/ip").Content.Trim() 
+        $MyIPAddress | Out-File -FilePath ./agent.ip
+        Remove-AzKeyVaultNetworkRule -VaultName ${{ parameters.keyvault_name }} -IpAddressRange  $MyIPAddress
