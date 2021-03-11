@@ -1,0 +1,115 @@
+parameters:
+  - name: service_connection_name
+    type: string
+  - name: datalayer_project_directory
+    type: string
+  - name: connectionString_secretname
+    type: string
+  - name: nuget_config_path
+    type: string
+  - name: variable_group_name
+    type: string
+  - name: vmImage
+    type: string
+    default: "windows-latest"
+  - name: run_after
+    type: object
+    default: []
+
+jobs:
+  - job: job_publish_database
+    displayName: Deploy database schema changes
+    dependsOn: ${{ parameters.run_after }}
+
+    pool:
+      vmImage: ${{ parameters.vmImage }}
+
+    variables:
+      - group: ${{parameters.variable_group_name}}
+
+    steps:
+      - task: FileTransform@1
+        inputs:
+          folderPath: "$(System.DefaultWorkingDirectory)/"
+          fileType: "json"
+          targetFiles: "**/local.settings.json"
+
+      - task: DotNetCoreCLI@2
+        displayName: "Initialize EntityframeworkCore"
+        inputs:
+          command: "custom"
+          custom: tool
+          arguments: "install --global dotnet-ef"
+
+      - task: DotNetCoreCLI@2
+        displayName: dotnet restore
+        inputs:
+          command: restore
+          projects: "${{parameters.datalayer_project_directory}}/*.csproj"
+          feedsToUse: "config"
+          includeNuGetOrg: true
+          nugetConfigPath: "${{parameters.nuget_config_path}}"
+
+      - task: DotNetCoreCLI@2
+        displayName: "Create migration script"
+        inputs:
+          command: custom
+          custom: ef
+          arguments: "migrations script -i -o migration.sql"
+          workingDirectory: ${{ parameters.datalayer_project_directory }}
+
+      - task: AzurePowerShell@5
+        displayName: "Open PostgreSQL Firewall"
+        inputs:
+          azureSubscription: "azdo.pipelines.cip.S118D.armfe1ef140-8bef-4043-b5ee-c449e6f951ef"
+          ScriptType: "InlineScript"
+          Inline: |
+            # Setting Variables
+            $MyIPAddress = (Invoke-WebRequest -uri "http://ifconfig.me/ip").Content.Trim() 
+            $MyIPAddress | Out-File -FilePath ./agent.ip
+            $PostGres = Get-AzPostgreSqlServer -ResourceGroupName 's118d01-app'
+            If ($null -eq $PostGres) {
+                Write-Output "##vso[task.logissue type=warning;]There is no PostGres Server in RG s118d01-app"
+                Exit 0
+              }
+            Write-Output 'Updating PostGres Firewall rules...'
+            $PostGresFWRule = New-AzPostgreSqlFirewallRule -Name deployment_rule -ResourceGroupName 's118d01-app' -ServerName $PostGres.Name -EndIPAddress $MyIPAddress -StartIPAddress $MyIPAddress
+            $LoopCount = 0
+            Write-Output "Waiting for Access..." 
+            # This will check every 5 seconds, up to a maximum of 30 seconds
+            Do {
+                $AccessAllowed = $PostGresFWRule | Get-AzPostgreSqlFirewallRule -ErrorAction SilentlyContinue
+                $LoopCount++
+                Start-Sleep -Seconds 5
+            }
+            While ($null -eq $AccessAllowed -and $LoopCount -lt 6)
+          azurePowerShellVersion: "LatestVersion"
+
+      - task: SqlAzureDacpacDeployment@1
+        displayName: Publish the database changes
+        inputs:
+          azureSubscription: "${{ parameters.service_connection_name }}"
+          AuthenticationType: "server"
+          ServerName: "$(Values.DatabaseServerName)"
+          DatabaseName: "$(Values.DatabaseName)"
+          SqlUsername: "$(Values.DatabaseServerName)"
+          SqlPassword: "$(Values.DatabasePassword)"
+          deployType: "SqlTask"
+          SqlFile: "${{ parameters.datalayer_project_directory }}/migration.sql"
+          IpDetectionMethod: "AutoDetect"
+
+      - task: AzurePowerShell@5
+        displayName: "Close PostgreSQL Firewall"
+        inputs:
+          azureSubscription: "azdo.pipelines.cip.S118D.armfe1ef140-8bef-4043-b5ee-c449e6f951ef"
+          ScriptType: "InlineScript"
+          Inline: |
+            # Setting Variables
+            $PostGres = Get-AzPostgreSqlServer -ResourceGroupName 's118d01-app'
+            If ($null -eq $PostGres) {
+                Write-Output "##vso[task.logissue type=warning;]There is no PostGres Server in RG s118d01-app"
+                Exit 0
+                }
+            Write-Output 'Removing Deployment PostGres Deployment Firewall rule...'
+            Remove-AzPostgreSqlFirewallRule -Name deployment_rule -ResourceGroupName 's118d01-app' -ServerName $PostGres.Name
+          azurePowerShellVersion: "LatestVersion"

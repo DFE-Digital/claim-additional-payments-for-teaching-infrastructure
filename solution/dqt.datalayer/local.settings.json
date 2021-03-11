@@ -3,7 +3,10 @@
   "Values": {
     "AzureWebJobsStorage": "UseDevelopmentStorage=true",
     "FUNCTIONS_WORKER_RUNTIME": "dotnet",
-    "DatabaseConnectionString": "",
+    "DatabaseName": "",
+    "DatabaseServerName": "",
+    "DatabaseUsername": "",
+    "DatabasePassword": ""
     "APIKey": ""
   }
 }
