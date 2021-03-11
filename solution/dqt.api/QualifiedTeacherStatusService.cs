@@ -52,11 +52,15 @@ namespace dqt.api
                     return new NotFoundObjectResult("No records found");
                 }
 
-                return new OkObjectResult(results);
+                return new OkObjectResult(results.ToList());
             }
             catch (JsonException)
             {
                 return new BadRequestObjectResult("Bad request data");
+            }
+            catch(Exception ex)
+            {
+                return new ObjectResult(ex.Message) { StatusCode = 500 };
             }
         }
     }
