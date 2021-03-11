@@ -20,8 +20,6 @@ parameters:
     - none
 
 variables:
-  # Base configuration
-  # Add OS naming convention variables here.
   - name: system_identifier
     value: s118
   - name: system_purpose
@@ -51,7 +49,7 @@ stages:
   - template: jobs/deploy-resources.yml
     parameters:
       service_connection_name: 'azdo.pipelines.cip.S118D.armfe1ef140-8bef-4043-b5ee-c449e6f951ef'
-      subscription_identifier: 's118'
+      subscription_identifier: '${{ variables.system_identifier }}'
       subscription_purpose: 'teacherpaymentsservice-development'
       environment_id: 'd01'
       nuget_config_path: 'solution/nuget.config'
