@@ -19,8 +19,15 @@ steps:
       scriptType: pscore
       scriptLocation: inlineScript
       inlineScript: |
+        # Setting Variables
+        $MyIPAddress = (Invoke-WebRequest -uri "http://ifconfig.me/ip").Content.Trim() 
+        $MyIPAddress | Out-File -FilePath ./agent.ip
+        Add-AzKeyVaultNetworkRule -VaultName ${{ parameters.keyvault_name }} -IpAddressRange $MyIPAddress
+
         #Get secret value from keyvault from which to use for the new Function App Key
         $secretvalue = az keyvault secret show --name ${{ parameters.keyvault_secret_name }} --vault-name ${{ parameters.keyvault_name }} --query value -o tsv
             
         #Create/align Function App Host Key for Function App
         az functionapp keys set --resource-group ${{ parameters.functionapp_resourcegroup }} --name ${{ parameters.functionapp_name }} --key-name ${{ parameters.functionapp_key_name }} --key-type functionKeys --key-value $secretvalue
+
+        Remove-AzKeyVaultNetworkRule -VaultName myVault -IpAddressRange  $MyIPAddress
