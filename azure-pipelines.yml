@@ -1,7 +1,7 @@
 
 jobs:
-  - job: job_publish_database
-    displayName: Deploy database schema changes 
+  - job: job_publish_azure_resources
+    displayName: Deploy function keys and database schema changes 
 
     pool:
       vmImage: windows-latest
@@ -13,13 +13,27 @@ jobs:
       - name: datalayer_project_directory
         value: solution/dqt.datalayer 
       - name: nuget_config_path
-        value: solution/nuget.config  
+        value: solution/nuget.config
+      - name: keyvault_name
+        value: 's118d01-secrets-kv'
 
     steps:
+    
+    - task: AzureCLI@2
+      displayName: Add Firewall rule to keyvault
+      inputs:
+        azureSubscription: "${{ variables.service_connection_name }}"
+        scriptType: pscore
+        scriptLocation: inlineScript
+        inlineScript: |
+          # Setting Variables
+          $MyIPAddress = (Invoke-WebRequest -uri "http://ifconfig.me/ip").Content.Trim() 
+          $MyIPAddress | Out-File -FilePath ./agent.ip
+          Add-AzKeyVaultNetworkRule -VaultName ${{ variables.keyvault_name }} -IpAddressRange $MyIPAddress        
     - task: AzureKeyVault@1
       inputs:
         azureSubscription: 'azdo.pipelines.cip.S118D.armfe1ef140-8bef-4043-b5ee-c449e6f951ef'
-        KeyVaultName: 's118d01-secrets-kv'
+        KeyVaultName: ${{ variables.keyvault_name }}
         SecretsFilter: 'DatabaseServerName,DatabaseName,DatabaseUsername,DatabasePassword'
         RunAsPreJob: false
     - task: AzureAppServiceSettings@1
@@ -51,6 +65,18 @@ jobs:
                       "slotSetting": false
                     }
                   ]
+
+    - task: AzureCLI@2
+      displayName: Remove firewall rules from keyvault
+      inputs:
+        azureSubscription: "${{ variables.service_connection_name }}"
+        scriptType: pscore
+        scriptLocation: inlineScript
+        inlineScript: |
+          # Setting Variables
+          $MyIPAddress = (Invoke-WebRequest -uri "http://ifconfig.me/ip").Content.Trim() 
+          $MyIPAddress | Out-File -FilePath ./agent.ip
+          Remove-AzKeyVaultNetworkRule -VaultName ${{ variables.keyvault_name }} -IpAddressRange  $MyIPAddress
 
     - task: FileTransform@1
       inputs:
