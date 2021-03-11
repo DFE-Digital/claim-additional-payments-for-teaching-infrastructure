@@ -18,7 +18,13 @@ jobs:
         value: 's118d01-secrets-kv'
 
     steps:
-    
+    - task: AzurePowerShell@5
+      displayName: "Install the Az Keyvault Module"
+      inputs:
+        azureSubscription: "${{ parameters.service_connection_name }}"
+        ScriptType: "InlineScript"
+        Inline: "Install-Module -Name Az.KeyVault -AllowClobber -force"
+        azurePowerShellVersion: "LatestVersion"
     - task: AzureCLI@2
       displayName: Add Firewall rule to keyvault
       inputs:
