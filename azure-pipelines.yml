@@ -21,7 +21,7 @@ jobs:
     - task: AzurePowerShell@5
       displayName: "Install the Az Keyvault Module"
       inputs:
-        azureSubscription: "${{ parameters.service_connection_name }}"
+        azureSubscription: "${{ variables.service_connection_name }}"
         ScriptType: "InlineScript"
         Inline: "Install-Module -Name Az.KeyVault -AllowClobber -force"
         azurePowerShellVersion: "LatestVersion"
