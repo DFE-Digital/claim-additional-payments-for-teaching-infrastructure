@@ -28,7 +28,7 @@ namespace dqt.api
             [HttpTrigger(AuthorizationLevel.Function, "post", Route = "qualified-teachers/qualified-teaching-status")] HttpRequest req)
         {
             if (!req.Headers.ContainsKey(AUTH_HEADER)
-                || req.Headers[AUTH_HEADER] != Environment.GetEnvironmentVariable("APIKey"))
+                || req.Headers[AUTH_HEADER] != Environment.GetEnvironmentVariable("DQTApiKey"))
             {
                 _log.Warning($"Unauthorized request");
                 return new UnauthorizedResult();

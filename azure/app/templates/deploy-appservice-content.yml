@@ -1,4 +1,6 @@
 parameters:
+  - name: subscription_identifier
+    type: string
   - name: service_connection_name
     type: string
   - name: environment_id
@@ -55,6 +57,8 @@ jobs:
             - ${{ if eq(parameters.create_functionapp_keys, true) }}:
                 - template: add-keys-to-function-app.yml
                   parameters:
+                    subscription_identifier: "${{ parameters.subscription_identifier }}"
+                    environment_id: "${{ parameters.environment_id }}"
                     functionapp_name: "${{ parameters.functionapp_name }}"
                     functionapp_resourcegroup: "${{ parameters.functionapp_resourcegroup }}"
                     functionapp_key_name: "${{ parameters.functionapp_key_name }}"

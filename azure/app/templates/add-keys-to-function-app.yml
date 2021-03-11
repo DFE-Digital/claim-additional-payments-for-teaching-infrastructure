@@ -1,4 +1,8 @@
 parameters:
+  - name: subscription_identifier
+    type: string
+  - name: environment_id
+    type: string
   - name: functionapp_name
     type: string
   - name: functionapp_key_name
@@ -70,7 +74,7 @@ steps:
           },
           {
             "name": "DatabaseUsername",
-            "value": "$(DatabaseUsername)",
+            "value": "$(DatabaseUsername)@${{parameters.subscription_identifier}}{{parameters.environment_id}}-app-db",
             "slotSetting": false
           },          
           {
@@ -81,7 +85,15 @@ steps:
           {
             "name": "DQTApiKey",
             "value": "$(DQTApiKey)"
-          }
+          },
+          {
+            "name": "RollbarAccessToken",
+            "value": "$(RollbarAccessToken)"
+          },
+          {
+            "name": "RollbarEnvironemnt",
+            "value": "$(RollbarEnvironemnt)"
+          },
         ]
 
   - task: AzureCLI@2

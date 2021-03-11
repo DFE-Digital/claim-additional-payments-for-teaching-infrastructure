@@ -37,6 +37,7 @@ jobs:
 # Deploy Funtions to Function app
 - template: ../templates/deploy-appservice-content.yml
   parameters:
+    subscription_identifier:  '${{ parameters.subscription_identifier }}'
     service_connection_name: '${{ parameters.service_connection_name }}'
     environment_id: '${{parameters.environment_id}}'
     functionapp_name: '${{ parameters.subscription_identifier }}${{parameters.environment_id}}funcappfapp'  
