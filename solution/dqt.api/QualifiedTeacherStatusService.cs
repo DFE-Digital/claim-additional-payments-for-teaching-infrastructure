@@ -4,7 +4,6 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.Azure.WebJobs;
 using Microsoft.Azure.WebJobs.Extensions.Http;
 using Microsoft.AspNetCore.Http;
-using Microsoft.Extensions.Logging;
 using dqt.domain;
 using Newtonsoft.Json;
 using System;
@@ -16,22 +15,22 @@ namespace dqt.api
     {
         private const string AUTH_HEADER = "Authorization";
         private readonly IQualifiedTeachersService _qtsService;
+        private readonly IRollbarService _log;
 
-        public QualifiedTeacherStatusService(IQualifiedTeachersService qtsService)
+        public QualifiedTeacherStatusService(IQualifiedTeachersService qtsService, IRollbarService log)
         { 
             _qtsService = qtsService;
+            _log = log;
         }
 
         [FunctionName("qualified-teacher-status")]
         public async Task<IActionResult> Run(
-            [HttpTrigger(AuthorizationLevel.Function, "post", Route = "qualified-teachers/qualified-teaching-status")] HttpRequest req,
-            ILogger log)
+            [HttpTrigger(AuthorizationLevel.Function, "post", Route = "qualified-teachers/qualified-teaching-status")] HttpRequest req)
         {
-            log.LogInformation("C# HTTP trigger function processed a request.");
-
             if (!req.Headers.ContainsKey(AUTH_HEADER)
                 || req.Headers[AUTH_HEADER] != Environment.GetEnvironmentVariable("APIKey"))
             {
+                _log.Warning($"Unauthorized request");
                 return new UnauthorizedResult();
             }
 
@@ -45,22 +44,27 @@ namespace dqt.api
                     return new BadRequestObjectResult("TeacherReferenceNumber is mandatory");
                 }
 
+                _log.Info($"Fetching records for TRN number {request.TRN} and NI number {request.NINumber}");
+
                 var results = await _qtsService.GetQualifiedTeacherRecords(request.TRN, request.NINumber);
 
                 if (!results.Any())
                 {
+                    _log.Info($"No records found for TRN number {request.TRN} and NI number {request.NINumber}");
                     return new NotFoundObjectResult("No records found");
                 }
 
                 return new OkObjectResult(results.ToList());
             }
-            catch (JsonException)
+            catch (JsonException jsonException)
             {
+                _log.Error(jsonException);
                 return new BadRequestObjectResult("Bad request data");
             }
-            catch(Exception ex)
+            catch(Exception exception)
             {
-                return new ObjectResult(ex.Message) { StatusCode = 500 };
+                _log.Error(exception);
+                return new ObjectResult(exception.Message) { StatusCode = 500 };
             }
         }
     }
