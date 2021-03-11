@@ -23,15 +23,15 @@ parameters:
 
 jobs:
 
-# Deploy Database changes
-- template: ../templates/deploy-db-migrationscript.yml
-  parameters:
-    service_connection_name:  '${{ parameters.service_connection_name }}' # 's118-teacherpaymentsservice-development'
-    datalayer_project_directory: '${{ parameters.datalayer_project_directory }}'
-    connectionString_secretname: '${{ parameters.connectionString_secretname }}'
-    nuget_config_path: '${{ parameters.nuget_config_path }}'
-    variable_group_name: 'dqt-${{ parameters.environment_id}}'
-    vmImage: '${{ parameters.vmImage }}'
+# # Deploy Database changes
+# - template: ../templates/deploy-db-migrationscript.yml
+#   parameters:
+#     service_connection_name:  '${{ parameters.service_connection_name }}' # 's118-teacherpaymentsservice-development'
+#     datalayer_project_directory: '${{ parameters.datalayer_project_directory }}'
+#     connectionString_secretname: '${{ parameters.connectionString_secretname }}'
+#     nuget_config_path: '${{ parameters.nuget_config_path }}'
+#     variable_group_name: 'dqt-${{ parameters.environment_id}}'
+#     vmImage: '${{ parameters.vmImage }}'
 
 
 # Deploy Funtions to Function app

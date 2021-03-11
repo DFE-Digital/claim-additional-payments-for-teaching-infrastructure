@@ -12,6 +12,13 @@ parameters:
   - name: service_connection_name
     type: string
 steps:
+  - task: AzurePowerShell@5
+    displayName: "Install the Az Keyvault Module"
+    inputs:
+      azureSubscription: "${{ parameters.service_connection_name }}"
+      ScriptType: "InlineScript"
+      Inline: "Install-Module -Name Az.KeyVault -AllowClobber -force"
+      azurePowerShellVersion: "LatestVersion"
   - task: AzureCLI@2
     displayName: Assign key to function app
     inputs:
