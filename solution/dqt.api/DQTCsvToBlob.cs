@@ -1,15 +1,41 @@
 using System;
+using System.IO;
+using System.Linq;
+using dqt.domain.Rollbar;
+using dqt.domain.SFTPToBlob;
 using Microsoft.Azure.WebJobs;
-using Microsoft.Extensions.Logging;
 
 namespace dqt.api
 {
-    public static class DQTCsvToBlob
+    public class DQTCsvToBlob
     {
-        [FunctionName("dqt-csv-to-blob")]
-        public static void Run([TimerTrigger("0 */5 * * * *")]TimerInfo myTimer, ILogger log)
+        private readonly IRollbarService _log;
+        private readonly ISFTPToBlobProcessor _processor;
+
+        public DQTCsvToBlob(IRollbarService log, ISFTPToBlobProcessor processor)
         {
-            log.LogInformation($"C# Timer trigger function executed at: {DateTime.Now}");
+            _log = log;
+            _processor = processor;
+            _log.Configure(Environment.GetEnvironmentVariable("DQTSFTPRollbarEnvironemnt"));
+        }
+
+        [FunctionName("dqt-csv-to-blob")]
+        public void Run([TimerTrigger("%SFTPScheduleTriggerTime%")] TimerInfo myTimer, ExecutionContext context)
+        {
+            try
+            {
+                _log.Info($"dqt-csv-to-blob started at {{DateTime.Now}}");
+
+                _processor.SaveCSVToBlob(context);
+
+                _log.Info($"dqt-csv-to-blob completed at {{DateTime.Now}}");
+
+            }
+            catch (Exception exception)
+            {
+                _log.Error(new Exception($"SFTP Trigget failed at {DateTime.Now}", exception));
+                throw exception;
+            }
         }
     }
 }
