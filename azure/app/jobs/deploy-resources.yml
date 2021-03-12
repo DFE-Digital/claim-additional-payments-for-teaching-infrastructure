@@ -22,18 +22,6 @@ parameters:
    default: []
 
 jobs:
-
-# # Deploy Database changes
-# - template: ../templates/deploy-db-migrationscript.yml
-#   parameters:
-#     service_connection_name:  '${{ parameters.service_connection_name }}' # 's118-teacherpaymentsservice-development'
-#     datalayer_project_directory: '${{ parameters.datalayer_project_directory }}'
-#     connectionString_secretname: '${{ parameters.connectionString_secretname }}'
-#     nuget_config_path: '${{ parameters.nuget_config_path }}'
-#     variable_group_name: 'dqt-${{ parameters.environment_id}}'
-#     vmImage: '${{ parameters.vmImage }}'
-
-
 # Deploy Funtions to Function app
 - template: ../templates/deploy-appservice-content.yml
   parameters:
@@ -49,6 +37,5 @@ jobs:
     functionapp_key_name: DQTFunctionAppKey
     functionapp_resourcegroup: '${{ parameters.subscription_identifier }}${{parameters.environment_id}}-funcapp'
     keyvault_name: '${{parameters.subscription_identifier }}${{parameters.environment_id}}-secrets-kv'
-    keyvault_secret_name: DQTFunctionAppKey 
-    #run_after: deploy_resources_database
+    keyvault_secret_name: DQTFunctionAppKey
    
