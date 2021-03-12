@@ -1,0 +1,60 @@
+# specific path build
+trigger:
+  - none
+  # branches:
+  #   include:
+  #   - master
+  #   - feature/*
+  # paths: 
+  #   exclude:
+  #   - README.md
+
+parameters:
+  - name: deployment_target
+    displayName: Deploy
+    type: string
+    default: dev1
+    values: 
+    - development
+    - production
+    - none
+
+variables:
+  - name: system_identifier
+    value: s118
+  - name: system_purpose
+    value: 'teacherpaymentsservice'
+  - name: sln_artifact_name
+    value: 'drop-sln'
+  - name: build_configuration
+    value: 'Release'
+ 
+stages:
+- stage: stage_build
+  displayName: 'Build and Publish'
+  jobs:
+  - template: templates/publish-solution.yml  
+    parameters:  
+      sln_artifact_name: '${{ variables.sln_artifact_name }}'
+      build_configuration: '${{variables.build_configuration}}'
+      project_path: 'solution/dqt.api/*.csproj' 
+      solution_path: 'solution/claim-additional-payments-for-teaching-qts-api.sln'          
+      test_projects_path: 'solution/*tests/*.csproj'
+      nuget_config_path: 'solution/nuget.config'
+
+- stage: stage_deploy_development
+  displayName: 'Deploy development'
+  condition: eq('${{ parameters.deployment_target}}', 'development')
+  jobs: 
+  - template: jobs/deploy-resources.yml
+    parameters:
+      service_connection_name: 'azdo.pipelines.cip.S118D.armfe1ef140-8bef-4043-b5ee-c449e6f951ef'
+      subscription_identifier: '${{ variables.system_identifier }}'
+      subscription_purpose: 'teacherpaymentsservice-development'
+      environment_id: 'd01'
+      nuget_config_path: 'solution/nuget.config'
+      connectionString_secretname: 'Values.DQTDbConnectionString'
+      datalayer_project_directory: 'solution/dqt.datalayer'
+      sln_artifact_name: 'drop-sln'
+      vmImage: 'windows-latest'
+      run_after: stage_build

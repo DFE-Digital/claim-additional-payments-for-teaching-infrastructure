@@ -23,7 +23,13 @@ namespace dqt.datalayer.Database
                 var localSettingsFilePath = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location) + "\\local.settings.json";
                 var text = File.ReadAllText(localSettingsFilePath);
                 var jObject = JObject.Parse(text);
-                var connectionstring = jObject["Values"]["DatabaseConnectionString"].ToString();
+
+                var server = jObject["Values"]["DatabaseServerName"].ToString();
+                var database = jObject["Values"]["DatabaseName"].ToString();
+                var username = jObject["Values"]["DatabaseUsername"].ToString();
+                var password = jObject["Values"]["DatabasePassword"].ToString();
+
+                var connectionstring = @$"Server={server};Database={database};Port=5432;User Id={username};Password={password};Ssl Mode=Require;";
                 optionsBuilder.UseNpgsql(connectionstring);
             }
 #endif
