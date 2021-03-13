@@ -93,7 +93,7 @@ steps:
           {
             "name": "RollbarEnvironemnt",
             "value": "$(RollbarEnvironemnt)"
-          },
+          }
         ]
 
   - task: AzureCLI@2
