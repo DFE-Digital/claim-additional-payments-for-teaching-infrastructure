@@ -18,6 +18,7 @@ namespace dqt.api
              builder.Services.AddTransient<IRollbarService, RollbarService>();
             builder.Services.AddTransient<IQualifiedTeachersService, QualifiedTeachersService>();
             builder.Services.AddTransient<IRepository<QualifiedTeacher>, QualifiedTeachersRepository>();
+            builder.Services.AddTransient<ICSVProcessor, CSVProcessor>();
         }
 
         private string GetConnStr()
