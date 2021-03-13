@@ -8,27 +8,29 @@ using dqt.domain;
 using Newtonsoft.Json;
 using System;
 using System.Linq;
+using dqt.api.Authorization;
 
 namespace dqt.api
 {
     public class QualifiedTeacherStatusService
     {
-        private const string AUTH_HEADER = "Authorization";
+       
         private readonly IQualifiedTeachersService _qtsService;
         private readonly IRollbarService _log;
+        private readonly IAuthorize authorize;
 
-        public QualifiedTeacherStatusService(IQualifiedTeachersService qtsService, IRollbarService log)
+        public QualifiedTeacherStatusService(IQualifiedTeachersService qtsService, IRollbarService log, IAuthorize authorize)
         { 
             _qtsService = qtsService;
             _log = log;
+            this.authorize = authorize;
         }
 
         [FunctionName("qualified-teacher-status")]
         public async Task<IActionResult> Run(
             [HttpTrigger(AuthorizationLevel.Function, "post", Route = "qualified-teachers/qualified-teaching-status")] HttpRequest req)
         {
-            if (!req.Headers.ContainsKey(AUTH_HEADER)
-                || req.Headers[AUTH_HEADER] != Environment.GetEnvironmentVariable("DQTApiKey"))
+            if (!authorize.AuthorizeRequest(req))
             {
                 _log.Warning($"Unauthorized request");
                 return new UnauthorizedResult();

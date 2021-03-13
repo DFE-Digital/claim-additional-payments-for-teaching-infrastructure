@@ -10,6 +10,7 @@ using System.IO;
 using dqt.api;
 using dqt.domain;
 using dqt.datalayer.Model;
+using dqt.api.Authorization;
 
 namespace dqt.unittests.api
 {
@@ -25,7 +26,7 @@ namespace dqt.unittests.api
         private readonly QualifiedTeacherStatusService _qualifiedTeacherStatusService;
         private readonly ExistingQualifiedTeacherRequest _requestObj;
         private readonly List<QualifiedTeacher> _mockQualifiedTeachers;
-
+        private readonly Mock<IAuthorize> _mockAuth;
 
         public QualifiedTeacherStatusServiceTests()
         {
@@ -33,12 +34,13 @@ namespace dqt.unittests.api
 
             _loggerMock = new Mock<IRollbarService>();
             _qualifiedTeachersServiceMock = new Mock<IQualifiedTeachersService>();
-            _qualifiedTeacherStatusService = new QualifiedTeacherStatusService(_qualifiedTeachersServiceMock.Object, _loggerMock.Object);
+            _mockAuth = new Mock<IAuthorize>();
+            _qualifiedTeacherStatusService = new QualifiedTeacherStatusService(_qualifiedTeachersServiceMock.Object, _loggerMock.Object, _mockAuth.Object);
 
             _requestObj = new ExistingQualifiedTeacherRequest()
             {
                 TRN = TRN,
-                NINumber = NI 
+                NINumber = NI
             };
 
             _mockQualifiedTeachers = new List<QualifiedTeacher>
@@ -48,18 +50,11 @@ namespace dqt.unittests.api
         }
 
         [Fact]
-        public async void Returns_UnauthorizedRequestResponse_WhenRequestAPIKeyNotPresent()
+        public async void Returns_UnauthorizedRequestResponse_WhenRequestIsUnAuthorized()
         {
+
+            _mockAuth.Setup(x => x.AuthorizeRequest(It.IsAny<HttpRequest>())).Returns(false);
             var request = CreateMockHttpRequest(_requestObj, null);
-            var response = (UnauthorizedResult)await _qualifiedTeacherStatusService.Run(request.Object);
-
-            Assert.Equal(401, response.StatusCode);
-        }
-
-        [Fact]
-        public async void Returns_UnauthorizedRequestResponse_WhenAPIKeyIsNotMatched()
-        {
-            var request = CreateMockHttpRequest(_requestObj, "wrong-api-key");
             var response = (UnauthorizedResult)await _qualifiedTeacherStatusService.Run(request.Object);
 
             Assert.Equal(401, response.StatusCode);
@@ -68,7 +63,10 @@ namespace dqt.unittests.api
         [Fact]
         public async void Returns_BadRequestResponse_WhenRequestBodyNull()
         {
+
+            _mockAuth.Setup(x => x.AuthorizeRequest(It.IsAny<HttpRequest>())).Returns(true);
             var request = CreateMockHttpRequest(null);
+
             var response = (BadRequestObjectResult)await _qualifiedTeacherStatusService.Run(request.Object);
 
             Assert.Equal(400, response.StatusCode);
@@ -87,8 +85,10 @@ namespace dqt.unittests.api
             writer.Flush();
             memoryStream.Position = 0;
 
+            _mockAuth.Setup(x => x.AuthorizeRequest(It.IsAny<HttpRequest>())).Returns(true);
             var request = CreateMockHttpRequest(null);
             request.Setup(r => r.Body).Returns(memoryStream);
+            _mockAuth.Setup(x => x.AuthorizeRequest(It.IsAny<HttpRequest>())).Returns(true);
 
             var response = (BadRequestObjectResult)await _qualifiedTeacherStatusService.Run(request.Object);
 
@@ -104,6 +104,7 @@ namespace dqt.unittests.api
                 NINumber = NI
             };
 
+            _mockAuth.Setup(x => x.AuthorizeRequest(It.IsAny<HttpRequest>())).Returns(true);
             var request = CreateMockHttpRequest(requestBody);
             var response = (BadRequestObjectResult)await _qualifiedTeacherStatusService.Run(request.Object);
 
@@ -114,6 +115,8 @@ namespace dqt.unittests.api
         [Fact]
         public async void Returns_NotFoundObjectResult_WhenRequestIsValidAndNoMatchFound()
         {
+
+            _mockAuth.Setup(x => x.AuthorizeRequest(It.IsAny<HttpRequest>())).Returns(true);
             _qualifiedTeachersServiceMock.Setup(x => x.GetQualifiedTeacherRecords(TRN, NI)).ReturnsAsync(new List<QualifiedTeacher>());
 
             var request = CreateMockHttpRequest(_requestObj);
@@ -126,6 +129,7 @@ namespace dqt.unittests.api
         [Fact]
         public async void Returns_InternalServerError_WhenAnyExceptionEncountered()
         {
+            _mockAuth.Setup(x => x.AuthorizeRequest(It.IsAny<HttpRequest>())).Returns(true);
             string exceptionMessage = "Not able to connect to database";
             _qualifiedTeachersServiceMock.Setup(x => x.GetQualifiedTeacherRecords(TRN, NI)).ThrowsAsync(new Exception(exceptionMessage));
 
@@ -139,6 +143,8 @@ namespace dqt.unittests.api
         [Fact]
         public async void Returns_SuccessResponseWithQualifiedTeacherRecords_WhenRequestIsValid()
         {
+
+            _mockAuth.Setup(x => x.AuthorizeRequest(It.IsAny<HttpRequest>())).Returns(true);
             _qualifiedTeachersServiceMock.Setup(x => x.GetQualifiedTeacherRecords(TRN, NI)).ReturnsAsync(_mockQualifiedTeachers);
 
             var request = CreateMockHttpRequest(_requestObj);
@@ -150,18 +156,18 @@ namespace dqt.unittests.api
 
         private Mock<HttpRequest> CreateMockHttpRequest(ExistingQualifiedTeacherRequest body, string apiKey = API_KEY)
         {
-            var headers = new HeaderDictionary(new Dictionary<string, StringValues>
-            {
-                { "content-type", "application/json" },
-            }) as IHeaderDictionary;
+            //var headers = new HeaderDictionary(new Dictionary<string, StringValues>
+            //{
+            //    { "content-type", "application/json" },
+            //}) as IHeaderDictionary;
 
-            if(apiKey != null)
-            {
-                headers.Add("Authorization", apiKey);
-            }
+            //if (apiKey != null)
+            //{
+            //    headers.Add("Authorization", apiKey);
+            //}
 
             var mockRequest = new Mock<HttpRequest>();
-            mockRequest.Setup(r => r.Headers).Returns(headers);
+            //mockRequest.Setup(r => r.Headers).Returns(headers);
 
             var memoryStream = new MemoryStream();
             var writer = new StreamWriter(memoryStream);
