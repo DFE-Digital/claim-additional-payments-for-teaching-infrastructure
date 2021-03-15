@@ -5,14 +5,15 @@ namespace dqt.domain.Rollbar
 {
     public class RollbarService : IRollbarService
     {
-        public RollbarService()
+        public void Configure(string environment)
         {
             RollbarLocator.RollbarInstance.Configure(
                 new RollbarConfig(Environment.GetEnvironmentVariable("RollbarAccessToken"))
                 {
-                    Environment = Environment.GetEnvironmentVariable("RollbarEnvironemnt")
+                    Environment = environment
                 });
         }
+
         public void Error(Exception exception)
         {
             RollbarLocator.RollbarInstance.AsBlockingLogger(TimeSpan.FromSeconds(1)).Error(exception);

@@ -9,6 +9,14 @@
     "DatabasePassword": "",
     "DQTApiKey": "",
     "RollbarAccessToken": "",
-    "RollbarEnvironemnt": ""
+    "DQTAPIRollbarEnvironemnt": "",
+    "DQTSFTPRollbarEnvironemnt": "",
+    "SFTPScheduleTriggerTime": "",
+    "SFTPHostName": "",
+    "SFTPUserName": "",
+    "SFTPPassword": "",
+    "SFTPSshHostKeyFingerprint": "",
+    "SFTPRemotePath": "",
+    "DQTBlobContainerName": ""
   }
 }

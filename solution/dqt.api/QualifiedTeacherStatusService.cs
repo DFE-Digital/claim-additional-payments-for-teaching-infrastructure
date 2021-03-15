@@ -18,20 +18,21 @@ namespace dqt.api
        
         private readonly IQualifiedTeachersService _qtsService;
         private readonly IRollbarService _log;
-        private readonly IAuthorize authorize;
+        private readonly IAuthorize _authorize;
 
         public QualifiedTeacherStatusService(IQualifiedTeachersService qtsService, IRollbarService log, IAuthorize authorize)
         { 
             _qtsService = qtsService;
             _log = log;
-            this.authorize = authorize;
+            _authorize = authorize;
+            _log.Configure(Environment.GetEnvironmentVariable("DQTAPIRollbarEnvironemnt"));
         }
 
         [FunctionName("qualified-teacher-status")]
         public async Task<IActionResult> Run(
             [HttpTrigger(AuthorizationLevel.Function, "post", Route = "qualified-teachers/qualified-teaching-status")] HttpRequest req)
         {
-            if (!authorize.AuthorizeRequest(req))
+            if (!_authorize.AuthorizeRequest(req))
             {
                 _log.Warning($"Unauthorized request");
                 return new UnauthorizedResult();
