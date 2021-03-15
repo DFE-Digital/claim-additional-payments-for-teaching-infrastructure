@@ -42,7 +42,7 @@ steps:
         # Setting Variables
         $MyIPAddress = (Invoke-WebRequest -uri "http://ifconfig.me/ip").Content.Trim() 
         $MyIPAddress | Out-File -FilePath ./agent.ip
-        az keyvault network-rule add --name dqtapi --ip-address $MyIPAddress
+        az keyvault network-rule add --name ${{ parameters.keyvault_name }} --ip-address $MyIPAddress
         # Import-Module Az.KeyVault -RequiredVersion 2.2.6
         # Add-AzKeyVaultNetworkRule -VaultName ${{ parameters.keyvault_name }} -IpAddressRange $MyIPAddress
 
