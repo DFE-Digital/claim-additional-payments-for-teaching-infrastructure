@@ -9,6 +9,7 @@ using Newtonsoft.Json;
 using System;
 using System.Linq;
 using dqt.api.Authorization;
+using dqt.domain.Rollbar;
 
 namespace dqt.api
 {

@@ -11,6 +11,7 @@ using dqt.api;
 using dqt.domain;
 using dqt.datalayer.Model;
 using dqt.api.Authorization;
+using dqt.domain.Rollbar;
 
 namespace dqt.unittests.api
 {
