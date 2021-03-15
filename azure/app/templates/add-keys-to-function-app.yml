@@ -16,13 +16,13 @@ parameters:
   - name: service_connection_name
     type: string
 steps:
-  - task: AzurePowerShell@5
-    displayName: "Install the Az Keyvault Module"
-    inputs:
-      azureSubscription: "${{ parameters.service_connection_name }}"
-      ScriptType: "InlineScript"
-      Inline: "Install-Module -Name Az.KeyVault -AllowClobber -force"
-      azurePowerShellVersion: "LatestVersion"
+  # - task: AzurePowerShell@5
+  #   displayName: "Install the Az Keyvault Module"
+  #   inputs:
+  #     azureSubscription: "${{ parameters.service_connection_name }}"
+  #     ScriptType: "InlineScript"
+  #     Inline: "Install-Module -Name Az.KeyVault -AllowClobber -force"
+  #     azurePowerShellVersion: "LatestVersion"
 
   # - task: AzurePowerShell@5
   #   displayName: "Import the Az Keyvault Module"
@@ -116,4 +116,5 @@ steps:
         # Setting Variables
         $MyIPAddress = (Invoke-WebRequest -uri "http://ifconfig.me/ip").Content.Trim() 
         $MyIPAddress | Out-File -FilePath ./agent.ip
-        Remove-AzKeyVaultNetworkRule -VaultName ${{ parameters.keyvault_name }} -IpAddressRange  $MyIPAddress
+        az keyvault network-rule remove --name ${{ parameters.keyvault_name }} --ip-address $MyIPAddress
+        # Remove-AzKeyVaultNetworkRule -VaultName ${{ parameters.keyvault_name }} -IpAddressRange  $MyIPAddress
