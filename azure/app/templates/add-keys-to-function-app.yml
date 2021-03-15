@@ -24,13 +24,13 @@ steps:
       Inline: "Install-Module -Name Az.KeyVault -AllowClobber -force"
       azurePowerShellVersion: "LatestVersion"
 
-  - task: AzurePowerShell@5
-    displayName: "Import the Az Keyvault Module"
-    inputs:
-      azureSubscription: "${{ parameters.service_connection_name }}"
-      ScriptType: "InlineScript"
-      Inline: "Import-Module Az.KeyVault"
-      azurePowerShellVersion: "LatestVersion"
+  # - task: AzurePowerShell@5
+  #   displayName: "Import the Az Keyvault Module"
+  #   inputs:
+  #     azureSubscription: "${{ parameters.service_connection_name }}"
+  #     ScriptType: "InlineScript"
+  #     Inline: "Import-Module Az.KeyVault"
+  #     azurePowerShellVersion: "LatestVersion"
 
   - task: AzureCLI@2
     displayName: Add firewall rule to keyvault
@@ -42,6 +42,7 @@ steps:
         # Setting Variables
         $MyIPAddress = (Invoke-WebRequest -uri "http://ifconfig.me/ip").Content.Trim() 
         $MyIPAddress | Out-File -FilePath ./agent.ip
+        Import-Module Az.KeyVault
         Add-AzKeyVaultNetworkRule -VaultName ${{ parameters.keyvault_name }} -IpAddressRange $MyIPAddress
 
   - task: AzureKeyVault@1
