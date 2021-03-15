@@ -11,25 +11,37 @@ namespace dqt.domain
     {
         public async Task SaveCSVDataToDatabase(Stream csvBLOB)
         {
-            try
-            {
+             
                 await using var conn = new NpgsqlConnection(GetConnStr());
                 await conn.OpenAsync();
-                await ProcessCSVDataAsync(csvBLOB, conn);
-            }
-            catch (Exception ex)
-            {
-                throw ex;
-            }
+                await ProcessCSVDataAsync(csvBLOB, conn);             
         }
 
         private async Task ProcessCSVDataAsync(Stream csvBLOB, NpgsqlConnection conn)
         {
-            await BackupData(conn);
-            await DeleteExistingData(conn);
+            await TruncateBackupData(conn);
+            await SaveCSVtoBackupTable(csvBLOB, conn);
+            await CopyDataFromBackuptoOriginalTable(conn);
+            await TruncateBackupData(conn);
+        }
+
+        private async Task CopyDataFromBackuptoOriginalTable(NpgsqlConnection conn)
+        {
+            using var tran = await conn.BeginTransactionAsync();
+            using var truncateTableCommand = new NpgsqlCommand("TRUNCATE TABLE \"QualifiedTeachers\";", conn);
+            await truncateTableCommand.ExecuteNonQueryAsync();
+
+            using var revertBackupCommand = new NpgsqlCommand("INSERT INTO \"QualifiedTeachers\" SELECT * from \"QualifiedTeachersBackup\"", conn);
+            await revertBackupCommand.ExecuteNonQueryAsync();
+            await tran.CommitAsync();
+
+        }
+
+        private async Task SaveCSVtoBackupTable(Stream csvBLOB, NpgsqlConnection conn)
+        {
             try
             {
-                using var writer = conn.BeginBinaryImport("COPY \"QualifiedTeachers\" (\"Id\", \"Name\", \"DoB\", \"ITTSubject1Code\", \"ITTSubject2Code\", \"ITTSubject3Code\", \"NINumber\", \"QTSAwardDate\",\"Trn\" , \"ActiveAlert\") FROM STDIN (FORMAT BINARY)");
+                using var writer = conn.BeginBinaryImport("COPY \"QualifiedTeachersBackup\" (\"Id\", \"Name\", \"DoB\", \"ITTSubject1Code\", \"ITTSubject2Code\", \"ITTSubject3Code\", \"NINumber\", \"QTSAwardDate\",\"Trn\" , \"ActiveAlert\") FROM STDIN (FORMAT BINARY)");
 
                 using (var memoryStream = new MemoryStream())
                 {
@@ -38,6 +50,7 @@ namespace dqt.domain
                     var csv_row = new CSVData();
                     var csvRows = csv.EnumerateRecords(csv_row);
                     var i = 0;
+
                     foreach (var row in csvRows)
                     {
                         i++;
@@ -58,37 +71,16 @@ namespace dqt.domain
             }
             catch (Exception ex)
             {
-                await RevertToExistingData(conn);
                 throw new Exception("Error persisting DQT data set.", ex);
             }
-
-            await DeleteBackedUpData(conn);
         }
 
-        private async Task DeleteBackedUpData(NpgsqlConnection conn)
+        private async Task TruncateBackupData(NpgsqlConnection conn)
         {
             using var truncateBackupTableCommand = new NpgsqlCommand("TRUNCATE TABLE \"QualifiedTeachersBackup\";", conn);
             await truncateBackupTableCommand.ExecuteNonQueryAsync();
         }
-
-        private async Task RevertToExistingData(NpgsqlConnection conn)
-        {
-            using var revertBackupCommand = new NpgsqlCommand("INSERT INTO \"QualifiedTeachers\" SELECT * from \"QualifiedTeachersBackup\"", conn);
-            await revertBackupCommand.ExecuteNonQueryAsync();
-        }
-
-        private async Task DeleteExistingData(NpgsqlConnection conn)
-        {
-            using var trucCommand = new NpgsqlCommand("TRUNCATE TABLE \"QualifiedTeachers\"", conn);
-            await trucCommand.ExecuteNonQueryAsync();
-        }
-
-        private async Task BackupData(NpgsqlConnection conn)
-        {
-            using var command = new NpgsqlCommand("INSERT INTO \"QualifiedTeachersBackup\" SELECT * from \"QualifiedTeachers\"", conn);
-            await command.ExecuteNonQueryAsync();
-        }
-
+ 
         private string GetConnStr()
         {
             var server = Environment.GetEnvironmentVariable("DatabaseServerName");
