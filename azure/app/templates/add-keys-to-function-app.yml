@@ -24,6 +24,14 @@ steps:
       Inline: "Install-Module -Name Az.KeyVault -AllowClobber -force"
       azurePowerShellVersion: "LatestVersion"
 
+  - task: AzurePowerShell@5
+    displayName: "Import the Az Keyvault Module"
+    inputs:
+      azureSubscription: "${{ parameters.service_connection_name }}"
+      ScriptType: "InlineScript"
+      Inline: "Import-Module Az.KeyVault"
+      azurePowerShellVersion: "LatestVersion"
+
   - task: AzureCLI@2
     displayName: Add firewall rule to keyvault
     inputs:
