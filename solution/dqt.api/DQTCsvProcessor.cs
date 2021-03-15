@@ -1,15 +1,39 @@
+using System;
 using System.IO;
-using Microsoft.Azure.WebJobs;
-using Microsoft.Extensions.Logging;
+using System.Threading.Tasks;
+using dqt.domain;
+using dqt.domain.Rollbar;
+using Microsoft.Azure.WebJobs; 
 
 namespace dqt.api
 {
     public class DQTCsvProcessor
     {
-        [FunctionName("dqt-csv-processor")]
-        public void Run([BlobTrigger("dqt-cont/{name}", Connection = "AzureWebJobsStorage")]Stream myBlob, string name, ILogger log)
+        private readonly ICSVProcessor csvProcessor;
+        private readonly IRollbarService log;
+        public DQTCsvProcessor(ICSVProcessor csvProcessor, IRollbarService log)
         {
-            log.LogInformation($"C# Blob trigger function Processed blob\n Name:{name} \n Size: {myBlob.Length} Bytes");
+            this.csvProcessor = csvProcessor;
+            this.log = log;
+        }
+        [FunctionName("dqt-csv-processor")]
+        public async Task Run([BlobTrigger("dqt-cont/{name}", Connection = "AzureWebJobsStorage")] Stream csvBlob, string name)
+        {
+            try
+            {
+                log.Info($"Started processing DQT data from Blob 'dqt-cont'. \n Name:{name} \n Size: {csvBlob.Length} Bytes");
+
+                await csvProcessor.SaveCSVDataToDatabase(csvBlob);
+
+                log.Info($"Finished processing DQT data from Blob 'dqt-cont'. \n Name:{name} \n Size: {csvBlob.Length} Bytes");
+            }
+            catch (System.Exception ex)
+            {
+                var msg = $"Error processing DQT data from Blob 'dqt-cont'. \n Name:{name} \n Size: {csvBlob.Length} Bytes";
+                var error = new Exception(msg, ex);
+                log.Error(error);
+                throw ex;
+            }
         }
     }
 }

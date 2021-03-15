@@ -1,13 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
+﻿using System; 
 
-namespace dqt.domain
+namespace dqt.domain.Rollbar
 {
     public interface IRollbarService
     {
         void Info(string message);
-        
+
         void Error(Exception exception);
 
         void Warning(string message);

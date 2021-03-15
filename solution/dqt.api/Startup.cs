@@ -6,6 +6,7 @@ using dqt.datalayer.Database;
 using dqt.domain;
 using dqt.datalayer.Repository;
 using dqt.datalayer.Model;
+using dqt.domain.Rollbar;
 
 [assembly: FunctionsStartup(typeof(dqt.api.Startup))]
 namespace dqt.api
@@ -18,6 +19,7 @@ namespace dqt.api
              builder.Services.AddTransient<IRollbarService, RollbarService>();
             builder.Services.AddTransient<IQualifiedTeachersService, QualifiedTeachersService>();
             builder.Services.AddTransient<IRepository<QualifiedTeacher>, QualifiedTeachersRepository>();
+            builder.Services.AddTransient<ICSVProcessor, CSVProcessor>();
         }
 
         private string GetConnStr()

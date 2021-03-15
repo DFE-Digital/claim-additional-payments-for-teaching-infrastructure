@@ -1,16 +1,14 @@
 ﻿using Rollbar;
 using System;
-using System.Collections.Generic;
-using System.Text;
 
-namespace dqt.domain
+namespace dqt.domain.Rollbar
 {
     public class RollbarService : IRollbarService
     {
         public RollbarService()
         {
-            Rollbar.RollbarLocator.RollbarInstance.Configure(
-                new Rollbar.RollbarConfig(Environment.GetEnvironmentVariable("RollbarAccessToken"))
+            RollbarLocator.RollbarInstance.Configure(
+                new RollbarConfig(Environment.GetEnvironmentVariable("RollbarAccessToken"))
                 {
                     Environment = Environment.GetEnvironmentVariable("RollbarEnvironemnt")
                 });
