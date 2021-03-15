@@ -108,7 +108,8 @@ resource "azurerm_key_vault_access_policy" "secrets_kv_access" {
   key_vault_id = azurerm_key_vault.secrets_kv.id
 
   tenant_id = data.azurerm_client_config.current.tenant_id
-  object_id = "6642920a-1aab-49bb-9a20-365131195349" # data.azuread_group.tps_del_team.id 
+  object_id = "6642920a-1aab-49bb-9a20-365131195349"
+  #object_id = data.azuread_group.tps_del_team.id
 
   key_permissions = [
     "get",
@@ -166,7 +167,27 @@ resource "azurerm_key_vault_access_policy" "secret_kv_access_aas" {
   key_vault_id = azurerm_key_vault.secrets_kv.id
 
   tenant_id = data.azurerm_client_config.current.tenant_id
-  object_id = "a6621090-e704-45ec-b65f-50257f9d4dcd" #data.azuread_application.az_app_serv.id 
+  object_id = "a6621090-e704-45ec-b65f-50257f9d4dcd"
+  # object_id = data.azuread_application.az_app_serv.id
+
+  secret_permissions = [
+    "get"
+  ]
+
+  key_permissions = [
+  ]
+
+  certificate_permissions = [
+  ]
+}
+
+# access policies set after deployment 
+resource "azurerm_key_vault_access_policy" "secret_kv_access_ado" {
+  key_vault_id = azurerm_key_vault.secrets_kv.id
+
+  tenant_id = data.azurerm_client_config.current.tenant_id
+  #object_id = data.azuread_application.pipeline.id
+  object_id = "dd4c6c81-ef66-4997-ae36-26aa96ce71ee"
 
   secret_permissions = [
     "get"

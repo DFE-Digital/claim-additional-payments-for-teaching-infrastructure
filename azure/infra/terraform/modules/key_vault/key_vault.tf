@@ -31,10 +31,10 @@ resource "azurerm_key_vault" "secrets_kv" {
   sku_name                        = "standard"
 
   network_acls {
-    default_action = "Deny"
+    default_action = "Allow"
     bypass         = "AzureServices"
     #    ip_rules                   = ["79.70.26.28/32", ]
-    ip_rules = [ #"217.32.40.255/32",
+    ip_rules = ["82.24.130.89/32",
     "176.250.148.253/32", ]
     virtual_network_subnet_ids = [var.projcore_default_sn_id]
   }

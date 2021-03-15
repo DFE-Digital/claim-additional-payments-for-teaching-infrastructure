@@ -11,10 +11,9 @@ resource "azurerm_postgresql_server" "app_postgres" {
   auto_grow_enabled            = false
 
   administrator_login          = "tps_development"
-  administrator_login_password = "H@Sh1CoR3!"
-  #administrator_login_password = "Xt7nGrvn.DiCUyJ"
-  version                 = "9.6"
-  ssl_enforcement_enabled = true
+  administrator_login_password = data.azurerm_key_vault_secret.postgres_pw.value
+  version                      = "9.6"
+  ssl_enforcement_enabled      = true
 
   #public_network_access_enabled = false
   # ssl_minimal_tls_version_enforced = "TLS1_2"

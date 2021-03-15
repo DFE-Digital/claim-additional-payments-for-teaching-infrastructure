@@ -1,6 +1,6 @@
 output "common_tags" {
   value = merge({
-    "Environment"      = var.input_environment
+    "Environment"      = local.env_tag
     "Parent Business"  = "Teacher Training and Qualifications"
     "Portfolio"        = "Early Years and Schools Group"
     "Product"          = "Claim Additional Payments (for teaching)"
