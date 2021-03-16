@@ -1,6 +1,7 @@
 using System;
 using System.IO;
 using System.Linq;
+using System.Threading.Tasks;
 using dqt.domain.Rollbar;
 using dqt.domain.SFTPToBlob;
 using Microsoft.Azure.WebJobs;
@@ -20,13 +21,13 @@ namespace dqt.api
         }
 
         [FunctionName("dqt-csv-to-blob")]
-        public void Run([TimerTrigger("%SFTPScheduleTriggerTime%")] TimerInfo myTimer, ExecutionContext context)
+        public async Task Run([TimerTrigger("%SFTPScheduleTriggerTime%")] TimerInfo myTimer, ExecutionContext context)
         {
             try
             {
                 _log.Info($"dqt-csv-to-blob started at {DateTime.Now}");
 
-                _processor.SaveCSVToBlob(context);
+                await _processor.SaveCSVToBlobAsync(context);
 
                 _log.Info($"dqt-csv-to-blob completed at {DateTime.Now}");
 

@@ -1,7 +1,7 @@
 ﻿using System;
 using System.IO;
 using System.Linq;
-using Azure.Storage.Blobs;
+using Microsoft.WindowsAzure.Storage;
 using Microsoft.Azure.WebJobs;
 using WinSCP;
 
@@ -9,7 +9,7 @@ namespace dqt.domain.SFTPToBlob
 {
     public class SFTPToBlobProcessor : ISFTPToBlobProcessor
     {
-        public void SaveCSVToBlob(ExecutionContext context)
+        public async System.Threading.Tasks.Task SaveCSVToBlobAsync(ExecutionContext context)
         {
             using Session session = new Session
             {
@@ -47,13 +47,20 @@ namespace dqt.domain.SFTPToBlob
 
                 session.GetFiles(sourcePath, tempPath).Check();
 
-                var blobServiceClient = new BlobServiceClient(Environment.GetEnvironmentVariable("AzureWebJobsStorage"));
-                var containerClient = blobServiceClient.GetBlobContainerClient(Environment.GetEnvironmentVariable("DQTBlobContainerName"));
-                var blobClient = containerClient.GetBlobClient(fileName);
+                if (CloudStorageAccount.TryParse(Environment.GetEnvironmentVariable("AzureWebJobsStorage"), out CloudStorageAccount cloudStorageAccount))
+                {
+                    var cloudBlobClient = cloudStorageAccount.CreateCloudBlobClient();
+                    var cloudBlobContainer = cloudBlobClient.GetContainerReference(Environment.GetEnvironmentVariable("DQTBlobContainerName"));
+                    var cloudBlockBlob = cloudBlobContainer.GetBlockBlobReference(fileName);
 
-                using FileStream uploadFileStream = File.OpenRead(tempPath);
-                blobClient.Upload(uploadFileStream, true);
-                uploadFileStream.Close();
+                    using FileStream uploadFileStream = File.OpenRead(tempPath);
+                    await cloudBlockBlob.UploadFromStreamAsync(uploadFileStream);
+                    uploadFileStream.Close();
+                }
+                else
+                {
+                    throw new Exception("Couldn't connect to the blob");
+                }
 
                 File.Delete(tempPath);
                 session.RemoveFiles(sourcePath);

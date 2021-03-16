@@ -1,9 +1,10 @@
 ﻿using Microsoft.Azure.WebJobs;
+using System.Threading.Tasks;
 
 namespace dqt.domain.SFTPToBlob
 {
     public interface ISFTPToBlobProcessor
     {
-        void SaveCSVToBlob(ExecutionContext context);
+        Task SaveCSVToBlobAsync(ExecutionContext context);
     }
 }
