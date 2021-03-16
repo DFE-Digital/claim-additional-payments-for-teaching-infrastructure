@@ -11,8 +11,8 @@ namespace dqt.api.Authorization
 
         public bool AuthorizeRequest(HttpRequest req)
         {
-            return !req.Headers.ContainsKey(AUTH_HEADER)
-                || req.Headers[AUTH_HEADER] != Environment.GetEnvironmentVariable("DQTApiKey");
+            return req.Headers.ContainsKey(AUTH_HEADER)
+                && req.Headers[AUTH_HEADER] == Environment.GetEnvironmentVariable("DQTApiKey");
         }
     }
 }

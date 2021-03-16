@@ -24,11 +24,11 @@ namespace dqt.api
         {
             try
             {
-                _log.Info($"dqt-csv-to-blob started at {{DateTime.Now}}");
+                _log.Info($"dqt-csv-to-blob started at {DateTime.Now}");
 
                 _processor.SaveCSVToBlob(context);
 
-                _log.Info($"dqt-csv-to-blob completed at {{DateTime.Now}}");
+                _log.Info($"dqt-csv-to-blob completed at {DateTime.Now}");
 
             }
             catch (Exception exception)
