@@ -8,7 +8,7 @@ namespace dqt.domain.Rollbar
         public void Configure(string environment)
         {
             RollbarLocator.RollbarInstance.Configure(
-                new RollbarConfig(Environment.GetEnvironmentVariable("RollbarAccessToken"))
+                new RollbarConfig(Environment.GetEnvironmentVariable("DQTRollbarAccessToken"))
                 {
                     Environment = environment
                 });

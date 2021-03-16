@@ -33,7 +33,7 @@ steps:
     inputs:
       azureSubscription: "${{ parameters.service_connection_name }}"
       KeyVaultName: "${{ parameters.keyvault_name }}"
-      SecretsFilter: "DatabaseServerName,DatabaseName,DatabaseUsername,DatabasePassword,DQTApiKey,DQTFunctionAppKey,RollbarAccessToken,DQTAPIRollbarEnvironemnt,SFTPScheduleTriggerTime,SFTPHostName,SFTPUserName,SFTPPassword,SFTPSshHostKeyFingerprint,SFTPRemotePath,BlobContainerName"
+      SecretsFilter: "DatabaseName,DatabaseServerName,DatabaseUsername,DatabasePassword,DQTApiKey,DQTFunctionAppKey,DQTRollbarAccessToken,DQTAPIRollbarEnvironment,DQTSFTPRollbarEnvironment, SFTPScheduleTriggerTime,SFTPHostName,SFTPUserName,SFTPPassword,SFTPSshHostKeyFingerprint,SFTPRemotePath,DQTBlobContainerName"
       RunAsPreJob: false
 
   - task: AzureCLI@2
@@ -79,16 +79,16 @@ steps:
             "value": "$(DQTApiKey)"
           },
           {
-            "name": "RollbarAccessToken",
-            "value": "$(RollbarAccessToken)"
+            "name": "DQTRollbarAccessToken",
+            "value": "$(DQTRollbarAccessToken)"
           },
           {
-            "name": "DQTAPIRollbarEnvironemnt",
-            "value": "$(DQTAPIRollbarEnvironemnt)"
+            "name": "DQTAPIRollbarEnvironment",
+            "value": "$(DQTAPIRollbarEnvironment)"
           },
           {
-            "name": "DQTSFTPRollbarEnvironemnt",
-            "value": "$(DQTSFTPRollbarEnvironemnt)"
+            "name": "DQTSFTPRollbarEnvironment",
+            "value": "$(DQTSFTPRollbarEnvironment)"
           },
           {
             "name": "SFTPScheduleTriggerTime",

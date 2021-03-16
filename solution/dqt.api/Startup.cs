@@ -8,6 +8,7 @@ using dqt.datalayer.Repository;
 using dqt.datalayer.Model;
 using dqt.domain.Rollbar;
 using dqt.domain.SFTPToBlob;
+using dqt.api.Authorization;
 
 [assembly: FunctionsStartup(typeof(dqt.api.Startup))]
 namespace dqt.api
@@ -22,6 +23,7 @@ namespace dqt.api
             builder.Services.AddTransient<IRepository<QualifiedTeacher>, QualifiedTeachersRepository>();
             builder.Services.AddTransient<ICSVProcessor, CSVProcessor>();
             builder.Services.AddTransient<ISFTPToBlobProcessor, SFTPToBlobProcessor>();
+            builder.Services.AddTransient<IAuthorize, Authorize>();
         }
 
         private string GetConnStr()
