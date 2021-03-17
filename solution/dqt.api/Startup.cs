@@ -9,6 +9,9 @@ using dqt.datalayer.Model;
 using dqt.domain.Rollbar;
 using dqt.domain.SFTPToBlob;
 using dqt.api.Authorization;
+using Rollbar.NetPlatformExtensions;
+using Microsoft.Extensions.Logging;
+using dqt.domain.Blob;
 
 [assembly: FunctionsStartup(typeof(dqt.api.Startup))]
 namespace dqt.api
@@ -24,6 +27,7 @@ namespace dqt.api
             builder.Services.AddTransient<ICSVProcessor, CSVProcessor>();
             builder.Services.AddTransient<ISFTPToBlobProcessor, SFTPToBlobProcessor>();
             builder.Services.AddTransient<IAuthorize, Authorize>();
+            builder.Services.AddTransient<IBlobService, BlobService>();
         }
 
         private string GetConnStr()

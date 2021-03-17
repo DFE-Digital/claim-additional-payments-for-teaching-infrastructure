@@ -25,7 +25,8 @@ namespace dqt.api
             {
                 log.Info($"Started processing DQT data from Blob 'dqt-cont'. \n Name:{name} \n Size: {csvBlob.Length} Bytes");
 
-                await csvProcessor.SaveCSVDataToDatabase(csvBlob);
+                await csvProcessor.SaveCSVDataToDatabase(csvBlob, name);
+ 
 
                 log.Info($"Finished processing DQT data from Blob 'dqt-cont'. \n Name:{name} \n Size: {csvBlob.Length} Bytes");
             }
