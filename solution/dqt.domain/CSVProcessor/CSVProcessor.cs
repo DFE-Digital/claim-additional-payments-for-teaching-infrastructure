@@ -1,4 +1,5 @@
 ﻿using CsvHelper;
+using dqt.domain.Blob;
 using Npgsql;
 using System;
 using System.Globalization;
@@ -9,12 +10,20 @@ namespace dqt.domain
 {
     public class CSVProcessor : ICSVProcessor
     {
-        public async Task SaveCSVDataToDatabase(Stream csvBLOB)
+        private readonly IBlobService _blobService;
+
+        public CSVProcessor(IBlobService blobService)
         {
-             
-                await using var conn = new NpgsqlConnection(GetConnStr());
-                await conn.OpenAsync();
-                await ProcessCSVDataAsync(csvBLOB, conn);             
+            _blobService = blobService;
+        }
+
+        public async Task SaveCSVDataToDatabase(Stream csvBLOB, string name)
+        {
+
+            await using var conn = new NpgsqlConnection(GetConnStr());
+            await conn.OpenAsync();
+            await ProcessCSVDataAsync(csvBLOB, conn);
+            await _blobService.DeleteFile(name);
         }
 
         private async Task ProcessCSVDataAsync(Stream csvBLOB, NpgsqlConnection conn)
@@ -80,7 +89,7 @@ namespace dqt.domain
             using var truncateBackupTableCommand = new NpgsqlCommand("TRUNCATE TABLE \"QualifiedTeachersBackup\";", conn);
             await truncateBackupTableCommand.ExecuteNonQueryAsync();
         }
- 
+
         private string GetConnStr()
         {
             var server = Environment.GetEnvironmentVariable("DatabaseServerName");

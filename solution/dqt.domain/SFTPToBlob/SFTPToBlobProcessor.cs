@@ -4,11 +4,18 @@ using System.Linq;
 using Microsoft.WindowsAzure.Storage;
 using Microsoft.Azure.WebJobs;
 using WinSCP;
+using dqt.domain.Blob;
 
 namespace dqt.domain.SFTPToBlob
 {
     public class SFTPToBlobProcessor : ISFTPToBlobProcessor
     {
+        private readonly IBlobService _blobService;
+
+        public SFTPToBlobProcessor(IBlobService blobService)
+        {
+            _blobService = blobService;
+        }
         public async System.Threading.Tasks.Task SaveCSVToBlobAsync(ExecutionContext context)
         {
             using Session session = new Session
@@ -47,20 +54,9 @@ namespace dqt.domain.SFTPToBlob
 
                 session.GetFiles(sourcePath, tempPath).Check();
 
-                if (CloudStorageAccount.TryParse(Environment.GetEnvironmentVariable("AzureWebJobsStorage"), out CloudStorageAccount cloudStorageAccount))
-                {
-                    var cloudBlobClient = cloudStorageAccount.CreateCloudBlobClient();
-                    var cloudBlobContainer = cloudBlobClient.GetContainerReference(Environment.GetEnvironmentVariable("DQTBlobContainerName"));
-                    var cloudBlockBlob = cloudBlobContainer.GetBlockBlobReference(fileName);
-
-                    using FileStream uploadFileStream = File.OpenRead(tempPath);
-                    await cloudBlockBlob.UploadFromStreamAsync(uploadFileStream);
-                    uploadFileStream.Close();
-                }
-                else
-                {
-                    throw new Exception("Couldn't connect to the blob");
-                }
+                using var uploadFileStream = File.OpenRead(tempPath);
+                await _blobService.UploadFile(uploadFileStream, fileName);
+                uploadFileStream.Close();
 
                 File.Delete(tempPath);
                 session.RemoveFiles(sourcePath);
