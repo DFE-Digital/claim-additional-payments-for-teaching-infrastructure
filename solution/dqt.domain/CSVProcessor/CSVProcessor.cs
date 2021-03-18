@@ -1,4 +1,6 @@
 ﻿using CsvHelper;
+using dqt.datalayer.Model;
+using dqt.datalayer.Repository;
 using dqt.domain.Blob;
 using Npgsql;
 using System;
@@ -12,16 +14,18 @@ namespace dqt.domain
     {
         private readonly IBlobService _blobService;
         private readonly IConfigSettings _configSettings;
+        private readonly IRepository<QualifiedTeacher> repo;
 
-        public CSVProcessor(IBlobService blobService, IConfigSettings configSettings)
+        public CSVProcessor(IBlobService blobService, IConfigSettings configSettings, IRepository<QualifiedTeacher> repo)
         {
             _blobService = blobService;
             _configSettings = configSettings;
+            this.repo = repo;
         }
 
         public async Task SaveCSVDataToDatabase(Stream csvBLOB, string name)
         {
-
+            await repo.SetUpDB();
             await using var conn = new NpgsqlConnection(GetConnStr());
             await conn.OpenAsync();
             await ProcessCSVDataAsync(csvBLOB, conn);

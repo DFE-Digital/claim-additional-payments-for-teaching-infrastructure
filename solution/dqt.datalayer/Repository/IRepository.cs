@@ -8,5 +8,6 @@ namespace dqt.datalayer.Repository
     public interface IRepository<T>
     {
         Task<IEnumerable<T>> FindAsync(Expression<Func<T, bool>> predicate);
+        Task SetUpDB();
     }
 }
