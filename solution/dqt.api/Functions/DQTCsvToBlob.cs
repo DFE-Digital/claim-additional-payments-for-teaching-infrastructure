@@ -6,7 +6,7 @@ using dqt.domain.Rollbar;
 using dqt.domain.SFTPToBlob;
 using Microsoft.Azure.WebJobs;
 
-namespace dqt.api
+namespace dqt.api.Functions
 {
     public class DQTCsvToBlob
     {

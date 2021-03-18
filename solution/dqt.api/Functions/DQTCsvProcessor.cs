@@ -3,9 +3,9 @@ using System.IO;
 using System.Threading.Tasks;
 using dqt.domain;
 using dqt.domain.Rollbar;
-using Microsoft.Azure.WebJobs; 
+using Microsoft.Azure.WebJobs;
 
-namespace dqt.api
+namespace dqt.api.Functions
 {
     public class DQTCsvProcessor
     {
@@ -26,7 +26,7 @@ namespace dqt.api
                 log.Info($"Started processing DQT data from Blob 'dqt-cont'. \n Name:{name} \n Size: {csvBlob.Length} Bytes");
 
                 await csvProcessor.SaveCSVDataToDatabase(csvBlob, name);
- 
+
 
                 log.Info($"Finished processing DQT data from Blob 'dqt-cont'. \n Name:{name} \n Size: {csvBlob.Length} Bytes");
             }

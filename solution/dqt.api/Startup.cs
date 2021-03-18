@@ -1,5 +1,4 @@
-﻿using System;
-using Microsoft.Azure.Functions.Extensions.DependencyInjection;
+﻿using Microsoft.Azure.Functions.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.EntityFrameworkCore;
 using dqt.datalayer.Database;
@@ -9,8 +8,6 @@ using dqt.datalayer.Model;
 using dqt.domain.Rollbar;
 using dqt.domain.SFTPToBlob;
 using dqt.api.Authorization;
-using Rollbar.NetPlatformExtensions;
-using Microsoft.Extensions.Logging;
 using dqt.domain.Blob;
 
 [assembly: FunctionsStartup(typeof(dqt.api.Startup))]
@@ -28,16 +25,13 @@ namespace dqt.api
             builder.Services.AddTransient<ISFTPToBlobProcessor, SFTPToBlobProcessor>();
             builder.Services.AddTransient<IAuthorize, Authorize>();
             builder.Services.AddTransient<IBlobService, BlobService>();
+            builder.Services.AddTransient<IConfigSettings, ConfigSettings>();
         }
 
         private string GetConnStr()
         {
-            var server = Environment.GetEnvironmentVariable("DatabaseServerName") ;
-            var database = Environment.GetEnvironmentVariable("DatabaseName");
-            var username = Environment.GetEnvironmentVariable("DatabaseUsername");
-            var password = Environment.GetEnvironmentVariable("DatabasePassword");
-
-            return @$" Server={server};Database={database};Port=5432;User Id={username};Password={password};Ssl Mode=Require;";
+            var configSettings = new ConfigSettings();
+            return @$" Server={configSettings.DatabaseServerName};Database={configSettings.DatabaseName};Port=5432;User Id={configSettings.DatabaseUsername};Password={configSettings.DatabasePassword};Ssl Mode=Require;";
         }
     }
 }

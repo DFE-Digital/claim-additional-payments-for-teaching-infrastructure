@@ -11,24 +11,24 @@ using System.Linq;
 using dqt.api.Authorization;
 using dqt.domain.Rollbar;
 
-namespace dqt.api
+namespace dqt.api.Functions
 {
     public class QualifiedTeacherStatusService
     {
-       
+
         private readonly IQualifiedTeachersService _qtsService;
         private readonly IRollbarService _log;
         private readonly IAuthorize _authorize;
 
         public QualifiedTeacherStatusService(IQualifiedTeachersService qtsService, IRollbarService log, IAuthorize authorize)
-        { 
+        {
             _qtsService = qtsService;
             _log = log;
             _authorize = authorize;
             _log.Configure(Environment.GetEnvironmentVariable("DQTAPIRollbarEnvironment"));
         }
 
-        [FunctionName("qualified-teacher-status")]
+        [FunctionName("qualified-teacher-status-api")]
         public async Task<IActionResult> Run(
             [HttpTrigger(AuthorizationLevel.Function, "post", Route = "qualified-teachers/qualified-teaching-status")] HttpRequest req)
         {
@@ -38,7 +38,7 @@ namespace dqt.api
                 return new UnauthorizedResult();
             }
 
-            string requestBody = await new StreamReader(req.Body).ReadToEndAsync();
+            var requestBody = await new StreamReader(req.Body).ReadToEndAsync();
             try
             {
                 var request = JsonConvert.DeserializeObject<ExistingQualifiedTeacherRequest>(requestBody);
@@ -65,7 +65,7 @@ namespace dqt.api
                 _log.Error(jsonException);
                 return new BadRequestObjectResult("Bad request data");
             }
-            catch(Exception exception)
+            catch (Exception exception)
             {
                 _log.Error(exception);
                 return new ObjectResult(exception.Message) { StatusCode = 500 };
