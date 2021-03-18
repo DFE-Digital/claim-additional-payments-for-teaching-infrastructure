@@ -11,10 +11,12 @@ namespace dqt.domain
     public class CSVProcessor : ICSVProcessor
     {
         private readonly IBlobService _blobService;
+        private readonly IConfigSettings _configSettings;
 
-        public CSVProcessor(IBlobService blobService)
+        public CSVProcessor(IBlobService blobService, IConfigSettings configSettings)
         {
             _blobService = blobService;
+            _configSettings = configSettings;
         }
 
         public async Task SaveCSVDataToDatabase(Stream csvBLOB, string name)
@@ -92,11 +94,7 @@ namespace dqt.domain
 
         private string GetConnStr()
         {
-            var server = Environment.GetEnvironmentVariable("DatabaseServerName");
-            var database = Environment.GetEnvironmentVariable("DatabaseName");
-            var username = Environment.GetEnvironmentVariable("DatabaseUsername");
-            var password = Environment.GetEnvironmentVariable("DatabasePassword");
-            return @$" Server={server};Database={database};Port=5432;User Id={username};Password={password};Ssl Mode=Require;";
+            return @$"Server={_configSettings.DatabaseServerName};Database={_configSettings.DatabaseName};Port=5432;User Id={_configSettings.DatabaseUsername};Password={_configSettings.DatabasePassword};Ssl Mode=Require;";
         }
     }
 }

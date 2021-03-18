@@ -11,10 +11,12 @@ namespace dqt.domain.SFTPToBlob
     public class SFTPToBlobProcessor : ISFTPToBlobProcessor
     {
         private readonly IBlobService _blobService;
+        private readonly IConfigSettings _configSettings;
 
-        public SFTPToBlobProcessor(IBlobService blobService)
+        public SFTPToBlobProcessor(IBlobService blobService, IConfigSettings configSettings)
         {
             _blobService = blobService;
+            _configSettings = configSettings;
         }
         public async System.Threading.Tasks.Task SaveCSVToBlobAsync(ExecutionContext context)
         {
@@ -26,13 +28,13 @@ namespace dqt.domain.SFTPToBlob
             session.Open(new SessionOptions
             {
                 Protocol = Protocol.Sftp,
-                HostName = Environment.GetEnvironmentVariable("SFTPHostName"),
-                UserName = Environment.GetEnvironmentVariable("SFTPUserName"),
-                Password = Environment.GetEnvironmentVariable("SFTPPassword"),
-                SshHostKeyFingerprint = Environment.GetEnvironmentVariable("SFTPSshHostKeyFingerprint")
+                HostName = _configSettings.SFTPHostName,
+                UserName = _configSettings.SFTPUserName,
+                Password = _configSettings.SFTPPassword,
+                SshHostKeyFingerprint = _configSettings.SFTPSshHostKeyFingerprint
             });
 
-            var remotePath = Environment.GetEnvironmentVariable("SFTPRemotePath");
+            var remotePath = _configSettings.SFTPRemotePath;
             var directory = session.ListDirectory(remotePath);
 
             var files = directory.Files
