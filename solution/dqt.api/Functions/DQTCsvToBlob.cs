@@ -17,7 +17,6 @@ namespace dqt.api.Functions
         {
             _log = log;
             _processor = processor;
-            _log.Configure(Environment.GetEnvironmentVariable("DQTSFTPRollbarEnvironment"));
         }
 
         [FunctionName("dqt-csv-to-blob")]

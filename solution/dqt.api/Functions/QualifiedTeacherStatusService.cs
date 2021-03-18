@@ -25,7 +25,6 @@ namespace dqt.api.Functions
             _qtsService = qtsService;
             _log = log;
             _authorize = authorize;
-            _log.Configure(Environment.GetEnvironmentVariable("DQTAPIRollbarEnvironment"));
         }
 
         [FunctionName("qualified-teacher-status-api")]
