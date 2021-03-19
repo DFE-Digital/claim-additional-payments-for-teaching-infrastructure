@@ -5,6 +5,9 @@
     <RootNamespace>dqt.api</RootNamespace>
   </PropertyGroup>
   <ItemGroup>
+    <Compile Remove="Functions\DQTCsvToBlob.cs" />
+  </ItemGroup>
+  <ItemGroup>
     <PackageReference Include="Azure.Storage.Blobs" Version="12.8.0" />
     <PackageReference Include="Microsoft.Azure.Functions.Extensions" Version="1.1.0" />
     <PackageReference Include="Microsoft.Azure.WebJobs.Extensions.Storage" Version="3.0.10" />

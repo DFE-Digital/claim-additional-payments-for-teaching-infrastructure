@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 using dqt.datalayer.Database;
@@ -9,9 +10,10 @@ using dqt.datalayer.Database;
 namespace dqt.datalayer.Migrations
 {
     [DbContext(typeof(DQTDataContext))]
-    partial class DQTDataContextModelSnapshot : ModelSnapshot
+    [Migration("20210318161837_AddBackupTable")]
+    partial class AddBackupTable
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -30,7 +32,7 @@ namespace dqt.datalayer.Migrations
                         .HasColumnType("boolean");
 
                     b.Property<DateTime>("DoB")
-                        .HasColumnType("Date");
+                        .HasColumnType("timestamp without time zone");
 
                     b.Property<string>("ITTSubject1Code")
                         .HasColumnType("text");
@@ -48,7 +50,7 @@ namespace dqt.datalayer.Migrations
                         .HasColumnType("text");
 
                     b.Property<DateTime>("QTSAwardDate")
-                        .HasColumnType("Date");
+                        .HasColumnType("timestamp without time zone");
 
                     b.Property<string>("Trn")
                         .HasColumnType("text");
@@ -69,7 +71,7 @@ namespace dqt.datalayer.Migrations
                         .HasColumnType("boolean");
 
                     b.Property<DateTime>("DoB")
-                        .HasColumnType("Date");
+                        .HasColumnType("timestamp without time zone");
 
                     b.Property<string>("ITTSubject1Code")
                         .HasColumnType("text");
@@ -87,7 +89,7 @@ namespace dqt.datalayer.Migrations
                         .HasColumnType("text");
 
                     b.Property<DateTime>("QTSAwardDate")
-                        .HasColumnType("Date");
+                        .HasColumnType("timestamp without time zone");
 
                     b.Property<string>("Trn")
                         .HasColumnType("text");

@@ -4,7 +4,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace dqt.datalayer.Model
 {
-    public class QualifiedTeacher
+    public class QualifiedTeacherBackup
     {
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
