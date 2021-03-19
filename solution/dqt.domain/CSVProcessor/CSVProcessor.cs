@@ -46,7 +46,7 @@ namespace dqt.domain
             using var truncateTableCommand = new NpgsqlCommand("TRUNCATE TABLE \"QualifiedTeachers\";", conn);
             await truncateTableCommand.ExecuteNonQueryAsync();
 
-            using var revertBackupCommand = new NpgsqlCommand("INSERT INTO \"QualifiedTeachers\" SELECT * from \"QualifiedTeachersBackup\"", conn);
+            using var revertBackupCommand = new NpgsqlCommand("INSERT INTO \"QualifiedTeachers\" ( \"Id\", \"Trn\", \"Name\", \"DoB\", \"NINumber\", \"QTSAwardDate\", \"ITTSubject1Code\", \"ITTSubject2Code\", \"ITTSubject3Code\", \"ActiveAlert\") SELECT * from \"QualifiedTeachersBackup\"", conn);
             await revertBackupCommand.ExecuteNonQueryAsync();
             await tran.CommitAsync();
 
