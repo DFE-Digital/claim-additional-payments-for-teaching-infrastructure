@@ -9,8 +9,7 @@ namespace dqt.datalayer.Database
     public class DQTDataContext : DbContext
     {
         internal DbSet<QualifiedTeacher> QualifiedTeachers { get; set; }
-        internal DbSet<QualifiedTeacherBackup> QualifiedTeachersBackup { get; set; }
-
+        internal DbSet<QualifiedTeacherBackup> QualifiedTeachersBackup { get; set; } 
         public DQTDataContext() { }
         public DQTDataContext(DbContextOptions options)
             : base(options)

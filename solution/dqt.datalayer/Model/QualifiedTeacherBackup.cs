@@ -14,10 +14,12 @@ namespace dqt.datalayer.Model
 
         public string Name { get; set; }
 
+        [Column(TypeName = "Date")]
         public DateTime DoB { get; set; }
 
         public string NINumber { get; set; }
 
+        [Column(TypeName = "Date")]
         public DateTime QTSAwardDate { get; set; }
 
         public string ITTSubject1Code { get; set; }
