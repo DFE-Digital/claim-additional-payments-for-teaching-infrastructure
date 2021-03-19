@@ -72,12 +72,12 @@ namespace dqt.domain
                         writer.StartRow();
                         writer.Write(i, NpgsqlTypes.NpgsqlDbType.Integer);
                         writer.Write(row.name, NpgsqlTypes.NpgsqlDbType.Text);
-                        writer.Write(row.dob, NpgsqlTypes.NpgsqlDbType.Timestamp);
+                        writer.Write(row.dob, NpgsqlTypes.NpgsqlDbType.Date);
                         writer.Write(row.ITTSubject1Code, NpgsqlTypes.NpgsqlDbType.Text);
                         writer.Write(row.ITTSubject2Code, NpgsqlTypes.NpgsqlDbType.Text);
                         writer.Write(row.ITTSubject3Code, NpgsqlTypes.NpgsqlDbType.Text);
                         writer.Write(row.niNumber, NpgsqlTypes.NpgsqlDbType.Text);
-                        writer.Write(row.qtsAwardDate, NpgsqlTypes.NpgsqlDbType.Timestamp);
+                        writer.Write(row.qtsAwardDate, NpgsqlTypes.NpgsqlDbType.Date);
                         writer.Write(row.trn, NpgsqlTypes.NpgsqlDbType.Text);
                         writer.Write(row.ActiveAlert, NpgsqlTypes.NpgsqlDbType.Boolean);
                     }
