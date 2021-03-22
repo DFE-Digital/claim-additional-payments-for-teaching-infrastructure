@@ -2,17 +2,16 @@
 using System.Collections.Generic;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Http;
-using Microsoft.Extensions.Primitives;
 using Xunit;
 using Moq;
 using Newtonsoft.Json;
 using System.IO;
-using dqt.api;
-using dqt.domain;
 using dqt.datalayer.Model;
+using dqt.api.DTOs;
 using dqt.api.Authorization;
-using dqt.domain.Rollbar;
 using dqt.api.Functions;
+using dqt.domain.Rollbar;
+using dqt.domain.QTS;
 
 namespace dqt.unittests.api
 {
@@ -26,7 +25,7 @@ namespace dqt.unittests.api
         private readonly Mock<IQualifiedTeachersService> _qualifiedTeachersServiceMock;
 
         private readonly QualifiedTeacherStatusService _qualifiedTeacherStatusService;
-        private readonly ExistingQualifiedTeacherRequest _requestObj;
+        private readonly ExistingQualifiedTeacherRequestDTO _requestObj;
         private readonly List<QualifiedTeacher> _mockQualifiedTeachers;
         private readonly Mock<IAuthorize> _mockAuth;
 
@@ -39,7 +38,7 @@ namespace dqt.unittests.api
             _mockAuth = new Mock<IAuthorize>();
             _qualifiedTeacherStatusService = new QualifiedTeacherStatusService(_qualifiedTeachersServiceMock.Object, _loggerMock.Object, _mockAuth.Object);
 
-            _requestObj = new ExistingQualifiedTeacherRequest()
+            _requestObj = new ExistingQualifiedTeacherRequestDTO()
             {
                 TRN = TRN,
                 NINumber = NI
@@ -56,7 +55,7 @@ namespace dqt.unittests.api
         {
 
             _mockAuth.Setup(x => x.AuthorizeRequest(It.IsAny<HttpRequest>())).Returns(false);
-            var request = CreateMockHttpRequest(_requestObj, null);
+            var request = CreateMockHttpRequest(_requestObj);
             var response = (UnauthorizedResult)await _qualifiedTeacherStatusService.Run(request.Object);
 
             Assert.Equal(401, response.StatusCode);
@@ -101,7 +100,7 @@ namespace dqt.unittests.api
         [Fact]
         public async void Returns_BadRequestResponse_WhenTRNNotPresent()
         {
-            var requestBody = new ExistingQualifiedTeacherRequest()
+            var requestBody = new ExistingQualifiedTeacherRequestDTO()
             {
                 NINumber = NI
             };
@@ -156,21 +155,9 @@ namespace dqt.unittests.api
             Assert.Equal(_mockQualifiedTeachers, response.Value);
         }
 
-        private Mock<HttpRequest> CreateMockHttpRequest(ExistingQualifiedTeacherRequest body, string apiKey = API_KEY)
+        private Mock<HttpRequest> CreateMockHttpRequest(ExistingQualifiedTeacherRequestDTO body)
         {
-            //var headers = new HeaderDictionary(new Dictionary<string, StringValues>
-            //{
-            //    { "content-type", "application/json" },
-            //}) as IHeaderDictionary;
-
-            //if (apiKey != null)
-            //{
-            //    headers.Add("Authorization", apiKey);
-            //}
-
             var mockRequest = new Mock<HttpRequest>();
-            //mockRequest.Setup(r => r.Headers).Returns(headers);
-
             var memoryStream = new MemoryStream();
             var writer = new StreamWriter(memoryStream);
 

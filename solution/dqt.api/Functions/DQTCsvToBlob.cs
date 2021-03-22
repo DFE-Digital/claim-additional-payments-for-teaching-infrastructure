@@ -2,6 +2,8 @@ using System;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
+using dqt.datalayer.Model;
+using dqt.domain.FileTransfer;
 using dqt.domain.Rollbar;
 using dqt.domain.SFTPToBlob;
 using Microsoft.Azure.WebJobs;
@@ -12,11 +14,13 @@ namespace dqt.api.Functions
     {
         private readonly IRollbarService _log;
         private readonly ISFTPToBlobProcessor _processor;
+        private readonly IDQTFileTransferService _dqtFileTransferService;
 
-        public DQTCsvToBlob(IRollbarService log, ISFTPToBlobProcessor processor)
+        public DQTCsvToBlob(IRollbarService log, ISFTPToBlobProcessor processor, IDQTFileTransferService dqtFileTransferService)
         {
             _log = log;
             _processor = processor;
+            _dqtFileTransferService = dqtFileTransferService;
         }
 
         [FunctionName("dqt-csv-to-blob")]
@@ -24,16 +28,26 @@ namespace dqt.api.Functions
         {
             try
             {
-                _log.Info($"dqt-csv-to-blob started at {DateTime.Now}");
+                _log.Info($"File transfer from SFTP to Blob started at {DateTime.Now}");
 
                 await _processor.SaveCSVToBlobAsync(context);
 
-                _log.Info($"dqt-csv-to-blob completed at {DateTime.Now}");
+                _log.Info($"File transfer from SFTP to Blob completed at {DateTime.Now}");
 
             }
             catch (Exception exception)
             {
-                _log.Error(new Exception($"SFTP Trigget failed at {DateTime.Now}", exception));
+                try
+                {
+                    await _dqtFileTransferService.AddDQTFileTransferDetails(DateTime.Now, DQTFileTransferStatus.Failure, exception.Message);
+                }
+                catch(Exception e)
+                {
+                    _log.Error(new Exception($"Failed to insert the last run error details", e));
+                }
+
+                _log.Error(new Exception($"File transfer from SFTP to blob failed at {DateTime.Now}", exception));
+
                 throw exception;
             }
         }

@@ -9,6 +9,8 @@ using dqt.domain.Rollbar;
 using dqt.domain.SFTPToBlob;
 using dqt.api.Authorization;
 using dqt.domain.Blob;
+using dqt.domain.FileTransfer;
+using dqt.domain.QTS;
 
 [assembly: FunctionsStartup(typeof(dqt.api.Startup))]
 namespace dqt.api
@@ -19,8 +21,10 @@ namespace dqt.api
         {
             builder.Services.AddDbContext<DQTDataContext>(options => options.UseNpgsql(GetConnStr()));
             builder.Services.AddTransient<IRollbarService, RollbarService>();
+            builder.Services.AddTransient<IDQTFileTransferService, DQTFileTransferService>();
             builder.Services.AddTransient<IQualifiedTeachersService, QualifiedTeachersService>();
             builder.Services.AddTransient<IRepository<QualifiedTeacher>, QualifiedTeachersRepository>();
+            builder.Services.AddTransient<IRepository<DQTFileTransfer>, DQTFileTransferRepository>();
             builder.Services.AddTransient<ICSVProcessor, CSVProcessor>();
             builder.Services.AddTransient<ISFTPToBlobProcessor, SFTPToBlobProcessor>();
             builder.Services.AddTransient<IAuthorize, Authorize>();

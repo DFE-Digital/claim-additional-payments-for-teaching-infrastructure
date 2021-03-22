@@ -9,5 +9,8 @@ namespace dqt.datalayer.Repository
     {
         Task<IEnumerable<T>> FindAsync(Expression<Func<T, bool>> predicate);
         Task SetUpDB();
+        Task<IEnumerable<T>> FindAllAsync();
+
+        Task<int> InsertAsync(T entity);
     }
 }

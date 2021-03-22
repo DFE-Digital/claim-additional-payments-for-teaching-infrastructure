@@ -4,12 +4,13 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.Azure.WebJobs;
 using Microsoft.Azure.WebJobs.Extensions.Http;
 using Microsoft.AspNetCore.Http;
-using dqt.domain;
 using Newtonsoft.Json;
 using System;
 using System.Linq;
-using dqt.api.Authorization;
 using dqt.domain.Rollbar;
+using dqt.domain.QTS;
+using dqt.api.Authorization;
+using dqt.api.DTOs;
 
 namespace dqt.api.Functions
 {
@@ -40,7 +41,7 @@ namespace dqt.api.Functions
             var requestBody = await new StreamReader(req.Body).ReadToEndAsync();
             try
             {
-                var request = JsonConvert.DeserializeObject<ExistingQualifiedTeacherRequest>(requestBody);
+                var request = JsonConvert.DeserializeObject<ExistingQualifiedTeacherRequestDTO>(requestBody);
 
                 if (request == null || string.IsNullOrWhiteSpace(request.TRN))
                 {
