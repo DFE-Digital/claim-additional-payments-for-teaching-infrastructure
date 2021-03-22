@@ -5,19 +5,17 @@ namespace dqt.domain.Rollbar
 {
     public class RollbarService : IRollbarService
     {
-        private readonly IConfigSettings _configSettings;
-
         public RollbarService(IConfigSettings configSettings)
         {
-            _configSettings = configSettings;
+            RollbarLocator.RollbarInstance.Configure(
+                new RollbarConfig(configSettings.DQTRollbarAccessToken)
+                {
+                    Environment = configSettings.DQTRollbarEnvironment
+                });
         }
         public void Configure(string environment)
         {
-            RollbarLocator.RollbarInstance.Configure(
-                new RollbarConfig(_configSettings.DQTRollbarAccessToken)
-                {
-                    Environment = environment
-                });
+            
         }
 
         public void Error(Exception exception)

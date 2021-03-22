@@ -1,16 +1,17 @@
 ﻿using System;
 using System.IO;
 using System.Linq;
-using Microsoft.WindowsAzure.Storage;
 using Microsoft.Azure.WebJobs;
 using WinSCP;
 using dqt.domain.Blob;
+using System.Threading.Tasks;
 
 namespace dqt.domain.SFTPToBlob
 {
     public class SFTPToBlobProcessor : ISFTPToBlobProcessor
     {
         private readonly IBlobService _blobService;
+
         private readonly IConfigSettings _configSettings;
 
         public SFTPToBlobProcessor(IBlobService blobService, IConfigSettings configSettings)
@@ -18,7 +19,8 @@ namespace dqt.domain.SFTPToBlob
             _blobService = blobService;
             _configSettings = configSettings;
         }
-        public async System.Threading.Tasks.Task SaveCSVToBlobAsync(ExecutionContext context)
+
+        public async Task SaveCSVToBlobAsync(ExecutionContext context)
         {
             using Session session = new Session
             {

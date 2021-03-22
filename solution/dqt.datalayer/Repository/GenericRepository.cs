@@ -18,9 +18,21 @@ namespace dqt.datalayer.Repository
             this.Context = context;
         }
 
+        public async Task<IEnumerable<T>> FindAllAsync()
+        {
+            return await Task.FromResult(Context.Set<T>());
+        }
+
         public async Task<IEnumerable<T>> FindAsync(Expression<Func<T, bool>> predicate)
         {
             return await Task.FromResult(Context.Set<T>().Where(predicate));
+        }
+
+        public async Task<int> InsertAsync(T entity)
+        {
+            await Context.Set<T>().AddAsync(entity);
+
+            return await Context.SaveChangesAsync();
         }
 
         public async Task SetUpDB()

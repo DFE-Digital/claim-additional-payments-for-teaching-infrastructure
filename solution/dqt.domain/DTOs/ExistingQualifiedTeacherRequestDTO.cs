@@ -1,8 +1,8 @@
 ﻿using System;
 
-namespace dqt.api
+namespace dqt.api.DTOs
 {
-    public class ExistingQualifiedTeacherRequest
+    public class ExistingQualifiedTeacherRequestDTO
     {
         public string TRN { get; set; }
 

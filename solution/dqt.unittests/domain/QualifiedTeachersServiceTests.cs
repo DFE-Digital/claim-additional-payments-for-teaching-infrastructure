@@ -3,8 +3,7 @@ using Moq;
 using Xunit;
 using dqt.datalayer.Model;
 using dqt.datalayer.Repository;
-using dqt.domain;
-
+using dqt.domain.QTS;
 
 namespace dqt.unittests.domain
 {
