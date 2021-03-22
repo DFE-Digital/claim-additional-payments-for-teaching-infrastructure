@@ -10,7 +10,7 @@ using dqt.datalayer.Database;
 namespace dqt.datalayer.Migrations
 {
     [DbContext(typeof(DQTDataContext))]
-    [Migration("20210322111539_InitialMigration")]
+    [Migration("20210322120635_InitialMigration")]
     partial class InitialMigration
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -20,6 +20,27 @@ namespace dqt.datalayer.Migrations
                 .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.SerialColumn)
                 .HasAnnotation("ProductVersion", "3.1.12")
                 .HasAnnotation("Relational:MaxIdentifierLength", 63);
+
+            modelBuilder.Entity("dqt.datalayer.Model.DQTFileTransfer", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer")
+                        .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.SerialColumn);
+
+                    b.Property<string>("Error")
+                        .HasColumnType("text");
+
+                    b.Property<DateTime>("LastRun")
+                        .HasColumnType("timestamp without time zone");
+
+                    b.Property<string>("Status")
+                        .HasColumnType("text");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("DQTFileTransfer");
+                });
 
             modelBuilder.Entity("dqt.datalayer.Model.QualifiedTeacher", b =>
                 {

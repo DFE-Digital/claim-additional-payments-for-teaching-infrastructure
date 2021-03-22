@@ -9,6 +9,21 @@ namespace dqt.datalayer.Migrations
         protected override void Up(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.CreateTable(
+                name: "DQTFileTransfer",
+                columns: table => new
+                {
+                    Id = table.Column<int>(nullable: false)
+                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.SerialColumn),
+                    LastRun = table.Column<DateTime>(nullable: false),
+                    Status = table.Column<string>(nullable: true),
+                    Error = table.Column<string>(nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_DQTFileTransfer", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "QualifiedTeachers",
                 columns: table => new
                 {
@@ -53,6 +68,9 @@ namespace dqt.datalayer.Migrations
 
         protected override void Down(MigrationBuilder migrationBuilder)
         {
+            migrationBuilder.DropTable(
+                name: "DQTFileTransfer");
+
             migrationBuilder.DropTable(
                 name: "QualifiedTeachers");
 
