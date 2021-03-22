@@ -22,5 +22,14 @@ namespace dqt.datalayer.Repository
         {
             return await Task.FromResult(Context.Set<T>().Where(predicate));
         }
+
+        public async Task SetUpDB()
+        {
+            var pendingMigrations = await Context.Database.GetPendingMigrationsAsync();
+            if (pendingMigrations.Any())
+            {
+                await Context.Database.MigrateAsync();
+            }          
+        }
     }
 }

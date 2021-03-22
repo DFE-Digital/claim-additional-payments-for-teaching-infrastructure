@@ -18,7 +18,7 @@ namespace dqt.api
         public override void Configure(IFunctionsHostBuilder builder)
         {
             builder.Services.AddDbContext<DQTDataContext>(options => options.UseNpgsql(GetConnStr()));
-             builder.Services.AddTransient<IRollbarService, RollbarService>();
+            builder.Services.AddTransient<IRollbarService, RollbarService>();
             builder.Services.AddTransient<IQualifiedTeachersService, QualifiedTeachersService>();
             builder.Services.AddTransient<IRepository<QualifiedTeacher>, QualifiedTeachersRepository>();
             builder.Services.AddTransient<ICSVProcessor, CSVProcessor>();

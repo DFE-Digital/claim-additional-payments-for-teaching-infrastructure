@@ -1,4 +1,6 @@
 ﻿using CsvHelper;
+using dqt.datalayer.Model;
+using dqt.datalayer.Repository;
 using dqt.domain.Blob;
 using Npgsql;
 using System;
@@ -12,16 +14,18 @@ namespace dqt.domain
     {
         private readonly IBlobService _blobService;
         private readonly IConfigSettings _configSettings;
+        private readonly IRepository<QualifiedTeacher> repo;
 
-        public CSVProcessor(IBlobService blobService, IConfigSettings configSettings)
+        public CSVProcessor(IBlobService blobService, IConfigSettings configSettings, IRepository<QualifiedTeacher> repo)
         {
             _blobService = blobService;
             _configSettings = configSettings;
+            this.repo = repo;
         }
 
         public async Task SaveCSVDataToDatabase(Stream csvBLOB, string name)
         {
-
+            await repo.SetUpDB();
             await using var conn = new NpgsqlConnection(GetConnStr());
             await conn.OpenAsync();
             await ProcessCSVDataAsync(csvBLOB, conn);
@@ -42,7 +46,7 @@ namespace dqt.domain
             using var truncateTableCommand = new NpgsqlCommand("TRUNCATE TABLE \"QualifiedTeachers\";", conn);
             await truncateTableCommand.ExecuteNonQueryAsync();
 
-            using var revertBackupCommand = new NpgsqlCommand("INSERT INTO \"QualifiedTeachers\" SELECT * from \"QualifiedTeachersBackup\"", conn);
+            using var revertBackupCommand = new NpgsqlCommand("INSERT INTO \"QualifiedTeachers\" ( \"Id\", \"Trn\", \"Name\", \"DoB\", \"NINumber\", \"QTSAwardDate\", \"ITTSubject1Code\", \"ITTSubject2Code\", \"ITTSubject3Code\", \"ActiveAlert\") SELECT * from \"QualifiedTeachersBackup\"", conn);
             await revertBackupCommand.ExecuteNonQueryAsync();
             await tran.CommitAsync();
 
@@ -68,12 +72,12 @@ namespace dqt.domain
                         writer.StartRow();
                         writer.Write(i, NpgsqlTypes.NpgsqlDbType.Integer);
                         writer.Write(row.name, NpgsqlTypes.NpgsqlDbType.Text);
-                        writer.Write(row.dob, NpgsqlTypes.NpgsqlDbType.Timestamp);
+                        writer.Write(row.dob, NpgsqlTypes.NpgsqlDbType.Date);
                         writer.Write(row.ITTSubject1Code, NpgsqlTypes.NpgsqlDbType.Text);
                         writer.Write(row.ITTSubject2Code, NpgsqlTypes.NpgsqlDbType.Text);
                         writer.Write(row.ITTSubject3Code, NpgsqlTypes.NpgsqlDbType.Text);
                         writer.Write(row.niNumber, NpgsqlTypes.NpgsqlDbType.Text);
-                        writer.Write(row.qtsAwardDate, NpgsqlTypes.NpgsqlDbType.Timestamp);
+                        writer.Write(row.qtsAwardDate, NpgsqlTypes.NpgsqlDbType.Date);
                         writer.Write(row.trn, NpgsqlTypes.NpgsqlDbType.Text);
                         writer.Write(row.ActiveAlert, NpgsqlTypes.NpgsqlDbType.Boolean);
                     }
