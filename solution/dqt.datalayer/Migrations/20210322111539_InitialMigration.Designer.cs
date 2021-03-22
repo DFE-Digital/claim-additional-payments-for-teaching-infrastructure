@@ -10,8 +10,8 @@ using dqt.datalayer.Database;
 namespace dqt.datalayer.Migrations
 {
     [DbContext(typeof(DQTDataContext))]
-    [Migration("20210319112314_ChangeDateTimeColumnToDateOnQualifiedTeacherStaus")]
-    partial class ChangeDateTimeColumnToDateOnQualifiedTeacherStaus
+    [Migration("20210322111539_InitialMigration")]
+    partial class InitialMigration
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
