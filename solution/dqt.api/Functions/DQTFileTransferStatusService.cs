@@ -7,6 +7,8 @@ using System;
 using dqt.api.Authorization;
 using dqt.domain.Rollbar;
 using dqt.domain.FileTransfer;
+using System.Collections.Generic;
+using dqt.api.DTOs;
 
 namespace dqt.api.Functions
 {
@@ -44,12 +46,18 @@ namespace dqt.api.Functions
                     return new NotFoundObjectResult("No file transfer record(s) found");
                 }
 
-                return new OkObjectResult(result);
+                return new OkObjectResult(GetResultDto(result));
             }
             catch (Exception exception)
             {
                 _log.Error(exception);
-                return new ObjectResult(exception.Message) { StatusCode = 500 };
+
+                return new ObjectResult(GetResultDto(null, exception.Message)) { StatusCode = 500 };
+            }
+
+            static ResultDTO<DQTFileTransferDTO> GetResultDto(DQTFileTransferDTO data, string message = null)
+            {
+                return new ResultDTO<DQTFileTransferDTO>(data, message);
             }
         }
     }
