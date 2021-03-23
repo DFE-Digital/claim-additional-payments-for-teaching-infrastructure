@@ -70,9 +70,10 @@ namespace dqt.unittests.api
 
             var request = CreateMockHttpRequest();
             var response = (ObjectResult)await _qualifiedTeacherStatusService.Run(request.Object);
+            var resultDto = (ResultDTO<DQTFileTransferDTO>)response.Value;
 
             Assert.Equal(500, response.StatusCode);
-            Assert.Equal(exceptionMessage, response.Value);
+            Assert.Equal(exceptionMessage, resultDto.Message);
         }
 
         [Fact]
@@ -91,9 +92,10 @@ namespace dqt.unittests.api
 
             var request = CreateMockHttpRequest();
             var response = (OkObjectResult)await _qualifiedTeacherStatusService.Run(request.Object);
+            var resultDto = (ResultDTO<DQTFileTransferDTO>)response.Value;
 
             Assert.Equal(200, response.StatusCode);
-            Assert.Equal(mockResult, response.Value);
+            Assert.Equal(mockResult, resultDto.Data);
         }
 
         private Mock<HttpRequest> CreateMockHttpRequest(string apiKey = API_KEY)
