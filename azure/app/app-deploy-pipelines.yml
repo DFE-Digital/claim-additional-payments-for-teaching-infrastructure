@@ -13,7 +13,6 @@ parameters:
   - name: deployment_target
     displayName: Deploy
     type: string
-    default: development
     values: 
     - development
     - test
