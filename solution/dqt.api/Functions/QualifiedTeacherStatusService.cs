@@ -11,6 +11,8 @@ using dqt.domain.Rollbar;
 using dqt.domain.QTS;
 using dqt.api.Authorization;
 using dqt.api.DTOs;
+using System.Collections.Generic;
+using dqt.datalayer.Model;
 
 namespace dqt.api.Functions
 {
@@ -30,11 +32,12 @@ namespace dqt.api.Functions
 
         [FunctionName("qualified-teacher-status-api")]
         public async Task<IActionResult> Run(
-            [HttpTrigger(AuthorizationLevel.Function, "post", Route = "qualified-teachers/qualified-teaching-status")] HttpRequest req)
+            [HttpTrigger(AuthorizationLevel.Function, "get", Route = "qualified-teachers/qualified-teaching-status")] HttpRequest req)
         {
             if (!_authorize.AuthorizeRequest(req))
             {
                 _log.Warning($"Unauthorized request");
+
                 return new UnauthorizedResult();
             }
 
@@ -45,7 +48,7 @@ namespace dqt.api.Functions
 
                 if (request == null || string.IsNullOrWhiteSpace(request.TRN))
                 {
-                    return new BadRequestObjectResult("TeacherReferenceNumber is mandatory");
+                    return new BadRequestObjectResult(GetResultDto(null, "TeacherReferenceNumber is mandatory"));
                 }
 
                 _log.Info($"Fetching records for TRN number {request.TRN} and NI number {request.NINumber}");
@@ -55,20 +58,28 @@ namespace dqt.api.Functions
                 if (!results.Any())
                 {
                     _log.Info($"No records found for TRN number {request.TRN} and NI number {request.NINumber}");
-                    return new NotFoundObjectResult("No records found");
+
+                    return new NotFoundObjectResult(GetResultDto(null, "No records found"));
                 }
 
-                return new OkObjectResult(results.ToList());
+                return new OkObjectResult(GetResultDto(results.ToList()));
             }
             catch (JsonException jsonException)
             {
                 _log.Error(jsonException);
-                return new BadRequestObjectResult("Bad request data");
+
+                return new BadRequestObjectResult(GetResultDto(null, "Bad request"));
             }
             catch (Exception exception)
             {
                 _log.Error(exception);
-                return new ObjectResult(exception.Message) { StatusCode = 500 };
+
+                return new ObjectResult(GetResultDto(null, exception.Message)) { StatusCode = 500 };
+            }
+
+            static ResultDTO<List<QualifiedTeacher>> GetResultDto(List<QualifiedTeacher> data, string message = null)
+            {
+                return new ResultDTO<List<QualifiedTeacher>>(data, message);
             }
         }
     }

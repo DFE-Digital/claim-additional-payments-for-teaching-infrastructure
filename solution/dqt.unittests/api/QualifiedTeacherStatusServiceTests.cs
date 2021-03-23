@@ -69,9 +69,10 @@ namespace dqt.unittests.api
             var request = CreateMockHttpRequest(null);
 
             var response = (BadRequestObjectResult)await _qualifiedTeacherStatusService.Run(request.Object);
+            var resultDto = (ResultDTO<List<QualifiedTeacher>>)response.Value;
 
             Assert.Equal(400, response.StatusCode);
-            Assert.Equal("TeacherReferenceNumber is mandatory", response.Value);
+            Assert.Equal("TeacherReferenceNumber is mandatory", resultDto.Message);
         }
 
         [Fact]
@@ -92,9 +93,10 @@ namespace dqt.unittests.api
             _mockAuth.Setup(x => x.AuthorizeRequest(It.IsAny<HttpRequest>())).Returns(true);
 
             var response = (BadRequestObjectResult)await _qualifiedTeacherStatusService.Run(request.Object);
+            var resultDto = (ResultDTO<List<QualifiedTeacher>>)response.Value;
 
             Assert.Equal(400, response.StatusCode);
-            Assert.Equal("Bad request data", response.Value);
+            Assert.Equal("Bad request", resultDto.Message);
         }
 
         [Fact]
@@ -108,9 +110,10 @@ namespace dqt.unittests.api
             _mockAuth.Setup(x => x.AuthorizeRequest(It.IsAny<HttpRequest>())).Returns(true);
             var request = CreateMockHttpRequest(requestBody);
             var response = (BadRequestObjectResult)await _qualifiedTeacherStatusService.Run(request.Object);
+            var resultDto = (ResultDTO<List<QualifiedTeacher>>)response.Value;
 
             Assert.Equal(400, response.StatusCode);
-            Assert.Equal("TeacherReferenceNumber is mandatory", response.Value);
+            Assert.Equal("TeacherReferenceNumber is mandatory", resultDto.Message);
         }
 
         [Fact]
@@ -122,9 +125,10 @@ namespace dqt.unittests.api
 
             var request = CreateMockHttpRequest(_requestObj);
             var response = (NotFoundObjectResult)await _qualifiedTeacherStatusService.Run(request.Object);
+            var resultDto = (ResultDTO<List<QualifiedTeacher>>)response.Value;
 
             Assert.Equal(404, response.StatusCode);
-            Assert.Equal("No records found", response.Value);
+            Assert.Equal("No records found", resultDto.Message);
         }
 
         [Fact]
@@ -136,9 +140,10 @@ namespace dqt.unittests.api
 
             var request = CreateMockHttpRequest(_requestObj);
             var response = (ObjectResult)await _qualifiedTeacherStatusService.Run(request.Object);
+            var resultDto = (ResultDTO<List<QualifiedTeacher>>)response.Value;
 
             Assert.Equal(500, response.StatusCode);
-            Assert.Equal(exceptionMessage, response.Value);
+            Assert.Equal(exceptionMessage, resultDto.Message);
         }
 
         [Fact]
@@ -150,9 +155,10 @@ namespace dqt.unittests.api
 
             var request = CreateMockHttpRequest(_requestObj);
             var response = (OkObjectResult)await _qualifiedTeacherStatusService.Run(request.Object);
+            var resultDto = (ResultDTO<List<QualifiedTeacher>>)response.Value;
 
             Assert.Equal(200, response.StatusCode);
-            Assert.Equal(_mockQualifiedTeachers, response.Value);
+            Assert.Equal(_mockQualifiedTeachers, resultDto.Data);
         }
 
         private Mock<HttpRequest> CreateMockHttpRequest(ExistingQualifiedTeacherRequestDTO body)
