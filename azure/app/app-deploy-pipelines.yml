@@ -76,3 +76,21 @@ stages:
       sln_artifact_name: 'drop-sln'
       vmImage: 'windows-latest'
       run_after: stage_build
+
+
+- stage: stage_deploy_production
+  displayName: 'Deploy Production'
+  condition: eq('${{ parameters.deployment_target}}', 'production')
+  jobs: 
+  - template: jobs/deploy-resources.yml
+    parameters:
+      service_connection_name: 'azdo.pipelines.cip.S118P.armf895c908-777c-49ec-b814-3c50d459c6ab'
+      subscription_identifier: '${{ variables.system_identifier }}'
+      subscription_purpose: 'teacherpaymentsservice-production'
+      environment_id: 'p01'
+      nuget_config_path: 'solution/nuget.config'
+      connectionString_secretname: 'Values.DQTDbConnectionString'
+      datalayer_project_directory: 'solution/dqt.datalayer'
+      sln_artifact_name: 'drop-sln'
+      vmImage: 'windows-latest'
+      run_after: stage_build
