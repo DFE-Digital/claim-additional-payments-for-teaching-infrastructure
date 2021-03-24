@@ -45,7 +45,7 @@ stages:
 
 - stage: stage_deploy_development
   displayName: 'Deploy development'
-  condition: eq('${{ parameters.deployment_target}}', 'test')
+  condition: eq('${{ parameters.deployment_target}}', 'development')
   jobs: 
   - template: jobs/deploy-resources.yml
     parameters:
@@ -62,13 +62,13 @@ stages:
 
 - stage: stage_deploy_test
   displayName: 'Deploy Test'
-  condition: eq('${{ parameters.deployment_target}}', 'Test')
+  condition: eq('${{ parameters.deployment_target}}', 'test')
   jobs: 
   - template: jobs/deploy-resources.yml
     parameters:
       service_connection_name: 'azdo.pipelines.cip.S118T.arm03ce3ff5-9a61-4525-a063-6ecde34874cf'
       subscription_identifier: '${{ variables.system_identifier }}'
-      subscription_purpose: 'teacherpaymentsservice-development'
+      subscription_purpose: 'teacherpaymentsservice-test'
       environment_id: 't01'
       nuget_config_path: 'solution/nuget.config'
       connectionString_secretname: 'Values.DQTDbConnectionString'
