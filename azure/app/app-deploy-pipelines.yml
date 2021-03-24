@@ -45,7 +45,7 @@ stages:
 
 - stage: stage_deploy_development
   displayName: 'Deploy development'
-  condition: eq('${{ parameters.deployment_target}}', 'development')
+  condition: eq('${{ parameters.deployment_target}}', 'test')
   jobs: 
   - template: jobs/deploy-resources.yml
     parameters:
