@@ -76,43 +76,53 @@ steps:
           },
           {
             "name": "DQTApiKey",
-            "value": "$(DQTApiKey)"
+            "value": "$(DQTApiKey)",
+            "slotSetting": false
           },
           {
             "name": "DQTRollbarAccessToken",
-            "value": "$(DQTRollbarAccessToken)"
+            "value": "$(DQTRollbarAccessToken)",
+            "slotSetting": false
           },
           {
             "name": "DQTRollbarEnvironment",
-            "value": "$(DQTRollbarEnvironment)"
+            "value": "$(DQTRollbarEnvironment)",
+            "slotSetting": false
           },
           {
             "name": "SFTPScheduleTriggerTime",
-            "value": "$(SFTPScheduleTriggerTime)"
+            "value": "$(SFTPScheduleTriggerTime)",
+            "slotSetting": false
           },
           {
             "name": "SFTPHostName",
-            "value": "$(SFTPHostName)"
+            "value": "$(SFTPHostName)",
+            "slotSetting": false            
           },
           {
             "name": "SFTPUserName",
-            "value": "$(SFTPUserName)"
+            "value": "$(SFTPUserName)",
+            "slotSetting": false
           },
           {
             "name": "SFTPPassword",
-            "value": "$(SFTPPassword)"
+            "value": "$(SFTPPassword)",
+            "slotSetting": false
           },
           {
             "name": "SFTPSshHostKeyFingerprint",
-            "value": "$(SFTPSshHostKeyFingerprint)"
+            "value": "$(SFTPSshHostKeyFingerprint)",
+            "slotSetting": false
           },
           {
             "name": "SFTPRemotePath",
-            "value": "$(SFTPRemotePath)"
+            "value": "$(SFTPRemotePath)",
+            "slotSetting": false
           },
           {
             "name": "DQTBlobContainerName",
-            "value": "$(DQTBlobContainerName)"
+            "value": "$(DQTBlobContainerName)",
+            "slotSetting": false
           }
         ]
 
