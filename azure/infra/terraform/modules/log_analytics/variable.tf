@@ -9,7 +9,7 @@
 
 variable "projcore_rg_name" {
   type        = string
-  description = "Core resource group for the log analytics"
+  description = "Project Core resource group for the log analytics"
 }
 variable "rg_location" {
   type        = string

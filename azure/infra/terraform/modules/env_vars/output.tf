@@ -7,6 +7,7 @@ output "common_tags" {
     "Service"          = "Teacher Training and Qualifications"
     "Service Line"     = "Teaching Workforce"
     "Service Offering" = "Claim Additional Payments (for teaching)"
+# "CostCentre"       = "DataCollections"    
   }, var.std_tags)
 }
 

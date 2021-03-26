@@ -43,6 +43,7 @@ variable "common_tags" {
 
 locals {
   verify_entity_id   = "development.additional-teaching-payment.education.gov.uk"
+  #verify_entity_id   = "www.claim-additional-teaching-payment.service.gov.uk" 
   verify_environment = "INTEGRATION"
 }
 

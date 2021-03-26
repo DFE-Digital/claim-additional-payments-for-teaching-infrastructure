@@ -36,7 +36,7 @@ resource "azurerm_container_group" "cont_reg_01" {
       "LOGSTASH_HOST"                                  = data.azurerm_key_vault_secret.LogstashHost.value
       "LOGSTASH_PORT"                                  = "17000"
       "NOTIFY_API_KEY"                                 = data.azurerm_key_vault_secret.NotifyApiKey.value
-      "RAILS_ENV"                                      = "production"
+      "RAILS_ENV"                                      = "development"
       "RAILS_SERVE_STATIC_FILES"                       = "true"
       "ROLLBAR_ACCESS_TOKEN"                           = data.azurerm_key_vault_secret.RollbarAccessToken.value
       "SECRET_KEY_BASE"                                = data.azurerm_key_vault_secret.SecretKeyBase.value

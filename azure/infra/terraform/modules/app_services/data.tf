@@ -3,11 +3,6 @@ data "azurerm_application_insights" "app_ai" {
   resource_group_name = var.app_rg_name
 }
 
-# data "azurerm_key_vault" "core_kv" {
-#        name                = "mykeyvault"
-#    resource_group_name = "some-resource-group"
-#    }
-
 data "azurerm_key_vault" "secrets_kv" {
   name                = "s118d01-secrets-kv"
   resource_group_name = "s118d01-secrets"

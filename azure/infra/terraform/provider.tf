@@ -6,11 +6,11 @@ provider "azurerm" {
   #dev
   subscription_id = "8655985a-2f87-44d7-a541-0be9a8c2779d"
   #test
-  #subscription_id = "e9299169-9666-4f15-9da9-5332680145af"
+  # subscription_id = "e9299169-9666-4f15-9da9-5332680145af"
   #prod west
-  #subscription_id = "88bd392f-df19-458b-a100-22b4429060ed"
+  # subscription_id = "88bd392f-df19-458b-a100-22b4429060ed"
   #prod north
-  #subscription_id = "8655985a-2f87-44d7-a541-0be9a8c2779d"  
+  # subscription_id = "8655985a-2f87-44d7-a541-0be9a8c2779d"  
   tenant_id = "9c7d9dd3-840c-4b3f-818e-552865082e16"
 
   features {}
@@ -29,8 +29,8 @@ terraform {
     # container_name       = "s118d01tfstate"
     container_name = "s118d01devtfstate"
     # container_name       = "s118t01testtfstate"
-    # container_name       = "s118p01prodwesttfstate"
-    # container_name       = "s118p01prodnorthtfstate"
+    # container_name       = "s118p01westprodtfstate"
+    # container_name       = "s118p01northprodtfstate"
     key = "terraform.tfstate"
   }
 

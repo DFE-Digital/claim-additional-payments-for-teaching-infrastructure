@@ -1,5 +1,3 @@
-# end of infra
-
 output "app_rg_name" {
   value       = azurerm_resource_group.rg_creation["app"].name
   description = "Resource Group name"

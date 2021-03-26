@@ -1,8 +1,8 @@
 
 resource "azurerm_recovery_services_vault" "core_rs_vault" {
-  name                = format("%s-%s", var.projcore_rg_name, "bv-01")
+  name                = format("%s-%s", var.core_rg_name, "bv-01")
   location            = var.rg_location
-  resource_group_name = var.projcore_rg_name
+  resource_group_name = var.core_rg_name
   sku                 = "Standard"
 
   soft_delete_enabled = true

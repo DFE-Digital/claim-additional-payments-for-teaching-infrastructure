@@ -16,7 +16,7 @@ module "resource_group" {
 module "storage_account" {
   source = "./modules/storageaccount"
   #  core_rg_name    = module.resource_group.core_rg_name
-  secrets_rg_name = module.resource_group.secrets_rg_namehaux
+  secrets_rg_name = module.resource_group.secrets_rg_name
   #  secrets_tmp_rg_name = module.resource_group.secrets_tmp_rg_name
   func_rg_name = module.resource_group.func_rg_name
   rg_location  = module.resource_group.rg_location
@@ -54,34 +54,34 @@ module "network_profile" {
   depends_on = [module.subnet]
 }
 
-# # route table section
-# module "route_table" {
-#   source = "./modules/route_table"
-#   core_rg_name = module.resource_group.core_rg_name
-#   core_sn_id   = module.subnet.core_sn_id
-#   rg_location = module.resource_group.rg_location
-#   common_tags = module.env_vars.common_tags
+# # # route table section
+# # module "route_table" {
+# #   source = "./modules/route_table"
+# #   core_rg_name = module.resource_group.core_rg_name
+# #   core_sn_id   = module.subnet.core_sn_id
+# #   rg_location = module.resource_group.rg_location
+# #   common_tags = module.env_vars.common_tags
+# # }
+
+# # # NSG
+# # module "network_security_group" {
+# #   source          = "./modules/nsg"
+# #   core_rg_name    = module.resource_group.core_rg_name
+# #   core_vn_01_name = module.network.core_vn_01_name
+# #   rg_location     = module.resource_group.rg_location
+# #   common_tags     = module.env_vars.common_tags
+
+# #   depends_on = [module.subnet]
+# # }
+
+# # recover_services managed centrally in CORE
+# module "recovery_services_vault" {
+#   source           = "./modules/recovery_services_vault"
+#   projcore_rg_name = module.resource_group.core_rg_name
+#   rg_location      = module.resource_group.rg_location
+#   common_tags      = module.env_vars.common_tags
+
 # }
-
-# # NSG
-# module "network_security_group" {
-#   source          = "./modules/nsg"
-#   core_rg_name    = module.resource_group.core_rg_name
-#   core_vn_01_name = module.network.core_vn_01_name
-#   rg_location     = module.resource_group.rg_location
-#   common_tags     = module.env_vars.common_tags
-
-#   depends_on = [module.subnet]
-# }
-
-# recover_services
-module "recovery_services_vault" {
-  source           = "./modules/recovery_services_vault"
-  projcore_rg_name = module.resource_group.projcore_rg_name
-  rg_location      = module.resource_group.rg_location
-  common_tags      = module.env_vars.common_tags
-
-}
 
 #key vault
 module "key_vault" {
@@ -119,13 +119,15 @@ module "app_insights" {
   common_tags = module.env_vars.common_tags
 }
 
-# app services
+# app services - removed pending investigation 
 module "app_services" {
   source       = "./modules/app_services"
   app_rg_name  = module.resource_group.app_rg_name
   func_rg_name = module.resource_group.func_rg_name
   rg_location  = module.resource_group.rg_location
   common_tags  = module.env_vars.common_tags
+
+  depends_on = [module.app_insights]  
 }
 
 # Function app
@@ -150,30 +152,30 @@ module "postgres" {
   depends_on = [module.subnet]
 }
 
-#container
-module "container" {
-  source                = "./modules/container_reg"
-  app_rg_name           = module.resource_group.app_rg_name
-  projcore_network_prof = module.network_profile.projcore_network_prof
-  container_version     = module.env_vars.container_version
-  rg_location           = module.resource_group.rg_location
-  common_tags           = module.env_vars.common_tags
+# #container
+# module "container" {
+#   source                = "./modules/container_reg"
+#   app_rg_name           = module.resource_group.app_rg_name
+#   projcore_network_prof = module.network_profile.projcore_network_prof
+#   container_version     = module.env_vars.container_version
+#   rg_location           = module.resource_group.rg_location
+#   common_tags           = module.env_vars.common_tags
 
-  depends_on = [module.network_profile]
-}
+#   depends_on = [module.network_profile, module.app_insights]    
+# }
 
-# below two modules are commented out as the two components are currently not required
-# # #ddos
-# # module "ddos" {
-# #   source      = "./modules/ddos"
-# #   rg_name     = module.resource_group.infra_rg_name
-# #   rg_location = module.resource_group.rg_location
-# #   common_tags = module.env_vars.common_tags
-# # }
+# # below two modules are commented out as the two components are currently not required
+# # # #ddos
+# # # module "ddos" {
+# # #   source      = "./modules/ddos"
+# # #   rg_name     = module.resource_group.infra_rg_name
+# # #   rg_location = module.resource_group.rg_location
+# # #   common_tags = module.env_vars.common_tags
+# # # }
 
-# # #security Centre
-# # module "security_centre" {
-# #   source = "./modules/security_centre"
-# #   la_id  = module.log_analytics.la_id
-# #   common_tags = module.env_vars.common_tags
-# # }
+# # # #security Centre
+# # # module "security_centre" {
+# # #   source = "./modules/security_centre"
+# # #   la_id  = module.log_analytics.la_id
+# # #   common_tags = module.env_vars.common_tags
+# # # }

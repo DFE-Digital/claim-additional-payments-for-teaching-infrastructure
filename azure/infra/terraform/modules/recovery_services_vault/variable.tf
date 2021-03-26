@@ -7,9 +7,9 @@
 #   description = "This is mandatory as there is no default declaration"
 # }
 
-variable "projcore_rg_name" {
+variable "core_rg_name" {
   type        = string
-  description = "Core resource group for the key vault"
+  description = "Core resource group for the recovery vault"
 }
 variable "rg_location" {
   type        = string

@@ -22,8 +22,8 @@ resource "azurerm_postgresql_server" "app_postgres" {
     disabled_alerts      = []
     email_account_admins = false
     email_addresses = [
-      #"capt-dev@digital.education.gov.uk",
-      "lucas.kelly@digital.education.gov.uk",
+      "capt-dev@digital.education.gov.uk",
+      #"lucas.kelly@digital.education.gov.uk",
     ]
     enabled        = true
     retention_days = 90
