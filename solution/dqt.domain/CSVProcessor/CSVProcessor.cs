@@ -46,7 +46,7 @@ namespace dqt.domain
             using var truncateTableCommand = new NpgsqlCommand("TRUNCATE TABLE \"QualifiedTeachers\";", conn);
             await truncateTableCommand.ExecuteNonQueryAsync();
 
-            using var revertBackupCommand = new NpgsqlCommand("INSERT INTO \"QualifiedTeachers\" ( \"Id\", \"Trn\", \"Name\", \"DoB\", \"NINumber\", \"QTSAwardDate\", \"ITTSubject1Code\", \"ITTSubject2Code\", \"ITTSubject3Code\", \"ActiveAlert\") SELECT * from \"QualifiedTeachersBackup\"", conn);
+            using var revertBackupCommand = new NpgsqlCommand("INSERT INTO \"QualifiedTeachers\" ( \"Id\", \"Trn\", \"Name\", \"DoB\", \"NINumber\", \"QTSAwardDate\", \"ITTSubject1Code\", \"ITTSubject2Code\", \"ITTSubject3Code\", \"ActiveAlert\", \"QualificatonName\", \"ITTStartDate\") SELECT * from \"QualifiedTeachersBackup\"", conn);
             await revertBackupCommand.ExecuteNonQueryAsync();
             await tran.CommitAsync();
 
@@ -56,7 +56,7 @@ namespace dqt.domain
         {
             try
             {
-                using var writer = conn.BeginBinaryImport("COPY \"QualifiedTeachersBackup\" (\"Id\", \"Name\", \"DoB\", \"ITTSubject1Code\", \"ITTSubject2Code\", \"ITTSubject3Code\", \"NINumber\", \"QTSAwardDate\",\"Trn\" , \"ActiveAlert\") FROM STDIN (FORMAT BINARY)");
+                using var writer = conn.BeginBinaryImport("COPY \"QualifiedTeachersBackup\" (\"Id\", \"Name\", \"DoB\", \"ITTSubject1Code\", \"ITTSubject2Code\", \"ITTSubject3Code\", \"NINumber\", \"QTSAwardDate\",\"Trn\" , \"ActiveAlert\", \"QualificatonName\", \"ITTStartDate\") FROM STDIN (FORMAT BINARY)");
 
                 using (var memoryStream = new MemoryStream())
                 {
@@ -71,15 +71,17 @@ namespace dqt.domain
                         i++;
                         writer.StartRow();
                         writer.Write(i, NpgsqlTypes.NpgsqlDbType.Integer);
-                        writer.Write(row.name, NpgsqlTypes.NpgsqlDbType.Text);
-                        writer.Write(row.dob, NpgsqlTypes.NpgsqlDbType.Date);
-                        writer.Write(row.ITTSubject1Code, NpgsqlTypes.NpgsqlDbType.Text);
-                        writer.Write(row.ITTSubject2Code, NpgsqlTypes.NpgsqlDbType.Text);
-                        writer.Write(row.ITTSubject3Code, NpgsqlTypes.NpgsqlDbType.Text);
-                        writer.Write(row.niNumber, NpgsqlTypes.NpgsqlDbType.Text);
-                        writer.Write(row.qtsAwardDate, NpgsqlTypes.NpgsqlDbType.Date);
-                        writer.Write(row.trn, NpgsqlTypes.NpgsqlDbType.Text);
-                        writer.Write(row.ActiveAlert, NpgsqlTypes.NpgsqlDbType.Boolean);
+                        writer.Write(row.fullname, NpgsqlTypes.NpgsqlDbType.Text);
+                        writer.Write(row.birthdate, NpgsqlTypes.NpgsqlDbType.Date);
+                        writer.Write(row.itt_sub1value, NpgsqlTypes.NpgsqlDbType.Text);
+                        writer.Write(row.itt_sub2value, NpgsqlTypes.NpgsqlDbType.Text);
+                        writer.Write(row.itt_sub3value, NpgsqlTypes.NpgsqlDbType.Text);
+                        writer.Write(row.dfeta_ninumber, NpgsqlTypes.NpgsqlDbType.Text);
+                        writer.Write(row.dfeta_qtsdate, NpgsqlTypes.NpgsqlDbType.Date);
+                        writer.Write(row.dfeta_trn, NpgsqlTypes.NpgsqlDbType.Text);
+                        writer.Write(row.active_alert, NpgsqlTypes.NpgsqlDbType.Boolean);
+                        writer.Write(row.qual_name, NpgsqlTypes.NpgsqlDbType.Text);
+                        writer.Write(row.itt_startdate, NpgsqlTypes.NpgsqlDbType.Date);
                     }
                 }
                 await writer.CompleteAsync();
