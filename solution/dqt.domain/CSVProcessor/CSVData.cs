@@ -13,7 +13,7 @@ namespace dqt.domain
         public string itt_sub1value { get; set; }
         public string itt_sub2value { get; set; }
         public string itt_sub3value { get; set; }
-        public bool active_alert { get; set; }
+        public string active_alert { get; set; }
         public string qual_name { get; set; }
     }
 }

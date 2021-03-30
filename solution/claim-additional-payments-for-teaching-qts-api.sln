@@ -14,7 +14,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 		..\README.md = ..\README.md
 	EndProjectSection
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "dqt.unittests", "dqt.unittests\dqt.unittests.csproj", "{5A2D214B-F633-4EDF-82A4-91514A7EC9BD}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "dqt.unittests", "dqt.unittests\dqt.unittests.csproj", "{5A2D214B-F633-4EDF-82A4-91514A7EC9BD}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

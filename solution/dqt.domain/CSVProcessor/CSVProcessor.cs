@@ -46,7 +46,7 @@ namespace dqt.domain
             using var truncateTableCommand = new NpgsqlCommand("TRUNCATE TABLE \"QualifiedTeachers\";", conn);
             await truncateTableCommand.ExecuteNonQueryAsync();
 
-            using var revertBackupCommand = new NpgsqlCommand("INSERT INTO \"QualifiedTeachers\" ( \"Id\", \"Trn\", \"Name\", \"DoB\", \"NINumber\", \"QTSAwardDate\", \"ITTSubject1Code\", \"ITTSubject2Code\", \"ITTSubject3Code\", \"ActiveAlert\", \"QualificatonName\", \"ITTStartDate\") SELECT * from \"QualifiedTeachersBackup\"", conn);
+            using var revertBackupCommand = new NpgsqlCommand("INSERT INTO \"QualifiedTeachers\" ( \"Id\", \"Trn\", \"Name\", \"DoB\", \"NINumber\", \"QTSAwardDate\", \"ITTSubject1Code\", \"ITTSubject2Code\", \"ITTSubject3Code\", \"ActiveAlert\", \"ITTStartDate\", \"QualificationName\") SELECT * from \"QualifiedTeachersBackup\"", conn);
             await revertBackupCommand.ExecuteNonQueryAsync();
             await tran.CommitAsync();
 
@@ -56,7 +56,7 @@ namespace dqt.domain
         {
             try
             {
-                using var writer = conn.BeginBinaryImport("COPY \"QualifiedTeachersBackup\" (\"Id\", \"Name\", \"DoB\", \"ITTSubject1Code\", \"ITTSubject2Code\", \"ITTSubject3Code\", \"NINumber\", \"QTSAwardDate\",\"Trn\" , \"ActiveAlert\", \"QualificatonName\", \"ITTStartDate\") FROM STDIN (FORMAT BINARY)");
+                using var writer = conn.BeginBinaryImport("COPY \"QualifiedTeachersBackup\" (\"Id\", \"Name\", \"DoB\", \"ITTSubject1Code\", \"ITTSubject2Code\", \"ITTSubject3Code\", \"NINumber\", \"QTSAwardDate\",\"Trn\" , \"ActiveAlert\", \"QualificationName\", \"ITTStartDate\") FROM STDIN (FORMAT BINARY)");
 
                 using (var memoryStream = new MemoryStream())
                 {
@@ -72,16 +72,16 @@ namespace dqt.domain
                         writer.StartRow();
                         writer.Write(i, NpgsqlTypes.NpgsqlDbType.Integer);
                         writer.Write(row.fullname, NpgsqlTypes.NpgsqlDbType.Text);
-                        writer.Write(row.birthdate, NpgsqlTypes.NpgsqlDbType.Date);
+                        writer.Write(DateTime.Parse(row.birthdate.Date.ToString("yyyy-MM-dd")), NpgsqlTypes.NpgsqlDbType.Date);
                         writer.Write(row.itt_sub1value, NpgsqlTypes.NpgsqlDbType.Text);
                         writer.Write(row.itt_sub2value, NpgsqlTypes.NpgsqlDbType.Text);
                         writer.Write(row.itt_sub3value, NpgsqlTypes.NpgsqlDbType.Text);
                         writer.Write(row.dfeta_ninumber, NpgsqlTypes.NpgsqlDbType.Text);
-                        writer.Write(row.dfeta_qtsdate, NpgsqlTypes.NpgsqlDbType.Date);
+                        writer.Write(DateTime.Parse(row.dfeta_qtsdate.Date.ToString("yyyy-MM-dd")), NpgsqlTypes.NpgsqlDbType.Date);
                         writer.Write(row.dfeta_trn, NpgsqlTypes.NpgsqlDbType.Text);
-                        writer.Write(row.active_alert, NpgsqlTypes.NpgsqlDbType.Boolean);
+                        writer.Write(ConvertStringToBoolean(row.active_alert), NpgsqlTypes.NpgsqlDbType.Boolean);
                         writer.Write(row.qual_name, NpgsqlTypes.NpgsqlDbType.Text);
-                        writer.Write(row.itt_startdate, NpgsqlTypes.NpgsqlDbType.Date);
+                        writer.Write(DateTime.Parse(row.itt_startdate.Date.ToString("yyyy-MM-dd")), NpgsqlTypes.NpgsqlDbType.Date);
                     }
                 }
                 await writer.CompleteAsync();
@@ -90,6 +90,17 @@ namespace dqt.domain
             {
                 throw new Exception("Error persisting DQT data set.", ex);
             }
+        }
+
+        private bool ConvertStringToBoolean(string condition)
+        {
+            if (condition.ToLower() == "yes") return true;
+            if (condition.ToLower() == "true") return true;
+
+            if (condition.ToLower() == "no") return false;
+            if (condition.ToLower() == "false") return false;
+
+            throw new Exception($"Invalid boolean type in CSV {condition}");
         }
 
         private async Task TruncateBackupData(NpgsqlConnection conn)
