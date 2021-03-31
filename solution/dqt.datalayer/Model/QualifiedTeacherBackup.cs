@@ -29,5 +29,10 @@ namespace dqt.datalayer.Model
         public string ITTSubject3Code { get; set; }
 
         public bool ActiveAlert { get; set; }
+
+        public string QualificationName { get; set; }
+
+        [Column(TypeName = "Date")]
+        public DateTime ITTStartDate { get; set; }
     }
 }

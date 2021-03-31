@@ -12,6 +12,11 @@ using dqt.api.Authorization;
 using dqt.api.Functions;
 using dqt.domain.Rollbar;
 using dqt.domain.QTS;
+using System.Web;
+using Microsoft.Extensions.Primitives;
+using Microsoft.AspNetCore.Http.Internal;
+using System.Text;
+using dqt.domain.Encoding;
 
 namespace dqt.unittests.api
 {
@@ -23,9 +28,7 @@ namespace dqt.unittests.api
 
         private readonly Mock<IRollbarService> _loggerMock;
         private readonly Mock<IQualifiedTeachersService> _qualifiedTeachersServiceMock;
-
         private readonly QualifiedTeacherStatusService _qualifiedTeacherStatusService;
-        private readonly ExistingQualifiedTeacherRequestDTO _requestObj;
         private readonly List<QualifiedTeacher> _mockQualifiedTeachers;
         private readonly Mock<IAuthorize> _mockAuth;
 
@@ -38,12 +41,6 @@ namespace dqt.unittests.api
             _mockAuth = new Mock<IAuthorize>();
             _qualifiedTeacherStatusService = new QualifiedTeacherStatusService(_qualifiedTeachersServiceMock.Object, _loggerMock.Object, _mockAuth.Object);
 
-            _requestObj = new ExistingQualifiedTeacherRequestDTO()
-            {
-                TRN = TRN,
-                NINumber = NI
-            };
-
             _mockQualifiedTeachers = new List<QualifiedTeacher>
             {
                 new QualifiedTeacher() { Name = "TEST1", Trn = TRN, NINumber = NI }
@@ -53,107 +50,93 @@ namespace dqt.unittests.api
         [Fact]
         public async void Returns_UnauthorizedRequestResponse_WhenRequestIsUnAuthorized()
         {
+            RequestInfo requestInfo = new RequestInfo()
+            {
+                TRN = "Test-TRN",
+                NINumber = "Test-NI"
+            };
 
             _mockAuth.Setup(x => x.AuthorizeRequest(It.IsAny<HttpRequest>())).Returns(false);
-            var request = CreateMockHttpRequest(_requestObj);
+            var request = CreateMockHttpRequest(requestInfo);
             var response = (UnauthorizedResult)await _qualifiedTeacherStatusService.Run(request.Object);
 
             Assert.Equal(401, response.StatusCode);
         }
 
         [Fact]
-        public async void Returns_BadRequestResponse_WhenRequestBodyNull()
-        {
-
-            _mockAuth.Setup(x => x.AuthorizeRequest(It.IsAny<HttpRequest>())).Returns(true);
-            var request = CreateMockHttpRequest(null);
-
-            var response = (BadRequestObjectResult)await _qualifiedTeacherStatusService.Run(request.Object);
-            var resultDto = (ResultDTO<List<QualifiedTeacher>>)response.Value;
-
-            Assert.Equal(400, response.StatusCode);
-            Assert.Equal("TeacherReferenceNumber is mandatory", resultDto.Message);
-        }
-
-        [Fact]
-        public async void Returns_BadRequestResponse_WhenRequestBodyIsNotDeserializable()
-        {
-            var memoryStream = new MemoryStream();
-            var writer = new StreamWriter(memoryStream);
-
-            var json = "{ abs: abs' }";
-
-            writer.Write(json);
-            writer.Flush();
-            memoryStream.Position = 0;
-
-            _mockAuth.Setup(x => x.AuthorizeRequest(It.IsAny<HttpRequest>())).Returns(true);
-            var request = CreateMockHttpRequest(null);
-            request.Setup(r => r.Body).Returns(memoryStream);
-            _mockAuth.Setup(x => x.AuthorizeRequest(It.IsAny<HttpRequest>())).Returns(true);
-
-            var response = (BadRequestObjectResult)await _qualifiedTeacherStatusService.Run(request.Object);
-            var resultDto = (ResultDTO<List<QualifiedTeacher>>)response.Value;
-
-            Assert.Equal(400, response.StatusCode);
-            Assert.Equal("Bad request", resultDto.Message);
-        }
-
-        [Fact]
         public async void Returns_BadRequestResponse_WhenTRNNotPresent()
         {
-            var requestBody = new ExistingQualifiedTeacherRequestDTO()
+
+            RequestInfo requestInfo = new RequestInfo()
             {
-                NINumber = NI
+                NINumber = "Test-NI"
             };
 
             _mockAuth.Setup(x => x.AuthorizeRequest(It.IsAny<HttpRequest>())).Returns(true);
-            var request = CreateMockHttpRequest(requestBody);
+            var request = CreateMockHttpRequest(requestInfo);
             var response = (BadRequestObjectResult)await _qualifiedTeacherStatusService.Run(request.Object);
             var resultDto = (ResultDTO<List<QualifiedTeacher>>)response.Value;
 
             Assert.Equal(400, response.StatusCode);
-            Assert.Equal("TeacherReferenceNumber is mandatory", resultDto.Message);
+            Assert.Equal("TeacherReferenceNumber is mandatory.", resultDto.Message);
         }
 
         [Fact]
         public async void Returns_NotFoundObjectResult_WhenRequestIsValidAndNoMatchFound()
         {
+            RequestInfo requestInfo = new RequestInfo()
+            {
+                TRN = "Test-TRN",
+                NINumber = "Test-NI"
+            };
 
             _mockAuth.Setup(x => x.AuthorizeRequest(It.IsAny<HttpRequest>())).Returns(true);
-            _qualifiedTeachersServiceMock.Setup(x => x.GetQualifiedTeacherRecords(TRN, NI)).ReturnsAsync(new List<QualifiedTeacher>());
+            _qualifiedTeachersServiceMock.Setup(x => x.GetQualifiedTeacherRecords(It.IsAny<string>(), It.IsAny<string>())).ReturnsAsync(new List<QualifiedTeacher>());
 
-            var request = CreateMockHttpRequest(_requestObj);
+            var request = CreateMockHttpRequest(requestInfo);
             var response = (NotFoundObjectResult)await _qualifiedTeacherStatusService.Run(request.Object);
             var resultDto = (ResultDTO<List<QualifiedTeacher>>)response.Value;
 
             Assert.Equal(404, response.StatusCode);
-            Assert.Equal("No records found", resultDto.Message);
+            Assert.Equal("No records found.", resultDto.Message);
         }
 
         [Fact]
         public async void Returns_InternalServerError_WhenAnyExceptionEncountered()
         {
+            RequestInfo requestInfo = new RequestInfo()
+            {
+                TRN = "1229708",
+                NINumber = "6A9Y58Z41"
+            };
+
             _mockAuth.Setup(x => x.AuthorizeRequest(It.IsAny<HttpRequest>())).Returns(true);
             string exceptionMessage = "Not able to connect to database";
-            _qualifiedTeachersServiceMock.Setup(x => x.GetQualifiedTeacherRecords(TRN, NI)).ThrowsAsync(new Exception(exceptionMessage));
+            _qualifiedTeachersServiceMock.Setup(x => x.GetQualifiedTeacherRecords(It.IsAny<string>(), It.IsAny<string>())).ThrowsAsync(new Exception(exceptionMessage));
 
-            var request = CreateMockHttpRequest(_requestObj);
+
+            var request = CreateMockHttpRequest(requestInfo);
             var response = (ObjectResult)await _qualifiedTeacherStatusService.Run(request.Object);
             var resultDto = (ResultDTO<List<QualifiedTeacher>>)response.Value;
 
             Assert.Equal(500, response.StatusCode);
-            Assert.Equal(exceptionMessage, resultDto.Message);
+            Assert.Equal($"Error retrieving qualified teacher status data. {exceptionMessage}", resultDto.Message);
         }
 
         [Fact]
         public async void Returns_SuccessResponseWithQualifiedTeacherRecords_WhenRequestIsValid()
         {
+            RequestInfo requestInfo = new RequestInfo()
+            {
+                TRN = "Test-TRN",
+                NINumber = "Test-NI"
+            };
 
             _mockAuth.Setup(x => x.AuthorizeRequest(It.IsAny<HttpRequest>())).Returns(true);
-            _qualifiedTeachersServiceMock.Setup(x => x.GetQualifiedTeacherRecords(TRN, NI)).ReturnsAsync(_mockQualifiedTeachers);
+            _qualifiedTeachersServiceMock.Setup(x => x.GetQualifiedTeacherRecords(requestInfo.TRN, requestInfo.NINumber)).ReturnsAsync(_mockQualifiedTeachers);
 
-            var request = CreateMockHttpRequest(_requestObj);
+            var request = CreateMockHttpRequest(requestInfo);
+
             var response = (OkObjectResult)await _qualifiedTeacherStatusService.Run(request.Object);
             var resultDto = (ResultDTO<List<QualifiedTeacher>>)response.Value;
 
@@ -161,21 +144,37 @@ namespace dqt.unittests.api
             Assert.Equal(_mockQualifiedTeachers, resultDto.Data);
         }
 
-        private Mock<HttpRequest> CreateMockHttpRequest(ExistingQualifiedTeacherRequestDTO body)
+        private Mock<HttpRequest> CreateMockHttpRequest(RequestInfo requestDto)
         {
             var mockRequest = new Mock<HttpRequest>();
-            var memoryStream = new MemoryStream();
-            var writer = new StreamWriter(memoryStream);
 
-            var json = body != null ? JsonConvert.SerializeObject(body) : "";
+            var paramsDictionary = new Dictionary<string, StringValues> {
+                { "trn",  string.IsNullOrWhiteSpace(requestDto.TRN)? null:ParameterEncoder.Base64StringEncode(requestDto.TRN) },
+                { "ni", string.IsNullOrWhiteSpace(requestDto.NINumber)? null: ParameterEncoder.Base64StringEncode(requestDto.NINumber) }
+            };
 
-            writer.Write(json);
-            writer.Flush();
+            mockRequest.SetupGet(x => x.Query).Returns(new QueryCollection(paramsDictionary));
 
-            memoryStream.Position = 0;
-            mockRequest.Setup(x => x.Body).Returns(memoryStream);
+            var headDictionary = new Dictionary<string, StringValues>
+            {
+                {"x-correlation-id",  Guid.NewGuid().ToString() }
+            };
+
+            var httpContext = new DefaultHttpContext();
+            httpContext.Request.Headers["x-correlation-id"] = Guid.NewGuid().ToString();
+
+            IHeaderDictionary x = new HeaderDictionary(headDictionary);
+
+            mockRequest.Setup(x => x.Headers).Returns(x);
 
             return mockRequest;
         }
     }
+    public class RequestInfo
+    {
+
+        public string TRN { get; set; }
+        public string NINumber { get; set; }
+    }
+
 }

@@ -1,4 +1,3 @@
-using System.IO;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Azure.WebJobs;
@@ -10,9 +9,10 @@ using System.Linq;
 using dqt.domain.Rollbar;
 using dqt.domain.QTS;
 using dqt.api.Authorization;
-using dqt.api.DTOs;
 using System.Collections.Generic;
 using dqt.datalayer.Model;
+using System.Text;
+using dqt.domain.Encoding;
 
 namespace dqt.api.Functions
 {
@@ -34,53 +34,80 @@ namespace dqt.api.Functions
         public async Task<IActionResult> Run(
             [HttpTrigger(AuthorizationLevel.Function, "get", Route = "qualified-teachers/qualified-teaching-status")] HttpRequest req)
         {
+
+            string requestReference = req.Headers["x-correlation-id"];
+            if (string.IsNullOrWhiteSpace(requestReference))
+            {
+                requestReference = Guid.NewGuid().ToString();
+            }
+
+            _log.Info($"Received request. CorrelationId : {requestReference}");
+
             if (!_authorize.AuthorizeRequest(req))
             {
-                _log.Warning($"Unauthorized request");
-
+                _log.Warning($"Unauthorized request. CorrelationId : {requestReference}");
                 return new UnauthorizedResult();
             }
 
-            var requestBody = await new StreamReader(req.Body).ReadToEndAsync();
             try
             {
-                var request = JsonConvert.DeserializeObject<ExistingQualifiedTeacherRequestDTO>(requestBody);
+                var encodedTrn = req.Query["trn"];
+                var encodedNi = req.Query["ni"];
 
-                if (request == null || string.IsNullOrWhiteSpace(request.TRN))
+                if (string.IsNullOrWhiteSpace(encodedTrn))
                 {
-                    return new BadRequestObjectResult(GetResultDto(null, "TeacherReferenceNumber is mandatory"));
+                    var msg = $"TeacherReferenceNumber is mandatory.";
+                    _log.Info($"{msg} CorrelationId : {requestReference}");
+                    return new BadRequestObjectResult(GetResultDto(null, msg));
                 }
 
-                _log.Info($"Fetching records for TRN number {request.TRN} and NI number {request.NINumber}");
+                var trn = Base64StringDecode(encodedTrn);
+                var ni = string.IsNullOrWhiteSpace(encodedNi) ? null : Base64StringDecode(encodedNi);
 
-                var results = await _qtsService.GetQualifiedTeacherRecords(request.TRN, request.NINumber);
+                _log.Info($"Fetching records. CorrelationId : {requestReference}");
+
+                var results = await _qtsService.GetQualifiedTeacherRecords(trn, ni);
 
                 if (!results.Any())
                 {
-                    _log.Info($"No records found for TRN number {request.TRN} and NI number {request.NINumber}");
-
-                    return new NotFoundObjectResult(GetResultDto(null, "No records found"));
+                    var msg = $"No records found.";
+                    _log.Info($"{msg} CorrelationId : {requestReference}");
+                    return new NotFoundObjectResult(GetResultDto(null, msg));
                 }
 
                 return new OkObjectResult(GetResultDto(results.ToList()));
             }
             catch (JsonException jsonException)
             {
-                _log.Error(jsonException);
-
-                return new BadRequestObjectResult(GetResultDto(null, "Bad request"));
+                var errorMsg = $"Error retrieving qualified teacher status data.";
+                _log.Error(new JsonException($"{errorMsg} CorrelationId : {requestReference}", jsonException));
+                return new BadRequestObjectResult(GetResultDto(null, errorMsg));
             }
             catch (Exception exception)
             {
-                _log.Error(exception);
-
-                return new ObjectResult(GetResultDto(null, exception.Message)) { StatusCode = 500 };
+                var errorMsg = $"Error retrieving qualified teacher status data. {exception.Message}";
+                _log.Error(new Exception($"{errorMsg} CorrelationId : {requestReference}", exception));
+                return new ObjectResult(GetResultDto(null, errorMsg)) { StatusCode = 500 };
             }
 
             static ResultDTO<List<QualifiedTeacher>> GetResultDto(List<QualifiedTeacher> data, string message = null)
             {
                 return new ResultDTO<List<QualifiedTeacher>>(data, message);
             }
+        }
+
+        private string Base64StringDecode(string param)
+        {
+            var bytes = Convert.FromBase64String(param);
+            var decodedString = Encoding.UTF8.GetString(bytes);
+            return decodedString;
+        }
+
+        public string Base64StringEncode(string originalString)
+        {
+            var bytes = Encoding.UTF8.GetBytes(originalString);
+            var encodedString = Convert.ToBase64String(bytes);
+            return encodedString;
         }
     }
 }
