@@ -10,4 +10,6 @@
 /solution/dqt.api/bin/Debug/netcoreapp3.1/bin/
 /solution/dqt.unittests/obj
 /solution/dqt.unittests/bin/Debug/netcoreapp3.1
+/solution/dqt.integrationtests/obj
+/solution/dqt.integrationtests/bin/Debug/netcoreapp3.1
 *.user
