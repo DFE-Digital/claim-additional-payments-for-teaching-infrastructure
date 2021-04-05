@@ -2,7 +2,7 @@
 param ( 
     $SFTPHostName,
     $SFTPUserName,
-    [SecureString] $SFTPPassword,
+    $SFTPPassword,
     $SFTPSshHostKeyFingerprint,
     $WinSCPnetDLLPath,
     $SFTPRemotePath,
