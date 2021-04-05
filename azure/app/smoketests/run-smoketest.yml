@@ -6,6 +6,10 @@ parameters:
   - name: WinSCPnetDLLPath
     type: string
   - name: FileToUploadPath
+    type: string  
+  - name: functionapp_name
+    type: string  
+  - name: functionapp_resourcegroup
     type: string
   - name: vmImage
     type: string
