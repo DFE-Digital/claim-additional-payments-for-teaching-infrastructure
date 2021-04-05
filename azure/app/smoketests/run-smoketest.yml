@@ -67,7 +67,7 @@ jobs:
           azureSubscription: "${{ parameters.service_connection_name }}"
           ScriptType: 'FilePath'
           ScriptPath: '${{ parameters.SmokeTestScriptPath }}'
-          ScriptArguments: '-SFTPHostName $(SFTPHostName) -SFTPUserName $(SFTPUserName) -SFTPPassword $(SFTPPassword) -SFTPSshHostKeyFingerprint $(SFTPSshHostKeyFingerprint) -SFTPRemotePath $(SFTPRemotePath) -WinSCPnetDLLPath ${{ parameters.WinSCPnetDLLPath }} -FileToUploadPath ${{ parameters.FileTOUploadPath}}'
+          ScriptArguments: -SFTPHostName "$(SFTPHostName)" -SFTPUserName "$(SFTPUserName)" -SFTPPassword "$(SFTPPassword)" -SFTPSshHostKeyFingerprint "$(SFTPSshHostKeyFingerprint)" -SFTPRemotePath "$(SFTPRemotePath)" -WinSCPnetDLLPath "${{ parameters.WinSCPnetDLLPath }}" -FileToUploadPath "${{ parameters.FileTOUploadPath}}"
           azurePowerShellVersion: "LatestVersion"
 
       - task: AzureAppServiceSettings@1
