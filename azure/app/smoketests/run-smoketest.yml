@@ -11,6 +11,11 @@ parameters:
     type: string  
   - name: functionapp_resourcegroup
     type: string
+  - name: SmokeTestScriptPath
+    type: string
+  - name: run_after
+    type: object
+    default: []
   - name: vmImage
     type: string
     default: "windows-latest"
@@ -19,8 +24,8 @@ jobs:
   - job: job_run_smoketests
     displayName: Run Smoke Test
     pool:
-      vmImage: ${{ parameters.vmImage }}
-    
+      vmImage: ${{ parameters.vmImage }}    
+    dependsOn: ${{ parameters.run_after }}
     steps:
       - task: AzureCLI@2
         displayName: Add firewall rule to keyvault
@@ -61,7 +66,7 @@ jobs:
         inputs:
           azureSubscription: "${{ parameters.service_connection_name }}"
           ScriptType: 'FilePath'
-          ScriptPath: '/smoketest.ps1'
+          ScriptPath: '${{ parameters.SmokeTestScriptPath }}'
           ScriptArguments: '-SFTPHostName $(SFTPHostName) -SFTPUserName $(SFTPUserName) -SFTPPassword $(SFTPPassword) -SFTPSshHostKeyFingerprint $(SFTPSshHostKeyFingerprint) -SFTPRemotePath $(SFTPRemotePath) -WinSCPnetDLLPath ${{ variables.WinSCPnetDLLPath }} -FileToUploadPath ${{ variables.FileTOUploadPath}}'
           azurePowerShellVersion: "LatestVersion"
 
