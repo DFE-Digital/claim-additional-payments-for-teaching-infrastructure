@@ -57,12 +57,13 @@ jobs:
               }
             ]
 
-      - task: AzurePowerShell@5
+      - task: The Azure PowerShell version '' specified is not in the correct format. Please check the format.@5
         inputs:
           azureSubscription: "${{ parameters.service_connection_name }}"
           ScriptType: 'FilePath'
           ScriptPath: '/smoketest.ps1'
           ScriptArguments: '-SFTPHostName $(SFTPHostName) -SFTPUserName $(SFTPUserName) -SFTPPassword $(SFTPPassword) -SFTPSshHostKeyFingerprint $(SFTPSshHostKeyFingerprint) -SFTPRemotePath $(SFTPRemotePath) -WinSCPnetDLLPath ${{ variables.WinSCPnetDLLPath }} -FileToUploadPath ${{ variables.FileTOUploadPath}}'
+          azurePowerShellVersion: 'LatestVersion'
 
       - task: AzureAppServiceSettings@1
         displayName: "Revert function app settings"
