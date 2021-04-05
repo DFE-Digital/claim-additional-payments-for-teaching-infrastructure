@@ -1,17 +1,5 @@
 parameters:
-  - name: subscription_identifier
-    type: string
-  - name: environment_id
-    type: string
-  - name: functionapp_name
-    type: string
-  - name: functionapp_key_name
-    type: string
-  - name: functionapp_resourcegroup
-    type: string
   - name: keyvault_name
-    type: string
-  - name: keyvault_secret_name
     type: string
   - name: service_connection_name
     type: string
@@ -53,7 +41,7 @@ steps:
         [
           {
             "name": "SFTPScheduleTriggerTime",
-            "value": "$(SFTPScheduleTriggerTime)",
+            "value": "*/15 * * * * *",
             "slotSetting": false
           }
         ]
@@ -63,13 +51,22 @@ steps:
       azureSubscription: "${{ parameters.service_connection_name }}"
       ScriptType: 'FilePath'
       ScriptPath: '/smoketest.ps1'
-      ScriptArguments: '-SFTPHostName $(SFTPHostName) 
-                        -SFTPUserName $(SFTPUserName) 
-                        -SFTPPassword $(SFTPPassword) 
-                        -SFTPSshHostKeyFingerprint $(SFTPSshHostKeyFingerprint) 
-                        -SFTPRemotePath $(SFTPRemotePath) 
-                        -WinSCPnetDLLPath ${{ variables.WinSCPnetDLLPath }} 
-                        -FileToUploadPath ${{ variables.FileTOUploadPath}}'
+      ScriptArguments: '-SFTPHostName $(SFTPHostName) -SFTPUserName $(SFTPUserName) -SFTPPassword $(SFTPPassword) -SFTPSshHostKeyFingerprint $(SFTPSshHostKeyFingerprint) -SFTPRemotePath $(SFTPRemotePath) -WinSCPnetDLLPath ${{ variables.WinSCPnetDLLPath }} -FileToUploadPath ${{ variables.FileTOUploadPath}}'
+
+  - task: AzureAppServiceSettings@1
+    displayName: "Revert function app settings"
+    inputs:
+      azureSubscription: "${{ parameters.service_connection_name }}"
+      appName: ${{ parameters.functionapp_name }}
+      resourceGroupName: ${{ parameters.functionapp_resourcegroup }}
+      appSettings: |
+        [
+          {
+            "name": "SFTPScheduleTriggerTime",
+            "value": "$(SFTPScheduleTriggerTime)",
+            "slotSetting": false
+          }
+        ]
 
   - task: AzureCLI@2
     displayName: Remove firewall rules from keyvault

@@ -39,4 +39,7 @@ jobs:
     keyvault_name: '${{parameters.subscription_identifier }}${{parameters.environment_id}}-secrets-kv'
     keyvault_secret_name: DQTFunctionAppKey
    
-   
+- template: ../smoketests/run-smoketest.yml
+  parameters:
+    keyvault_name: DQTFunctionAppKey
+    service_connection_name: '${{ parameters.service_connection_name }}'
