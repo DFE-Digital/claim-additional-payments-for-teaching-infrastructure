@@ -16,8 +16,8 @@ parameters:
     default: "windows-latest"
 
 jobs:
-  - job: job_build_and_publish_dotnetcore_project
-    displayName: Build and publish dotnet core project
+  - job: job_run_smoketests
+    displayName: Run Smoke Test
     pool:
       vmImage: ${{ parameters.vmImage }}
     
