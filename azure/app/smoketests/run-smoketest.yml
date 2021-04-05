@@ -6,9 +6,9 @@ parameters:
 
 variables:
   - name: WinSCPnetDLLPath
-  - value: 'azure/app/somoketests/WinSCPnet.dll'
+    value: 'azure/app/somoketests/WinSCPnet.dll'
   - name: FileToUploadPath
-  - value: 'azure/app/somoketests/DqtTestData.csv'
+    value: 'azure/app/somoketests/DqtTestData.csv'
 
 steps:
   - task: AzureCLI@2
