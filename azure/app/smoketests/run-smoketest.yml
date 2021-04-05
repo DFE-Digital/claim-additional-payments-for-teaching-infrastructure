@@ -3,22 +3,20 @@ parameters:
     type: string
   - name: service_connection_name
     type: string
+  - name: WinSCPnetDLLPath
+    type: string
+  - name: FileToUploadPath
+    type: string
   - name: vmImage
     type: string
     default: "windows-latest"
-
-variables:
-  - name: WinSCPnetDLLPath
-    value: 'azure/app/somoketests/WinSCPnet.dll'
-  - name: FileToUploadPath
-    value: 'azure/app/somoketests/DqtTestData.csv'
 
 jobs:
   - job: job_build_and_publish_dotnetcore_project
     displayName: Build and publish dotnet core project
     pool:
       vmImage: ${{ parameters.vmImage }}
-
+    
     steps:
       - task: AzureCLI@2
         displayName: Add firewall rule to keyvault

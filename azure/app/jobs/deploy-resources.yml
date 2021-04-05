@@ -43,3 +43,5 @@ jobs:
   parameters:
     keyvault_name: DQTFunctionAppKey
     service_connection_name: '${{ parameters.service_connection_name }}'
+    WinSCPnetDLLPath: 'azure/app/somoketests/WinSCPnet.dll'
+    FileToUploadPath: 'azure/app/somoketests/DqtTestData.csv'
