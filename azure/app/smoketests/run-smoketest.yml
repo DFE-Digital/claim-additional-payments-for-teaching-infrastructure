@@ -61,7 +61,10 @@ jobs:
                 "slotSetting": false
               }
             ]
-
+      - task: DownloadPipelineArtifact@2
+        inputs:
+          patterns: '**/*.csv'
+          
       - task: AzurePowerShell@5
         inputs:
           azureSubscription: "${{ parameters.service_connection_name }}"
