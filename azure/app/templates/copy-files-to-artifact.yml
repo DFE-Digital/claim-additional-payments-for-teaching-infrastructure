@@ -1,0 +1,28 @@
+parameters:
+  - name: artifact_name
+    type: string
+  - name: source_folder
+    type: string
+  - name: content_type
+    type: string
+  - name: vmImage
+    type: string
+    default: windows-latest
+
+jobs:
+  - job: job_publish_arm_templates
+    displayName: Publish ARM Templates
+    pool:
+      vmImage: ${{ parameters.vmImage }}
+    steps:
+      - task: CopyFiles@2
+        displayName: Stage ARM Deployment Templates
+        inputs:
+          SourceFolder: ${{ parameters.source_folder }}
+          Contents: "**/*.${{ parameters.content_type }}"
+          TargetFolder: "$(build.artifactstagingdirectory)/"
+          flattenFolders: true
+
+      - publish: $(build.artifactstagingdirectory)
+        displayName: copy ${{ parameters.content_type }} files
+        artifact: ${{ parameters.artifact_name }}
