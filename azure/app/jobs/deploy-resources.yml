@@ -46,7 +46,7 @@ jobs:
     service_connection_name: '${{ parameters.service_connection_name }}'
     WinSCPnetDLLPath: 'azure/app/smoketests/WinSCPnet.dll'
     #FileToUploadPath: '$(build.artifactstagingdirectory)\azure\app\smoketests\DqtTestData.csv'
-    FileToUploadPath: '$(Pipeline.Workspace)\azure\app\smoketests\DqtTestData.csv'
+    FileToUploadPath: '$(Pipeline.Workspace)\s\azure\app\smoketests\DqtTestData.csv'
     functionapp_name: '${{ parameters.subscription_identifier }}${{parameters.environment_id}}funcappfapp'  
     functionapp_resourcegroup: '${{ parameters.subscription_identifier }}${{parameters.environment_id}}-funcapp'
     SmokeTestScriptPath: 'azure/app/smoketests/smoketest.ps1'
