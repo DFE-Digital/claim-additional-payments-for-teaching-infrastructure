@@ -52,18 +52,18 @@ locals {
       retry_enabled = true
       geo_locations = ["emea-nl-ams-azr", "emea-ru-msa-edge", "emea-se-sto-edge", "emea-gb-db3-azr", "emea-fr-pra-edge"]
       URL           = "development.additional-teaching-payment.education.gov.uk/healthcheck" #<- need to check for test and prod
-    },
-    vsp-as = {
-      name          = format("%s-%s-%s-%s", var.app_rg_name, "ai-at", var.app_rg_name, "vsp-as-webtest")
-      kind          = "ping"
-      frequency     = 300
-      timeout       = 120
-      enabled       = true
-      retry_enabled = true
-      geo_locations = ["emea-nl-ams-azr", "emea-ru-msa-edge", "emea-se-sto-edge", "emea-gb-db3-azr", "emea-fr-pra-edge"]
-      #URL           = format("%s%s", var.app_rg_name, "-vsp-as.azurewebsites.net/admin/healthcheck") 
-      URL = "s118d01-app-vsp-as.azurewebsites.net/admin/healthcheck" #<- hardcoding for infradev ONLY
     }
+    # vsp-as = {
+    #   name          = format("%s-%s-%s-%s", var.app_rg_name, "ai-at", var.app_rg_name, "vsp-as-webtest")
+    #   kind          = "ping"
+    #   frequency     = 300
+    #   timeout       = 120
+    #   enabled       = true
+    #   retry_enabled = true
+    #   geo_locations = ["emea-nl-ams-azr", "emea-ru-msa-edge", "emea-se-sto-edge", "emea-gb-db3-azr", "emea-fr-pra-edge"]
+    #   URL           = format("%s%s", var.app_rg_name, "-vsp-as.azurewebsites.net/admin/healthcheck")
+    #   # URL = "s118d01-app-vsp-as.azurewebsites.net/admin/healthcheck" #<- hardcoding for infradev ONLY
+    # }
   }
 
 }

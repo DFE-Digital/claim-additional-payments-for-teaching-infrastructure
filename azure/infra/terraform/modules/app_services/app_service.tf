@@ -44,7 +44,6 @@ resource "azurerm_app_service" "app_as" {
     "ENVIRONMENT_NAME"                               = "production"
     "GECKOBOARD_API_KEY"                             = data.azurerm_key_vault_secret.GeckoboardAPIKey.value
     "GOOGLE_ANALYTICS_ID"                            = ""
-    "GOVUK_VERIFY_VSP_HOST"                          = format("%s%s.%s", "https://", azurerm_app_service.app_vsp_as.name, "azurewebsites.net")
     "LOGSTASH_HOST"                                  = data.azurerm_key_vault_secret.LogstashHost.value
     "LOGSTASH_PORT"                                  = "23888"
     "NOTIFY_API_KEY"                                 = data.azurerm_key_vault_secret.NotifyApiKey.value
@@ -53,13 +52,8 @@ resource "azurerm_app_service" "app_as" {
     "ROLLBAR_ACCESS_TOKEN"                           = data.azurerm_key_vault_secret.RollbarAccessToken.value
     "SECRET_KEY_BASE"                                = data.azurerm_key_vault_secret.SecretKeyBase.value
     "WORKER_COUNT"                                   = "2"
+    #    "GOVUK_VERIFY_VSP_HOST"                          = format("%s%s.%s", "https://", azurerm_app_service.app_vsp_as.name, "azurewebsites.net")    
   }
-
-  # connection_string {
-  #   name  = "Database"
-  #   type  = "SQLServer"
-  #   value = "Server=some-server.mydomain.com;Integrated Security=SSPI"
-  # }
 
   tags = merge({
     },
@@ -68,53 +62,53 @@ resource "azurerm_app_service" "app_as" {
 
 }
 
-resource "azurerm_app_service" "app_vsp_as" {
-  name                = format("%s-%s", var.app_rg_name, "vsp-as")
-  resource_group_name = var.app_rg_name
-  location            = var.rg_location
-  app_service_plan_id = azurerm_app_service_plan.app_vsp_asp.id
+# resource "azurerm_app_service" "app_vsp_as" {
+#   name                = format("%s-%s", var.app_rg_name, "vsp-as")
+#   resource_group_name = var.app_rg_name
+#   location            = var.rg_location
+#   app_service_plan_id = azurerm_app_service_plan.app_vsp_asp.id
 
-  client_affinity_enabled = true
-  https_only              = true
-  # this needs to be defined
+#   client_affinity_enabled = true
+#   https_only              = true
+#   # this needs to be defined
 
-  site_config {
-    always_on = true
-    default_documents = [
-      "Default.htm",
-      "Default.html",
-      "Default.asp",
-      "index.htm",
-      "index.html",
-      "iisstart.htm",
-      "default.aspx",
-      "index.php",
-      "hostingstart.html",
-    ]
-    #    health_check_path         = "/healthcheck"
-    scm_type                  = "None"
-    use_32_bit_worker_process = true
-  }
+#   site_config {
+#     always_on = true
+#     default_documents = [
+#       "Default.htm",
+#       "Default.html",
+#       "Default.asp",
+#       "index.htm",
+#       "index.html",
+#       "iisstart.htm",
+#       "default.aspx",
+#       "index.php",
+#       "hostingstart.html",
+#     ]
+#     #    health_check_path         = "/healthcheck"
+#     scm_type                  = "None"
+#     use_32_bit_worker_process = true
+#   }
 
-  app_settings = {
-    "EUROPEAN_IDENTITY_ENABLED"     = "true"
-    "SAML_PRIMARY_ENCRYPTION_KEY"   = data.azurerm_key_vault_secret.SamlEncryptionKey.value
-    "SAML_SECONDARY_ENCRYPTION_KEY" = ""
-    "SAML_SIGNING_KEY"              = data.azurerm_key_vault_secret.SamlSigningKey.value
-    "SERVICE_ENTITY_IDS"            = format("%s%s%s", "['https://", local.verify_entity_id, "']")
-    "VERIFY_ENVIRONMENT"            = local.verify_environment
-  }
+#   app_settings = {
+#     "EUROPEAN_IDENTITY_ENABLED"     = "true"
+#     "SAML_PRIMARY_ENCRYPTION_KEY"   = data.azurerm_key_vault_secret.SamlEncryptionKey.value
+#     "SAML_SECONDARY_ENCRYPTION_KEY" = ""
+#     "SAML_SIGNING_KEY"              = data.azurerm_key_vault_secret.SamlSigningKey.value
+#     "SERVICE_ENTITY_IDS"            = format("%s%s%s", "['https://", local.verify_entity_id, "']")
+#     "VERIFY_ENVIRONMENT"            = local.verify_environment
+#   }
 
-  # connection_string {
-  #   name  = "Database"
-  #   type  = "SQLServer"
-  #   value = "Server=some-server.mydomain.com;Integrated Security=SSPI"
-  # }
+#   # connection_string {
+#   #   name  = "Database"
+#   #   type  = "SQLServer"
+#   #   value = "Server=some-server.mydomain.com;Integrated Security=SSPI"
+#   # }
 
-  tags = merge({
-    },
-    var.common_tags
-  )
+#   tags = merge({
+#     },
+#     var.common_tags
+#   )
 
-}
+# }
 

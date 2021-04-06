@@ -1,3 +1,15 @@
+CREATE TABLE IF NOT EXISTS inventory2 (
+        id serial PRIMARY KEY,
+        name VARCHAR(50),
+        quantity INTEGER
+    );
+
+CREATE TABLE IF NOT EXISTS inventory3 (
+        id serial PRIMARY KEY,
+        name VARCHAR(50),
+        quantity INTEGER
+    );
+
 CREATE TABLE IF NOT EXISTS inventory4 (
         id serial PRIMARY KEY,
         name VARCHAR(50),
@@ -20,4 +32,4 @@ CREATE TABLE IF NOT EXISTS inventory7 (
         id serial PRIMARY KEY,
         name VARCHAR(50),
         quantity INTEGER
-    ); 
+    );

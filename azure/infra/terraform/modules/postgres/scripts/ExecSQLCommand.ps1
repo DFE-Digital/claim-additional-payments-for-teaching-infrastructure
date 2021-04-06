@@ -1,28 +1,28 @@
 
 param(
-    [Parameter(Mandatory=$true)] 
+    [Parameter(Mandatory = $true)] 
     [String] 
     $subscriptionId, 
-    [Parameter(Mandatory=$true)] 
+    [Parameter(Mandatory = $true)] 
     [String] 
     $ResourceGroupName, 
-    [Parameter(Mandatory=$true)] 
+    [Parameter(Mandatory = $true)] 
     [String]
     $SecretId,  
-    [Parameter(Mandatory=$true)] 
+    [Parameter(Mandatory = $true)] 
     [String]
     $Database, 
-    [Parameter(Mandatory=$true)] 
+    [Parameter(Mandatory = $true)] 
     [String]
     $Server, 
-    [parameter(Mandatory=$false,
-    ParameterSetName="QueryFile")]
+    [parameter(Mandatory = $false,
+        ParameterSetName = "QueryFile")]
     [String[]]$QueryFile, 
-    [parameter(Mandatory=$false,
-    ParameterSetName="QueryString")]
+    [parameter(Mandatory = $false,
+        ParameterSetName = "QueryString")]
     [String[]]$QueryString 
 )
-try{
+try {
 
 
     # $AzCred = Get-Credential -UserName 's118d.bsvc.cip.azdo'
@@ -32,14 +32,12 @@ try{
     az account set --subscription $subscriptionId
 
     # Get the build server current IP
-    $CurrentIP = (Invoke-WebRequest http://ipv4.icanhazip.com).Content.Replace("`n","")
+    $CurrentIP = (Invoke-WebRequest http://ipv4.icanhazip.com).Content.Replace("`n", "")
 }
-catch
-{
+catch {
     exit 1
 }
-try
-{
+try {
 
     # Add a temporary firewall rule to allow the build server connectivity to the SQL Server
     $Rule = az postgres server firewall-rule create -g $ResourceGroupName -s $Server -n TEMPDEPLOY --start-ip-address $CurrentIP --end-ip-address $CurrentIP -o json
@@ -50,6 +48,9 @@ try
     $PostGresServer = "$($Server).postgres.database.azure.com"
     $User = "tps_development@$($Server)"
     $Password = az keyvault secret show --id $SecretId --query "value" --output tsv
+
+    Write-Host "SecretId $SecretId"
+    Write-Host "Password $Password"
 
     Write-Host "Connected to server [$($Server)]"
 
@@ -62,6 +63,8 @@ try
     }
 
     $psqlArguments = "host=$PostGresServer port=5432 dbname=$Database user=$User password=$Password sslmode=require"
+
+    Write-Host "SQL Command $psqlArguments"
 
     psql $psqlArguments -c "$Query"
 

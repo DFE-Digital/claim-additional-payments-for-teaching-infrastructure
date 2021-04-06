@@ -74,12 +74,12 @@ data "azurerm_key_vault_secret" "RollbarAccessToken" {
   key_vault_id = data.azurerm_key_vault.secrets_kv.id
 }
 
-data "azurerm_key_vault_secret" "SamlEncryptionKey" {
-  name         = "TeacherPaymentsDevVspSamlEncryption8KeyBase64"
-  key_vault_id = data.azurerm_key_vault.secrets_kv.id
-}
-data "azurerm_key_vault_secret" "SamlSigningKey" {
-  name         = "TeacherPaymentsDevVspSamlSigning8KeyBase64"
-  key_vault_id = data.azurerm_key_vault.secrets_kv.id
-}
+# data "azurerm_key_vault_secret" "SamlEncryptionKey" {
+#   name         = "TeacherPaymentsDevVspSamlEncryption8KeyBase64"
+#   key_vault_id = data.azurerm_key_vault.secrets_kv.id
+# }
+# data "azurerm_key_vault_secret" "SamlSigningKey" {
+#   name         = "TeacherPaymentsDevVspSamlSigning8KeyBase64"
+#   key_vault_id = data.azurerm_key_vault.secrets_kv.id
+# }
 

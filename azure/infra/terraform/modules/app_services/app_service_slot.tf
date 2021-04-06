@@ -28,7 +28,6 @@ resource "azurerm_app_service_slot" "app_as_slot" {
     "ENVIRONMENT_NAME"                               = "development"
     "GECKOBOARD_API_KEY"                             = data.azurerm_key_vault_secret.GeckoboardAPIKey.value
     "GOOGLE_ANALYTICS_ID"                            = ""
-    "GOVUK_VERIFY_VSP_HOST"                          = format("%s%s.%s", "https://", azurerm_app_service.app_vsp_as.name, "azurewebsites.net")
     "LOGSTASH_HOST"                                  = data.azurerm_key_vault_secret.LogstashHost.value
     "LOGSTASH_PORT"                                  = "17000"
     "NOTIFY_API_KEY"                                 = data.azurerm_key_vault_secret.NotifyApiKey.value
@@ -37,12 +36,8 @@ resource "azurerm_app_service_slot" "app_as_slot" {
     "ROLLBAR_ACCESS_TOKEN"                           = data.azurerm_key_vault_secret.RollbarAccessToken.value
     "SECRET_KEY_BASE"                                = data.azurerm_key_vault_secret.SecretKeyBase.value
     "WORKER_COUNT"                                   = "2"
+    #    "GOVUK_VERIFY_VSP_HOST"                          = format("%s%s.%s", "https://", azurerm_app_service.app_vsp_as.name, "azurewebsites.net")    
   }
-  # connection_string {
-  #   name  = "Database"
-  #   type  = "SQLServer"
-  #   value = "Server=some-server.mydomain.com;Integrated Security=SSPI"
-  # }
 
   tags = merge({
     },
@@ -52,35 +47,35 @@ resource "azurerm_app_service_slot" "app_as_slot" {
 }
 
 
-resource "azurerm_app_service_slot" "app_vsp_as_slot" {
-  name                = "staging"
-  app_service_name    = azurerm_app_service.app_vsp_as.name
-  resource_group_name = var.app_rg_name
-  location            = var.rg_location
-  app_service_plan_id = azurerm_app_service_plan.app_vsp_asp.id
-  https_only          = true
+# resource "azurerm_app_service_slot" "app_vsp_as_slot" {
+#   name                = "staging"
+#   app_service_name    = azurerm_app_service.app_vsp_as.name
+#   resource_group_name = var.app_rg_name
+#   location            = var.rg_location
+#   app_service_plan_id = azurerm_app_service_plan.app_vsp_asp.id
+#   https_only          = true
 
-  # site_config {
-  #   dotnet_framework_version = "v4.0"
-  # }
+#   # site_config {
+#   #   dotnet_framework_version = "v4.0"
+#   # }
 
-  app_settings = {
-    "EUROPEAN_IDENTITY_ENABLED"     = "true"
-    "SAML_PRIMARY_ENCRYPTION_KEY"   = data.azurerm_key_vault_secret.SamlEncryptionKey.value
-    "SAML_SECONDARY_ENCRYPTION_KEY" = ""
-    "SAML_SIGNING_KEY"              = data.azurerm_key_vault_secret.SamlSigningKey.value
-    "SERVICE_ENTITY_IDS"            = format("%s%s%s", "['https://", local.verify_entity_id, "']")
-    "VERIFY_ENVIRONMENT"            = local.verify_environment
-  }
-  # connection_string {
-  #   name  = "Database"
-  #   type  = "SQLServer"
-  #   value = "Server=some-server.mydomain.com;Integrated Security=SSPI"
-  # }
+#   app_settings = {
+#     "EUROPEAN_IDENTITY_ENABLED"     = "true"
+#     "SAML_PRIMARY_ENCRYPTION_KEY"   = data.azurerm_key_vault_secret.SamlEncryptionKey.value
+#     "SAML_SECONDARY_ENCRYPTION_KEY" = ""
+#     "SAML_SIGNING_KEY"              = data.azurerm_key_vault_secret.SamlSigningKey.value
+#     "SERVICE_ENTITY_IDS"            = format("%s%s%s", "['https://", local.verify_entity_id, "']")
+#     "VERIFY_ENVIRONMENT"            = local.verify_environment
+#   }
+#   # connection_string {
+#   #   name  = "Database"
+#   #   type  = "SQLServer"
+#   #   value = "Server=some-server.mydomain.com;Integrated Security=SSPI"
+#   # }
 
-  tags = merge({
-    },
-    var.common_tags
-  )
+#   tags = merge({
+#     },
+#     var.common_tags
+#   )
 
-}
+# }
