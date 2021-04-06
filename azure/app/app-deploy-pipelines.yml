@@ -46,7 +46,7 @@ stages:
   - template: templates/copy-files-to-artifact.yml  
     parameters:  
       artifact_name: 'misc'
-      source_folder: 'app/smoketests'
+      source_folder: 'azure/app/smoketests'
       content_type: 'csv'
 
 - stage: stage_deploy_development
