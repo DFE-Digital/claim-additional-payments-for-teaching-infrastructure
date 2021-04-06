@@ -24,9 +24,10 @@ $session = New-Object WinSCP.Session
 try {
     # Connect
     $session.Open($sessionOptions)
+    $uploadPath = "/*"
     # Transfer files
     # $session.PutFiles("C:\Users\chandrakasetty\Documents\dqtecptestextract.csv", "/upload/dev/*").Check()
-    $session.PutFiles($FileToUploadPath, $SFTPRemotePath).Check()
+    $session.PutFiles($FileToUploadPath, "$SFTPRemotePath$uploadPath").Check()
 }
 finally {
     $session.Dispose()
