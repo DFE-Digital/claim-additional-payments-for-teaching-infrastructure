@@ -10,13 +10,13 @@ parameters:
     default: windows-latest
 
 jobs:
-  - job: job_publish_arm_templates
-    displayName: Publish ARM Templates
+  - job: copy_files
+    displayName: Copy Files
     pool:
       vmImage: ${{ parameters.vmImage }}
     steps:
       - task: CopyFiles@2
-        displayName: Stage ARM Deployment Templates
+        displayName: Copy smoketest CSV file
         inputs:
           SourceFolder: ${{ parameters.source_folder }}
           Contents: "**/*.${{ parameters.content_type }}"
