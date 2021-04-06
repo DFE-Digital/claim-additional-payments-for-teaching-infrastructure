@@ -4,6 +4,8 @@ trigger: none
   #   include:
   #   - main
 
+system.debug: true
+
 parameters:
   - name: RunDeploy
     displayName: "run deployment step"
