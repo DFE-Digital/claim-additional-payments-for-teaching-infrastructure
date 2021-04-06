@@ -1,8 +1,14 @@
 
-trigger:
-  branches:
-    include:
-    - main
+trigger: none
+  # branches:
+  #   include:
+  #   - main
+
+parameters:
+  - name: RunDeploy
+    displayName: "run deployment step"
+    type: boolean
+    default: true
 
 stages:
 - stage: plan
@@ -13,16 +19,17 @@ stages:
     displayName: Plan
 
     pool:
-      # vmImage: ubuntu-default
       vmImage: "ubuntu-latest"
 
     steps:
-    - task: TerraformInstaller@0
+    - task: charleszipp.azure-pipelines-tasks-terraform.azure-pipelines-tasks-terraform-installer.TerraformInstaller@0
+      displayName: 'Installing Terraform $(Terraform.Version) for plan'
       inputs:
         terraformVersion: '0.14.6'
+
     - task: TerraformTaskV1@0
       name: TFInit
-      displayName: "TF init example"
+      displayName: "TerraForm init"
       inputs:
         provider: "azurerm"
         command: "init"
@@ -30,11 +37,37 @@ stages:
         backendServiceArm: "azdo.pipelines.cip.S118D.armfe1ef140-8bef-4043-b5ee-c449e6f951ef"
         backendAzureRmResourceGroupName: "s118d01-tfbackend"
         backendAzureRmStorageAccountName: "s118d01tfbackendsa"
-        backendAzureRmContainerName: "s118d01tfstate"
+        backendAzureRmContainerName: "s118d01devtfstate"
         backendAzureRmKey: "terraform.tfstate"
 
+    - task: AzurePowerShell@5
+      displayName: 'Open KeyVault Firewall'
+      inputs:
+        azureSubscription: "azdo.pipelines.cip.S118D.armfe1ef140-8bef-4043-b5ee-c449e6f951ef"
+        TargetAzurePs: LatestVersion      
+        ScriptType: InlineScript
+        Inline: |
+          # Setting Variables
+          $KeyVaultId = '/subscriptions/8655985a-2f87-44d7-a541-0be9a8c2779d/resourceGroups/s118d01-secrets/providers/Microsoft.KeyVault/vaults/s118d01-secrets-kv'
+          $KeyVault = Get-AzResource -ResourceId $KeyVaultId -ErrorAction SilentlyContinue
+          If ($null -eq $KeyVault) {
+            Write-Output "##vso[task.logissue type=warning;]The Key Vault with Id $KeyVaultId does not exist"
+            Exit 0
+          }
+          $KeyVault = Get-AzKeyVault -ResourceGroupName $KeyVault.ResourceGroupName -VaultName $KeyVault.Name
+          Write-Output 'Updating Key Vault rules...'
+          $KeyVault | Update-AzKeyVaultNetworkRuleSet -DefaultAction Allow 
+          $LoopCount = 0
+          Write-Output "Waiting for Access..." 
+          # This will check every 5 seconds, up to a maximum of 30 seconds
+          Do {
+              $AccessAllowed = $KeyVault | Get-AzKeyVaultSecret -ErrorAction SilentlyContinue
+              $LoopCount++
+              Start-Sleep -Seconds 5
+          }
+          While ($null -eq $AccessAllowed -and $LoopCount -lt 6)
     - task: TerraformTaskV1@0
-      displayName: "TF plan infradev"
+      displayName: "TerraForm plan"
       name: TFPlan
       inputs:
         provider: 'azurerm'
@@ -43,12 +76,27 @@ stages:
         commandOptions: '-var="input_region=$(REGION)" -var="input_environment=$(environment)"'
         environmentServiceNameAzureRM: 'azdo.pipelines.cip.S118D.armfe1ef140-8bef-4043-b5ee-c449e6f951ef'
 
+    - task: AzurePowerShell@5
+      displayName: 'Close KeyVault Firewall'
+      condition: always()
+      inputs:
+        azureSubscription: "azdo.pipelines.cip.S118D.armfe1ef140-8bef-4043-b5ee-c449e6f951ef"
+        TargetAzurePs: LatestVersion 
+        ScriptType: InlineScript
+        Inline: |
+          # Setting Variables
+          $KeyVaultId = '/subscriptions/8655985a-2f87-44d7-a541-0be9a8c2779d/resourceGroups/s118d01-secrets/providers/Microsoft.KeyVault/vaults/s118d01-secrets-kv'
+          $KeyVault = Get-AzResource -ResourceId $KeyVaultId -ErrorAction SilentlyContinue
+          $KeyVault = Get-AzKeyVault -ResourceGroupName $KeyVault.ResourceGroupName -VaultName $KeyVault.Name
+          Write-Output 'Updating Key Vault rules...'
+          $KeyVault | Update-AzKeyVaultNetworkRuleSet -DefaultAction Deny 
+
     - task: CopyFiles@2
       displayName: 'Stage Artifacts'
       inputs:
         SourceFolder: '$(System.DefaultWorkingDirectory)'
         Contents: |
-          code/terraform/**
+          terraform/**
           .artifactignore
         TargetFolder: '$(Build.ArtifactStagingDirectory)'
         flattenFolders: false
@@ -64,12 +112,7 @@ stages:
 - stage: apply
   displayName: Apply
   dependsOn: plan
-  
-#  jobs:
-#
-#  - deployment: apply
-#    displayName: Apply
-#    environment: 'infra dev'
+  condition: ${{ parameters.RunDeploy }}
 
   jobs:
   - job: apply
@@ -85,13 +128,14 @@ stages:
       - download: current
         artifact: 'dev_plan'
 
-      - task: TerraformInstaller@0
+      - task: charleszipp.azure-pipelines-tasks-terraform.azure-pipelines-tasks-terraform-installer.TerraformInstaller@0
+        displayName: 'Installing Terraform $(Terraform.Version) for apply'
         inputs:
           terraformVersion: '0.14.6'
 
       - task: TerraformTaskV1@0
         name: TFInit
-        displayName: "TF init example"
+        displayName: "TerraForm init"
         inputs:
           provider: "azurerm"
           command: "init"
@@ -99,18 +143,46 @@ stages:
           backendServiceArm: "azdo.pipelines.cip.S118D.armfe1ef140-8bef-4043-b5ee-c449e6f951ef"
           backendAzureRmResourceGroupName: "s118d01-tfbackend"
           backendAzureRmStorageAccountName: "s118d01tfbackendsa"
-          backendAzureRmContainerName: "s118d01tfstate"
+          backendAzureRmContainerName: "s118d01devtfstate"
           backendAzureRmKey: "terraform.tfstate"        
 
-      - task: TerraformTaskV1@0
-        displayName: "TF apply infradev"
+      - task: AzurePowerShell@5
+        displayName: 'Open KeyVault Firewall'
+        inputs:
+          azureSubscription: "azdo.pipelines.cip.S118D.armfe1ef140-8bef-4043-b5ee-c449e6f951ef"
+          TargetAzurePs: LatestVersion      
+          ScriptType: InlineScript
+          Inline: |
+            # Setting Variables
+            $KeyVaultId = '/subscriptions/8655985a-2f87-44d7-a541-0be9a8c2779d/resourceGroups/s118d01-secrets/providers/Microsoft.KeyVault/vaults/s118d01-secrets-kv'
+            $KeyVault = Get-AzResource -ResourceId $KeyVaultId -ErrorAction SilentlyContinue
+            If ($null -eq $KeyVault) {
+              Write-Output "##vso[task.logissue type=warning;]The Key Vault with Id $KeyVaultId does not exist"
+              Exit 0
+            }
+            $KeyVault = Get-AzKeyVault -ResourceGroupName $KeyVault.ResourceGroupName -VaultName $KeyVault.Name
+            Write-Output 'Updating Key Vault rules...'
+            $KeyVault | Update-AzKeyVaultNetworkRuleSet -DefaultAction Allow 
+            $LoopCount = 0
+            Write-Output "Waiting for Access..." 
+            # This will check every 5 seconds, up to a maximum of 30 seconds
+            Do {
+                $AccessAllowed = $KeyVault | Get-AzKeyVaultSecret -ErrorAction SilentlyContinue
+                $LoopCount++
+                Start-Sleep -Seconds 5
+            }
+            While ($null -eq $AccessAllowed -and $LoopCount -lt 6)
+
+      - task: TerraformCLI@0
+        displayName: "TerraForm apply"
         name: TFApply
         inputs:
-          provider: 'azurerm'
           command: 'apply'
-          workingDirectory: '$(System.DefaultWorkingDirectory)/terraform'
+          runAzLogin: true  
+          environmentServiceName: 'azdo.pipelines.cip.S118D.armfe1ef140-8bef-4043-b5ee-c449e6f951ef'
+          workingDirectory: '$(System.DefaultWorkingDirectory)/terraform'          
           commandOptions: '-var="input_region=$(REGION)" -var="input_environment=$(environment)"'
-          environmentServiceNameAzureRM: 'azdo.pipelines.cip.S118D.armfe1ef140-8bef-4043-b5ee-c449e6f951ef'
+          allowTelemetryCollection: true
 
   # - task: TerraformTaskV1@0
   #   displayName: 'TF destroy example'
@@ -122,3 +194,17 @@ stages:
   #.    commandOptions: '-var="input_region=$(REGION)" -var="input_rg_prefix=$(rg_prefix)"'
   #     environmentServiceNameAzureRM: 'azdo.pipelines.cip.S118D.armfe1ef140-8bef-4043-b5ee-c449e6f951ef'
 
+      - task: AzurePowerShell@5
+        displayName: 'Close KeyVault Firewall'
+        condition: always()
+        inputs:
+          azureSubscription: "azdo.pipelines.cip.S118D.armfe1ef140-8bef-4043-b5ee-c449e6f951ef"
+          TargetAzurePs: LatestVersion 
+          ScriptType: InlineScript
+          Inline: |
+            # Setting Variables
+            $KeyVaultId = '/subscriptions/8655985a-2f87-44d7-a541-0be9a8c2779d/resourceGroups/s118d01-secrets/providers/Microsoft.KeyVault/vaults/s118d01-secrets-kv'
+            $KeyVault = Get-AzResource -ResourceId $KeyVaultId -ErrorAction SilentlyContinue
+            $KeyVault = Get-AzKeyVault -ResourceGroupName $KeyVault.ResourceGroupName -VaultName $KeyVault.Name
+            Write-Output 'Updating Key Vault rules...'
+            $KeyVault | Update-AzKeyVaultNetworkRuleSet -DefaultAction Deny 
