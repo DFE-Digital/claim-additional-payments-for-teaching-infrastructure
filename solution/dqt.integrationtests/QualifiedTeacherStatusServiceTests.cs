@@ -38,7 +38,7 @@ namespace dqt.integrationtests
             var configSettingsMock = new Mock<IConfigSettings>();
             configSettingsMock.Setup(config => config.DQTApiKey).Returns(API_KEY);
 
-            var dbSetMock = new Mock<DbSet<QualifiedTeacher>>();  
+            var dbSetMock = new Mock<DbSet<QualifiedTeacher>>();
 
             dbSetMock.As<IQueryable<QualifiedTeacher>>().Setup(x => x.Provider).Returns(qualifiedTeachers.AsQueryable().Provider);
             dbSetMock.As<IQueryable<QualifiedTeacher>>().Setup(x => x.Expression).Returns(qualifiedTeachers.AsQueryable().Expression);
@@ -126,8 +126,8 @@ namespace dqt.integrationtests
             var mockRequest = new Mock<HttpRequest>();
 
             var paramsDictionary = new Dictionary<string, StringValues> {
-                { "trn",  string.IsNullOrWhiteSpace(requestDto.TRN)? null:ParameterEncoder.Base64StringEncode(requestDto.TRN) },
-                { "ni", string.IsNullOrWhiteSpace(requestDto.NINumber)? null: ParameterEncoder.Base64StringEncode(requestDto.NINumber) }
+                { "trn", requestDto.TRN },
+                { "ni", requestDto.NINumber}
             };
 
             mockRequest.SetupGet(x => x.Query).Returns(new QueryCollection(paramsDictionary));
