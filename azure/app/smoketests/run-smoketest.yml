@@ -1,0 +1,126 @@
+parameters:
+  - name: keyvault_name
+    type: string
+  - name: service_connection_name
+    type: string
+  - name: WinSCPnetDLLPath
+    type: string
+  - name: FileToUploadPath
+    type: string  
+  - name: functionapp_name
+    type: string  
+  - name: functionapp_resourcegroup
+    type: string
+  - name: SmokeTestScriptPath
+    type: string
+  - name: run_after
+    type: object
+    default: []
+  - name: vmImage
+    type: string
+    default: "windows-latest"
+
+jobs:
+  - job: job_run_smoketests
+    displayName: Run Smoke Test
+    pool:
+      vmImage: ${{ parameters.vmImage }}    
+    dependsOn: ${{ parameters.run_after }}
+    steps:
+      - task: AzureCLI@2
+        displayName: Add firewall rule to keyvault
+        inputs:
+          azureSubscription: "${{ parameters.service_connection_name }}"
+          scriptType: pscore
+          scriptLocation: inlineScript
+          inlineScript: |
+            # Setting Variables
+            $MyIPAddress = (Invoke-WebRequest -uri "http://ifconfig.me/ip").Content.Trim() 
+            $MyIPAddress | Out-File -FilePath ./agent.ip
+            az keyvault network-rule add --name ${{ parameters.keyvault_name }} --ip-address $MyIPAddress
+
+      - task: AzureCLI@2
+        displayName: Add firewall rule to functionapp
+        inputs:
+          azureSubscription: "${{ parameters.service_connection_name }}"
+          scriptType: pscore
+          scriptLocation: inlineScript
+          inlineScript: |
+            # Setting Variables
+            $MyIPAddress = (Invoke-WebRequest -uri "http://ifconfig.me/ip").Content.Trim() 
+            $MyIPAddress | Out-File -FilePath ./agent.ip
+            az functionapp config access-restriction add -g ${{ parameters.functionapp_resourcegroup }} -n ${{ parameters.functionapp_name }} --rule-name 'Pipeline' --action Allow --ip-address $MyIPAddress --priority 200
+
+      - task: AzureKeyVault@1
+        displayName: "Get the secrets from keyvault"
+        inputs:
+          azureSubscription: "${{ parameters.service_connection_name }}"
+          KeyVaultName: "${{ parameters.keyvault_name }}"
+          SecretsFilter: "SFTPScheduleTriggerTime,SFTPHostName,SFTPUserName,SFTPPassword,SFTPSshHostKeyFingerprint,SFTPRemotePath,DQTApiKey,DQTFunctionAppKey"
+          RunAsPreJob: false
+    
+      - task: AzureAppServiceSettings@1
+        displayName: "Update function app settings"
+        inputs:
+          azureSubscription: "${{ parameters.service_connection_name }}"
+          appName: ${{ parameters.functionapp_name }}
+          resourceGroupName: ${{ parameters.functionapp_resourcegroup }}
+          appSettings: |
+            [
+              {
+                "name": "SFTPScheduleTriggerTime",
+                "value": "*/15 * * * * *",
+                "slotSetting": false
+              }
+            ]
+
+      - task: AzurePowerShell@5        
+        displayName: Smoke Test
+        inputs:
+          azureSubscription: "${{ parameters.service_connection_name }}"
+          ScriptType: 'FilePath'
+          ScriptPath: '${{ parameters.SmokeTestScriptPath }}'
+          ScriptArguments: -SFTPHostName "$(SFTPHostName)" -SFTPUserName "$(SFTPUserName)" -SFTPPassword "$(SFTPPassword)" -SFTPSshHostKeyFingerprint "$(SFTPSshHostKeyFingerprint)" -SFTPRemotePath "$(SFTPRemotePath)" -WinSCPnetDLLPath "${{ parameters.WinSCPnetDLLPath }}" -FileToUploadPath "${{ parameters.FileToUploadPath}}" -functionappName "${{ parameters.functionapp_name }}" -apiKey "$(DQTApiKey)" -functionAppKey "$(DQTFunctionAppKey)" 
+          azurePowerShellVersion: "LatestVersion"
+
+      - task: AzureAppServiceSettings@1
+        displayName: "Revert function app settings"
+        condition: always()
+        inputs:
+          azureSubscription: "${{ parameters.service_connection_name }}"
+          appName: ${{ parameters.functionapp_name }}
+          resourceGroupName: ${{ parameters.functionapp_resourcegroup }}
+          appSettings: |
+            [
+              {
+                "name": "SFTPScheduleTriggerTime",
+                "value": "$(SFTPScheduleTriggerTime)",
+                "slotSetting": false
+              }
+            ]
+
+      - task: AzureCLI@2
+        displayName: Remove firewall rules from keyvault
+        condition: always()
+        inputs:
+          azureSubscription: "${{ parameters.service_connection_name }}"
+          scriptType: pscore
+          scriptLocation: inlineScript
+          inlineScript: |
+            # Setting Variables
+            $MyIPAddress = (Invoke-WebRequest -uri "http://ifconfig.me/ip").Content.Trim() 
+            $MyIPAddress | Out-File -FilePath ./agent.ip
+            az keyvault network-rule remove --name ${{ parameters.keyvault_name }} --ip-address $MyIPAddress
+
+      - task: AzureCLI@2
+        displayName: Remove firewall rule from functionapp
+        condition: always()
+        inputs:
+          azureSubscription: "${{ parameters.service_connection_name }}"
+          scriptType: pscore
+          scriptLocation: inlineScript
+          inlineScript: |
+            # Setting Variables
+            $MyIPAddress = (Invoke-WebRequest -uri "http://ifconfig.me/ip").Content.Trim() 
+            $MyIPAddress | Out-File -FilePath ./agent.ip
+            az functionapp config access-restriction remove  -g ${{ parameters.functionapp_resourcegroup }} -n ${{ parameters.functionapp_name }} --rule-name 'Pipeline'
