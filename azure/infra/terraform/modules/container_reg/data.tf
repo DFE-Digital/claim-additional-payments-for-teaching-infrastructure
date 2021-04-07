@@ -4,8 +4,8 @@ data "azurerm_application_insights" "app_ai" {
 }
 
 data "azurerm_key_vault" "secrets_kv" {
-  name                = "s118t01-secrets-kv"
-  resource_group_name = "s118t01-secrets"
+  name                = format("%s-%s", var.rg_prefix, "secrets-kv")
+  resource_group_name = format("%s-%s", var.rg_prefix, "secrets")
 }
 
 
