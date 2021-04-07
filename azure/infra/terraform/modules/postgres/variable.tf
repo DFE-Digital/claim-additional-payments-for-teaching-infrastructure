@@ -29,4 +29,15 @@ variable "common_tags" {
 }
 
 
+# ---------------------------------------------------------------------------------------------------------------------
+# LOCAL CALCULATED
+# ---------------------------------------------------------------------------------------------------------------------
+# locals {
+#   calculated_local_value = uuid()
+# }
 
+locals {
+
+  db_name = var.rg_prefix == "s118d01" ? "development" : var.rg_prefix == "s118t01" ? "test" : var.rg_prefix == "s118p01" ? "production" : "infradev"
+
+}

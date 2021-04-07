@@ -15,7 +15,7 @@
 # }
 
 resource "azurerm_postgresql_database" "app_dev" {
-  name                = "development"
+  name                = local.db_name
   resource_group_name = var.app_rg_name
   server_name         = azurerm_postgresql_server.app_postgres.name
   charset             = "UTF8"
@@ -47,7 +47,6 @@ resource "null_resource" "sql_command" {
     template = random_uuid.create_table.id
   }
   provisioner "local-exec" {
-    #    command     = ".'${path.module}/scripts/ExecSQLCommand.ps1' -subscriptionId \"${data.azurerm_subscription.current.subscription_id}\" -ResourceGroupName \"${var.app_rg_name}\" -Server \"${azurerm_postgresql_server.app_postgres.name}\" -SecretID \"${data.azurerm_key_vault_secret.postgres_pw.id}\" -Database \"${azurerm_postgresql_database.dqt_dev.name}\" -QueryString \"${templatefile("${path.module}/templates/createtables.sql.tpl", {})}\""
     command     = ".'${path.module}/scripts/ExecSQLCommand.ps1' -subscriptionId \"${data.azurerm_subscription.current.subscription_id}\" -ResourceGroupName \"${var.app_rg_name}\" -Server \"${azurerm_postgresql_server.app_postgres.name}\" -SecretID \"${data.azurerm_key_vault_secret.postgres_pw.id}\" -Database \"${azurerm_postgresql_database.dqt_dev.name}\" -QueryString \"${random_uuid.create_table.keepers.content}\" "
     interpreter = ["pwsh", "-Command"]
   }

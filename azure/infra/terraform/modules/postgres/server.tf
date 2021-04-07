@@ -10,7 +10,7 @@ resource "azurerm_postgresql_server" "app_postgres" {
   geo_redundant_backup_enabled = false
   auto_grow_enabled            = false
 
-  administrator_login          = "tps_development"
+  administrator_login          = data.azurerm_key_vault_secret.postgres_user.value
   administrator_login_password = data.azurerm_key_vault_secret.postgres_pw.value
   version                      = "9.6"
   ssl_enforcement_enabled      = true
@@ -23,7 +23,6 @@ resource "azurerm_postgresql_server" "app_postgres" {
     email_account_admins = false
     email_addresses = [
       "capt-dev@digital.education.gov.uk",
-      #"lucas.kelly@digital.education.gov.uk",
     ]
     enabled        = true
     retention_days = 90
