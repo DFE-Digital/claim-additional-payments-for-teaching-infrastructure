@@ -40,7 +40,7 @@ namespace dqt.unittests.api
         {
             _mockAuth.Setup(x => x.AuthorizeRequest(It.IsAny<HttpRequest>())).Returns(false);
 
-            var request = CreateMockHttpRequest(null);
+            var request = CreateMockHttpRequest();
             var response = (UnauthorizedResult)await _qualifiedTeacherStatusService.Run(request.Object);
 
             Assert.Equal(401, response.StatusCode);
@@ -98,7 +98,7 @@ namespace dqt.unittests.api
             Assert.Equal(mockResult, resultDto.Data);
         }
 
-        private Mock<HttpRequest> CreateMockHttpRequest(string apiKey = API_KEY)
+        private Mock<HttpRequest> CreateMockHttpRequest()
         {
             var mockRequest = new Mock<HttpRequest>();
 
