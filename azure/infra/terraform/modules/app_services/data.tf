@@ -83,3 +83,13 @@ data "azurerm_key_vault_secret" "RollbarAccessToken" {
 #   key_vault_id = data.azurerm_key_vault.secrets_kv.id
 # }
 
+# ---------------------------------------------------------------------------------------------------------------------
+# LOCAL CALCULATED
+# ---------------------------------------------------------------------------------------------------------------------
+# locals {
+#   calculated_local_value = uuid()
+# }
+
+locals {
+  environment = var.rg_prefix == "s118d01" ? "development" : var.rg_prefix == "s118t01" ? "test" : var.rg_prefix == "s118p01" ? "production" : "infradev"
+}
