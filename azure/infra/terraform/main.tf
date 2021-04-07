@@ -169,6 +169,7 @@ module "container" {
   app_rg_name           = module.resource_group.app_rg_name
   projcore_network_prof = module.network_profile.projcore_network_prof
   container_version     = module.env_vars.container_version
+  rg_prefix             = module.env_vars.rg_prefix
   rg_location           = module.resource_group.rg_location
   common_tags           = module.env_vars.common_tags
 
