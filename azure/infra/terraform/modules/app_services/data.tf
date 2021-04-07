@@ -92,4 +92,5 @@ data "azurerm_key_vault_secret" "RollbarAccessToken" {
 
 locals {
   environment = var.rg_prefix == "s118d01" ? "development" : var.rg_prefix == "s118t01" ? "test" : var.rg_prefix == "s118p01" ? "production" : "infradev"
+  stash_port  = var.rg_prefix == "s118p01" ? "23888" : "17000"
 }
