@@ -170,9 +170,9 @@ namespace dqt.unittests.api
             return mockRequest;
         }
     }
+
     public class RequestInfo
     {
-
         public string TRN { get; set; }
         public string NINumber { get; set; }
     }
