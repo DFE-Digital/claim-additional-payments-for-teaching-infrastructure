@@ -4,8 +4,8 @@ data "azurerm_application_insights" "app_ai" {
 }
 
 data "azurerm_key_vault" "secrets_kv" {
-  name                = "s118d01-secrets-kv"
-  resource_group_name = "s118d01-secrets"
+  name                = "s118t01-secrets-kv"
+  resource_group_name = "s118t01-secrets"
 }
 
 data "azurerm_key_vault_secret" "AdminAllowedIPs" {

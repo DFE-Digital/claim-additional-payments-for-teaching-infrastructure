@@ -14,20 +14,17 @@ module "resource_group" {
 
 #storage account
 module "storage_account" {
-  source = "./modules/storageaccount"
-  #  core_rg_name    = module.resource_group.core_rg_name
+  source          = "./modules/storageaccount"
   secrets_rg_name = module.resource_group.secrets_rg_name
-  #  secrets_tmp_rg_name = module.resource_group.secrets_tmp_rg_name
-  func_rg_name = module.resource_group.func_rg_name
-  rg_prefix    = module.env_vars.rg_prefix
-  rg_location  = module.resource_group.rg_location
-  common_tags  = module.env_vars.common_tags
+  func_rg_name    = module.resource_group.func_rg_name
+  rg_prefix       = module.env_vars.rg_prefix
+  rg_location     = module.resource_group.rg_location
+  common_tags     = module.env_vars.common_tags
 }
 
 #networking
 module "network" {
-  source = "./modules/network"
-  #  core_rg_name     = module.resource_group.core_rg_name
+  source           = "./modules/network"
   projcore_rg_name = module.resource_group.projcore_rg_name
   rg_prefix        = module.env_vars.rg_prefix
   rg_location      = module.resource_group.rg_location
@@ -36,10 +33,8 @@ module "network" {
 
 # subnet section
 module "subnet" {
-  source = "./modules/subnet"
-  #  core_rg_name        = module.resource_group.core_rg_name
-  projcore_rg_name = module.resource_group.projcore_rg_name
-  #  core_vn_01_name     = module.network.core_vn_01_name
+  source              = "./modules/subnet"
+  projcore_rg_name    = module.resource_group.projcore_rg_name
   projcore_vn_01_name = module.network.projcore_vn_01_name
   rg_prefix           = module.env_vars.rg_prefix
   rg_location         = module.resource_group.rg_location
@@ -89,8 +84,7 @@ module "network_profile" {
 
 #key vault
 module "key_vault" {
-  source = "./modules/key_vault"
-  #  core_rg_name           = module.resource_group.core_rg_name
+  source                 = "./modules/key_vault"
   secrets_rg_name        = module.resource_group.secrets_rg_name
   projcore_default_sn_id = module.subnet.projcore_sn_default_id
   rg_prefix              = module.env_vars.rg_prefix

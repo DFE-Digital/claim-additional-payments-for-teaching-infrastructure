@@ -46,9 +46,13 @@ variable "common_tags" {
 # }
 
 locals {
-  verify_entity_id = "development.additional-teaching-payment.education.gov.uk"
-  #verify_entity_id   = "www.claim-additional-teaching-payment.service.gov.uk" 
-  verify_environment = "INTEGRATION"
+  # verify_entity_id = "development.additional-teaching-payment.education.gov.uk"
+  # verify_entity_id   = "www.claim-additional-teaching-payment.service.gov.uk" 
+  # verify_environment = "INTEGRATION"
+
+  verify_entity_id   = var.rg_prefix == "s118d01" ? "development.additional-teaching-payment.education.gov.uk" : var.rg_prefix == "s118t01" ? "development.additional-teaching-payment.education.gov.uk" : var.rg_prefix == "s118p01" ? "www.claim-additional-teaching-payment.service.gov.uk" : "development.additional-teaching-payment.education.gov.uk"
+  verify_environment = var.rg_prefix == "s118d01" ? "DEVELOPMENT" : var.rg_prefix == "s118t01" ? "INTEGRATION" : var.rg_prefix == "s118p01" ? "PRODUCTION" : "INFRA_DEV"
+
 }
 
 
