@@ -163,17 +163,17 @@ module "postgres" {
   depends_on = [module.subnet]
 }
 
-# #container
-# module "container" {
-#   source                = "./modules/container_reg"
-#   app_rg_name           = module.resource_group.app_rg_name
-#   projcore_network_prof = module.network_profile.projcore_network_prof
-#   container_version     = module.env_vars.container_version
-#   rg_location           = module.resource_group.rg_location
-#   common_tags           = module.env_vars.common_tags
+#container
+module "container" {
+  source                = "./modules/container_reg"
+  app_rg_name           = module.resource_group.app_rg_name
+  projcore_network_prof = module.network_profile.projcore_network_prof
+  container_version     = module.env_vars.container_version
+  rg_location           = module.resource_group.rg_location
+  common_tags           = module.env_vars.common_tags
 
-#   depends_on = [module.network_profile, module.app_insights]    
-# }
+  depends_on = [module.network_profile, module.app_insights]
+}
 
 # # below two modules are commented out as the two components are currently not required
 # # # #ddos
