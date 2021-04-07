@@ -1,5 +1,5 @@
 resource "azurerm_network_ddos_protection_plan" "ddos" {
-  name                = "s118d01-ddos-example-01"
+  name                = format("%s-%s", var.rg_prefix, "ddos-example-01")
   location            = var.rg_location
   resource_group_name = var.rg_name
 

@@ -19,6 +19,10 @@ variable "projcore_default_sn_id" {
   type        = string
   description = "The ID of the projcore default subnet"
 }
+variable "rg_prefix" {
+  type        = string
+  description = "The prefix to be used for all resources"
+}
 variable "rg_location" {
   type        = string
   description = "The location of the resource group and the resources"

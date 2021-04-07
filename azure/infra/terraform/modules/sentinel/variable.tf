@@ -19,6 +19,10 @@ variable "la_name" {
   type        = string
   description = "Log analytics workspace Name"
 }
+variable "rg_prefix" {
+  type        = string
+  description = "The prefix to be used for all resources"
+}
 variable "rg_location" {
   type        = string
   description = "The location of the resource group and the resources"

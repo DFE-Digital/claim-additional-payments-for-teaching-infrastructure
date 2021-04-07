@@ -19,6 +19,10 @@ variable "container_version" {
   type        = string
   description = "Specific version of the docker contaner"
 }
+variable "rg_prefix" {
+  type        = string
+  description = "The prefix to be used for all resources"
+}
 variable "rg_location" {
   type        = string
   description = "The location of the resource group and the resources"

@@ -15,6 +15,10 @@ variable "func_rg_name" {
   type        = string
   description = "Resource group for the function app"
 }
+variable "rg_prefix" {
+  type        = string
+  description = "The prefix to be used for all resources"
+}
 variable "rg_location" {
   type        = string
   description = "The location of the resource group and the resources"
@@ -42,7 +46,7 @@ variable "common_tags" {
 # }
 
 locals {
-  verify_entity_id   = "development.additional-teaching-payment.education.gov.uk"
+  verify_entity_id = "development.additional-teaching-payment.education.gov.uk"
   #verify_entity_id   = "www.claim-additional-teaching-payment.service.gov.uk" 
   verify_environment = "INTEGRATION"
 }
