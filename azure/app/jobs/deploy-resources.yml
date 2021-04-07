@@ -23,25 +23,25 @@ parameters:
 
 jobs:
 # Deploy Funtions to Function app
-# - template: ../templates/deploy-appservice-content.yml
-#   parameters:
-#     subscription_identifier:  '${{ parameters.subscription_identifier }}'
-#     service_connection_name: '${{ parameters.service_connection_name }}'
-#     environment_id: '${{parameters.environment_id}}'
-#     functionapp_name: '${{ parameters.subscription_identifier }}${{parameters.environment_id}}funcappfapp'  
-#     function_package_zip_name: 'dqt.api'
-#     location: 'West Europe'
-#     sln_artifact_name: '${{ parameters.sln_artifact_name }}'    
-#     webapp_kind: 'Function'
-#     create_functionapp_keys: true 
-#     functionapp_key_name: DQTFunctionAppKey
-#     functionapp_resourcegroup: '${{ parameters.subscription_identifier }}${{parameters.environment_id}}-funcapp'
-#     keyvault_name: '${{parameters.subscription_identifier }}${{parameters.environment_id}}-secrets-kv'
-#     keyvault_secret_name: DQTFunctionAppKey
+- template: ../templates/deploy-appservice-content.yml
+  parameters:
+    subscription_identifier:  '${{ parameters.subscription_identifier }}'
+    service_connection_name: '${{ parameters.service_connection_name }}'
+    environment_id: '${{parameters.environment_id}}'
+    functionapp_name: '${{ parameters.subscription_identifier }}${{parameters.environment_id}}funcappfapp'  
+    function_package_zip_name: 'dqt.api'
+    location: 'West Europe'
+    sln_artifact_name: '${{ parameters.sln_artifact_name }}'    
+    webapp_kind: 'Function'
+    create_functionapp_keys: true 
+    functionapp_key_name: DQTFunctionAppKey
+    functionapp_resourcegroup: '${{ parameters.subscription_identifier }}${{parameters.environment_id}}-funcapp'
+    keyvault_name: '${{parameters.subscription_identifier }}${{parameters.environment_id}}-secrets-kv'
+    keyvault_secret_name: DQTFunctionAppKey
    
 - template: ../smoketests/run-smoketest.yml
   parameters:
-    #run_after: "job_deploy_sln_${{ parameters.subscription_identifier }}${{parameters.environment_id}}funcappfapp"
+    run_after: "job_deploy_sln_${{ parameters.subscription_identifier }}${{parameters.environment_id}}funcappfapp"
     keyvault_name: '${{parameters.subscription_identifier }}${{parameters.environment_id}}-secrets-kv'
     service_connection_name: '${{ parameters.service_connection_name }}'
     WinSCPnetDLLPath: 'azure/app/smoketests/WinSCPnet.dll'

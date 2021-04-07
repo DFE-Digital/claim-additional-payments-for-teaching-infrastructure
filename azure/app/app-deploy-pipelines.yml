@@ -43,12 +43,6 @@ stages:
       test_projects_path: 'solution/*tests/*.csproj'
       nuget_config_path: 'solution/nuget.config'
 
-  - template: templates/copy-files-to-artifact.yml  
-    parameters:  
-      artifact_name: 'misc'
-      source_folder: 'azure/app/smoketests'
-      content_type: 'csv'
-
 - stage: stage_deploy_development
   displayName: 'Deploy development'
   condition: eq('${{ parameters.deployment_target}}', 'development')

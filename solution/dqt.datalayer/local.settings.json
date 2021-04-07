@@ -3,19 +3,19 @@
   "Values": {
     "AzureWebJobsStorage": "UseDevelopmentStorage=true",
     "FUNCTIONS_WORKER_RUNTIME": "dotnet",
-    "DatabaseName": "",
-    "DatabaseServerName": "",
-    "DatabaseUsername": "",
-    "DatabasePassword": "",
-    "DQTApiKey": "",
-    "DQTRollbarAccessToken": "",
-    "DQTRollbarEnvironment": "",
-    "SFTPScheduleTriggerTime": "",
-    "SFTPHostName": "",
-    "SFTPUserName": "",
-    "SFTPPassword": "",
-    "SFTPSshHostKeyFingerprint": "",
-    "SFTPRemotePath": "",
-    "DQTBlobContainerName": ""
+    "DatabaseName": "dqt",
+    "DatabaseServerName": "s118d01-app-db.postgres.database.azure.com",
+    "DatabaseUsername": "tps_development@s118d01-app-db",
+    "DatabasePassword": "Xt7nGrvn.DiCUyJ",
+    "DQTApiKey": "}N~4#V6VY->dX2p4R#~Rz%t,&5!fr}]Y[*>Rs[C{kX#GBmS.}5",
+    "DQTRollbarAccessToken": "efa0b92742924d02b0da2c05c74c5810",
+    "DQTRollbarEnvironment": "dqt-developement",
+    "SFTPScheduleTriggerTime": "*/30 * * * * *",
+    "SFTPHostName": "sj33kqgn2dkc2.westeurope.azurecontainer.io",
+    "SFTPUserName": "dev_team",
+    "SFTPPassword": "P@55word",
+    "SFTPSshHostKeyFingerprint": "ssh-ed25519 255 FGohRNbtMn9rjELnbw0sGVL/fjvzlTOuzjZg77N8+24=",
+    "SFTPRemotePath": "/upload/dev",
+    "DQTBlobContainerName": "dqt-cont"
   }
-}
+} 
