@@ -51,18 +51,15 @@ namespace dqt.api.Functions
 
             try
             {
-                var encodedTrn = req.Query["trn"];
-                var encodedNi = req.Query["ni"];
+                var trn = req.Query["trn"];
+                var ni = req.Query["ni"];
 
-                if (string.IsNullOrWhiteSpace(encodedTrn))
+                if (string.IsNullOrWhiteSpace(trn))
                 {
                     var msg = $"TeacherReferenceNumber is mandatory.";
                     _log.Info($"{msg} CorrelationId : {requestReference}");
                     return new BadRequestObjectResult(GetResultDto(null, msg));
-                }
-
-                var trn = Base64StringDecode(encodedTrn);
-                var ni = string.IsNullOrWhiteSpace(encodedNi) ? null : Base64StringDecode(encodedNi);
+                }                 
 
                 _log.Info($"Fetching records. CorrelationId : {requestReference}");
 

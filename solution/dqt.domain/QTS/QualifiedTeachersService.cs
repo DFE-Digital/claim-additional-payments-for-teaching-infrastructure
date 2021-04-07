@@ -21,7 +21,10 @@ namespace dqt.domain.QTS
             
             if (!qts.Any())
             {
-                qts = await _qualifiedTeachersRepository.FindAsync(x => x.NINumber == nationalInsuranceNumber);
+                if (!string.IsNullOrWhiteSpace(nationalInsuranceNumber))
+                {
+                    qts = await _qualifiedTeachersRepository.FindAsync(x => x.NINumber == nationalInsuranceNumber);
+                }
             }
 
             return qts;
