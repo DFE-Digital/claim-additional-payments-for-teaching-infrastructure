@@ -6,7 +6,10 @@ param (
     $SFTPSshHostKeyFingerprint,
     $WinSCPnetDLLPath,
     $SFTPRemotePath,
-    $FileToUploadPath
+    $FileToUploadPath,
+    $functionappName,
+    $apiKey,
+    $functionAppKey
 )
 
 # Load WinSCP .NET assembly
@@ -32,4 +35,22 @@ try {
 finally {
     $session.Dispose()
 }
+
+Start-Sleep -s 15
+
+$uri = "https://$functionappName.azurewebsites.net/api/qualified-teachers/qualified-teaching-status?code=$functionAppKey&trn=1234567&ni=SS349378C"
  
+$headers = @{}
+$headers.Add("x-correlation-id", "9B28C533-D8B1-475C-9569-A7C2F60DFC16")
+$headers.Add("Authorization", $apiKey)
+
+$response = Invoke-WebRequest -Uri $uri -Method 'GET' -Headers $headers -SkipHeaderValidation -UseBasicParsing
+
+$statusCode = $response.StatusCode
+ 
+if ( $statusCode -ne 200 ) {
+    throw 'Response is not 200'
+}
+else {
+    Write-Host 'Received response successfully'
+}

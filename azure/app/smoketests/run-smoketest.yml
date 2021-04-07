@@ -44,7 +44,7 @@ jobs:
         inputs:
           azureSubscription: "${{ parameters.service_connection_name }}"
           KeyVaultName: "${{ parameters.keyvault_name }}"
-          SecretsFilter: "SFTPScheduleTriggerTime,SFTPHostName,SFTPUserName,SFTPPassword,SFTPSshHostKeyFingerprint,SFTPRemotePath"
+          SecretsFilter: "SFTPScheduleTriggerTime,SFTPHostName,SFTPUserName,SFTPPassword,SFTPSshHostKeyFingerprint,SFTPRemotePath,DQTApiKey,DQTFunctionAppKey"
           RunAsPreJob: false
     
       - task: AzureAppServiceSettings@1
@@ -64,13 +64,13 @@ jobs:
       - task: DownloadPipelineArtifact@2
         inputs:
           patterns: '**/*.csv'
-          
+
       - task: AzurePowerShell@5
         inputs:
           azureSubscription: "${{ parameters.service_connection_name }}"
           ScriptType: 'FilePath'
           ScriptPath: '${{ parameters.SmokeTestScriptPath }}'
-          ScriptArguments: -SFTPHostName "$(SFTPHostName)" -SFTPUserName "$(SFTPUserName)" -SFTPPassword "$(SFTPPassword)" -SFTPSshHostKeyFingerprint "$(SFTPSshHostKeyFingerprint)" -SFTPRemotePath "$(SFTPRemotePath)" -WinSCPnetDLLPath "${{ parameters.WinSCPnetDLLPath }}" -FileToUploadPath "${{ parameters.FileToUploadPath}}"
+          ScriptArguments: -SFTPHostName "$(SFTPHostName)" -SFTPUserName "$(SFTPUserName)" -SFTPPassword "$(SFTPPassword)" -SFTPSshHostKeyFingerprint "$(SFTPSshHostKeyFingerprint)" -SFTPRemotePath "$(SFTPRemotePath)" -WinSCPnetDLLPath "${{ parameters.WinSCPnetDLLPath }}" -FileToUploadPath "${{ parameters.FileToUploadPath}}" -functionappName "${{ parameters.functionapp_name }}" -apiKey "${{DQTApiKey}}" -functionAppKey "$(DQTFunctionAppKey)" 
           azurePowerShellVersion: "LatestVersion"
 
       - task: AzureAppServiceSettings@1
