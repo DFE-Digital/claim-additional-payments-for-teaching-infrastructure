@@ -73,11 +73,9 @@ jobs:
                 "slotSetting": false
               }
             ]
-      - task: DownloadPipelineArtifact@2
-        inputs:
-          patterns: '**/*.csv'
 
-      - task: AzurePowerShell@5
+      - task: AzurePowerShell@5        
+        displayName: Smoke Test
         inputs:
           azureSubscription: "${{ parameters.service_connection_name }}"
           ScriptType: 'FilePath'
@@ -87,6 +85,7 @@ jobs:
 
       - task: AzureAppServiceSettings@1
         displayName: "Revert function app settings"
+        condition: always()
         inputs:
           azureSubscription: "${{ parameters.service_connection_name }}"
           appName: ${{ parameters.functionapp_name }}
@@ -102,6 +101,7 @@ jobs:
 
       - task: AzureCLI@2
         displayName: Remove firewall rules from keyvault
+        condition: always()
         inputs:
           azureSubscription: "${{ parameters.service_connection_name }}"
           scriptType: pscore
@@ -113,7 +113,8 @@ jobs:
             az keyvault network-rule remove --name ${{ parameters.keyvault_name }} --ip-address $MyIPAddress
 
       - task: AzureCLI@2
-        displayName: Remove firewall rule to functionapp
+        displayName: Remove firewall rule from functionapp
+        condition: always()
         inputs:
           azureSubscription: "${{ parameters.service_connection_name }}"
           scriptType: pscore

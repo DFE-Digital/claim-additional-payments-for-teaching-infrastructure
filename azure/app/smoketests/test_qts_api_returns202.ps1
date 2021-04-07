@@ -29,7 +29,6 @@ try {
     $session.Open($sessionOptions)
     $uploadPath = "/*"
     # Transfer files
-    # $session.PutFiles("C:\Users\chandrakasetty\Documents\dqtecptestextract.csv", "/upload/dev/*").Check()
     $session.PutFiles($FileToUploadPath, "$SFTPRemotePath$uploadPath").Check()
 }
 finally {
@@ -54,4 +53,5 @@ if ( $statusCode -ne 200 ) {
 }
 else {
     Write-Host 'Received response successfully'
+    throw 'Response is not 200'
 }
