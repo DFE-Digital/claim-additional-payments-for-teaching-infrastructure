@@ -34,9 +34,9 @@ stages:
         command: 'init'
         workingDirectory: '$(System.DefaultWorkingDirectory)/azure/infra/terraform'
         backendServiceArm: 'azdo.pipelines.cip.S118T.arm03ce3ff5-9a61-4525-a063-6ecde34874cf'
-        backendAzureRmResourceGroupName: 's118d01-tfbackend'
-        backendAzureRmStorageAccountName: 's118d01tfbackendsa'
-        backendAzureRmContainerName: 's118d01testtfstate'
+        backendAzureRmResourceGroupName: 's118t01-tfbackend'
+        backendAzureRmStorageAccountName: 's118t01tfbackendsa'
+        backendAzureRmContainerName: 's118t01testtfstate'
         backendAzureRmKey: 'terraform.tfstate'
 
     - task: AzurePowerShell@5
@@ -140,9 +140,9 @@ stages:
           command: 'init'
           workingDirectory: '$(System.DefaultWorkingDirectory)/azure/infra/terraform'
           backendServiceArm: 'azdo.pipelines.cip.S118T.arm03ce3ff5-9a61-4525-a063-6ecde34874cf'
-          backendAzureRmResourceGroupName: 's118d01-tfbackend'
-          backendAzureRmStorageAccountName: 's118d01tfbackendsa'
-          backendAzureRmContainerName: 's118d01testtfstate'
+          backendAzureRmResourceGroupName: 's118t01-tfbackend'
+          backendAzureRmStorageAccountName: 's118t01tfbackendsa'
+          backendAzureRmContainerName: 's118t01testtfstate'
           backendAzureRmKey: 'terraform.tfstate'
 
       - task: AzurePowerShell@5
