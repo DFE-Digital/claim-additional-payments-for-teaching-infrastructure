@@ -44,7 +44,8 @@ $headers = @{}
 $headers.Add("x-correlation-id", "9B28C533-D8B1-475C-9569-A7C2F60DFC16")
 $headers.Add("Authorization", $apiKey)
 
-$response = Invoke-WebRequest -Uri $uri -Method 'GET' -Headers $headers -SkipHeaderValidation -UseBasicParsing
+$response = Invoke-WebRequest -Uri $uri -Method 'GET' -Headers $headers 
+#-SkipHeaderValidation -UseBasicParsing
 
 $statusCode = $response.StatusCode
  
