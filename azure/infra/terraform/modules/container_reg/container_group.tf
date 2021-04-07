@@ -32,15 +32,15 @@ resource "azurerm_container_group" "cont_reg_01" {
       "ENVIRONMENT_NAME"                               = "development"
       "GECKOBOARD_API_KEY"                             = data.azurerm_key_vault_secret.GeckoboardAPIKey.value
       "GOOGLE_ANALYTICS_ID"                            = ""
-      "GOVUK_VERIFY_VSP_HOST"                          = format("%s%s.%s", "https://", data.azurerm_app_service.app_vsp_as.name, "azurewebsites.net")
-      "LOGSTASH_HOST"                                  = data.azurerm_key_vault_secret.LogstashHost.value
-      "LOGSTASH_PORT"                                  = "17000"
-      "NOTIFY_API_KEY"                                 = data.azurerm_key_vault_secret.NotifyApiKey.value
-      "RAILS_ENV"                                      = "development"
-      "RAILS_SERVE_STATIC_FILES"                       = "true"
-      "ROLLBAR_ACCESS_TOKEN"                           = data.azurerm_key_vault_secret.RollbarAccessToken.value
-      "SECRET_KEY_BASE"                                = data.azurerm_key_vault_secret.SecretKeyBase.value
-      "WORKER_COUNT"                                   = "2"
+      #      "GOVUK_VERIFY_VSP_HOST"                          = format("%s%s.%s", "https://", data.azurerm_app_service.app_vsp_as.name, "azurewebsites.net")
+      "LOGSTASH_HOST"            = data.azurerm_key_vault_secret.LogstashHost.value
+      "LOGSTASH_PORT"            = "17000"
+      "NOTIFY_API_KEY"           = data.azurerm_key_vault_secret.NotifyApiKey.value
+      "RAILS_ENV"                = "development"
+      "RAILS_SERVE_STATIC_FILES" = "true"
+      "ROLLBAR_ACCESS_TOKEN"     = data.azurerm_key_vault_secret.RollbarAccessToken.value
+      "SECRET_KEY_BASE"          = data.azurerm_key_vault_secret.SecretKeyBase.value
+      "WORKER_COUNT"             = "2"
     }
 
     ports {
@@ -87,15 +87,15 @@ resource "azurerm_container_group" "cont_reg_02" {
       "ENVIRONMENT_NAME"                               = "development"
       "GECKOBOARD_API_KEY"                             = data.azurerm_key_vault_secret.GeckoboardAPIKey.value
       "GOOGLE_ANALYTICS_ID"                            = ""
-      "GOVUK_VERIFY_VSP_HOST"                          = format("%s%s.%s", "https://", data.azurerm_app_service.app_vsp_as.name, "azurewebsites.net")
-      "LOGSTASH_HOST"                                  = data.azurerm_key_vault_secret.LogstashHost.value
-      "LOGSTASH_PORT"                                  = "17000"
-      "NOTIFY_API_KEY"                                 = data.azurerm_key_vault_secret.NotifyApiKey.value
-      "RAILS_ENV"                                      = "production"
-      "RAILS_SERVE_STATIC_FILES"                       = "true"
-      "ROLLBAR_ACCESS_TOKEN"                           = data.azurerm_key_vault_secret.RollbarAccessToken.value
-      "SECRET_KEY_BASE"                                = data.azurerm_key_vault_secret.SecretKeyBase.value
-      "WORKER_COUNT"                                   = "2"
+      #      "GOVUK_VERIFY_VSP_HOST"                          = format("%s%s.%s", "https://", data.azurerm_app_service.app_vsp_as.name, "azurewebsites.net")
+      "LOGSTASH_HOST"            = data.azurerm_key_vault_secret.LogstashHost.value
+      "LOGSTASH_PORT"            = "17000"
+      "NOTIFY_API_KEY"           = data.azurerm_key_vault_secret.NotifyApiKey.value
+      "RAILS_ENV"                = "production"
+      "RAILS_SERVE_STATIC_FILES" = "true"
+      "ROLLBAR_ACCESS_TOKEN"     = data.azurerm_key_vault_secret.RollbarAccessToken.value
+      "SECRET_KEY_BASE"          = data.azurerm_key_vault_secret.SecretKeyBase.value
+      "WORKER_COUNT"             = "2"
 
     }
 
