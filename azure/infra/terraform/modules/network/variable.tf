@@ -27,3 +27,19 @@ variable "common_tags" {
   type        = map(string)
   description = "Map of the mandatory standard DfE tags"
 }
+
+# ---------------------------------------------------------------------------------------------------------------------
+# LOCAL CALCULATED
+# ---------------------------------------------------------------------------------------------------------------------
+# locals {
+#   calculated_local_value = uuid()
+# }
+
+locals {
+
+
+
+  ip_address_space = var.rg_prefix == "s118d01" ? "11.0.1.0/24" : var.rg_prefix == "s118t01" ? "11.0.2.0/24" : var.rg_prefix == "s118p01" ? "11.0.3.0/24" : "192.168.1.0/24"
+  ip_dns_servers   = var.rg_prefix == "s118d01" ? ["11.0.1.4", "11.0.1.5"] : var.rg_prefix == "s118t01" ? ["11.0.2.4", "11.0.2.5"] : var.rg_prefix == "s118p01" ? ["11.0.3.4", "11.0.3.5"] : ["192.168.1.4", "192.168.1.5"]
+
+}  
