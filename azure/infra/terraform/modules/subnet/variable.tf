@@ -35,3 +35,11 @@ variable "common_tags" {
   type        = map(string)
   description = "Map of the mandatory standard DfE tags"
 }
+
+
+locals {
+
+  default_ip = var.rg_prefix == "s118d01" ? ["11.0.1.16/28"] : var.rg_prefix == "s118t01" ? ["11.0.2.16/28"] : var.rg_prefix == "s118p01" ? ["11.0.3.16/28"] : ["192.168.1.16/28"]
+  worker_ip  = var.rg_prefix == "s118d01" ? ["11.0.1.0/28"] : var.rg_prefix == "s118t01" ? ["11.0.2.0/28"] : var.rg_prefix == "s118p01" ? ["11.0.3.0/28"] : ["192.168.1.0/28"]
+
+}
