@@ -149,8 +149,8 @@ namespace dqt.unittests.api
             var mockRequest = new Mock<HttpRequest>();
 
             var paramsDictionary = new Dictionary<string, StringValues> {
-                { "trn",  string.IsNullOrWhiteSpace(requestDto.TRN)? null:ParameterEncoder.Base64StringEncode(requestDto.TRN) },
-                { "ni", string.IsNullOrWhiteSpace(requestDto.NINumber)? null: ParameterEncoder.Base64StringEncode(requestDto.NINumber) }
+                { "trn",  requestDto.TRN  },
+                { "ni",  requestDto.NINumber}
             };
 
             mockRequest.SetupGet(x => x.Query).Returns(new QueryCollection(paramsDictionary));
