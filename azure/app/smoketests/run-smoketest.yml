@@ -39,6 +39,18 @@ jobs:
             $MyIPAddress | Out-File -FilePath ./agent.ip
             az keyvault network-rule add --name ${{ parameters.keyvault_name }} --ip-address $MyIPAddress
 
+      - task: AzureCLI@2
+        displayName: Add firewall rule to functionapp
+        inputs:
+          azureSubscription: "${{ parameters.service_connection_name }}"
+          scriptType: pscore
+          scriptLocation: inlineScript
+          inlineScript: |
+            # Setting Variables
+            $MyIPAddress = (Invoke-WebRequest -uri "http://ifconfig.me/ip").Content.Trim() 
+            $MyIPAddress | Out-File -FilePath ./agent.ip
+            az functionapp config access-restriction add -g ${{ parameters.functionapp_resourcegroup }} -n ${{ parameters.functionapp_name }} --rule-name 'Pipeline' --action Allow --ip-address $MyIPAddress --priority 200
+
       - task: AzureKeyVault@1
         displayName: "Get the secrets from keyvault"
         inputs:
@@ -99,3 +111,15 @@ jobs:
             $MyIPAddress = (Invoke-WebRequest -uri "http://ifconfig.me/ip").Content.Trim() 
             $MyIPAddress | Out-File -FilePath ./agent.ip
             az keyvault network-rule remove --name ${{ parameters.keyvault_name }} --ip-address $MyIPAddress
+
+      - task: AzureCLI@2
+        displayName: Remove firewall rule to functionapp
+        inputs:
+          azureSubscription: "${{ parameters.service_connection_name }}"
+          scriptType: pscore
+          scriptLocation: inlineScript
+          inlineScript: |
+            # Setting Variables
+            $MyIPAddress = (Invoke-WebRequest -uri "http://ifconfig.me/ip").Content.Trim() 
+            $MyIPAddress | Out-File -FilePath ./agent.ip
+            az functionapp config access-restriction remove  -g ${{ parameters.functionapp_resourcegroup }} -n ${{ parameters.functionapp_name }} --rule-name 'Pipeline'
