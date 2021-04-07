@@ -47,11 +47,33 @@ $response = Invoke-WebRequest -Uri $uri -Method 'GET' -Headers $headers
 #-SkipHeaderValidation -UseBasicParsing
 
 $statusCode = $response.StatusCode
+$result = $response | ConvertFrom-Json
  
 if ( $statusCode -ne 200 ) {
     throw 'Response is not 200'
 }
 else {
-    Write-Host 'Received response successfully'
-    throw 'Response is not 200'
+    $expected = '{       
+        "id": 1,
+        "trn": "1234567",
+        "name": "Test1 Test1",
+        "doB": "1956-01-30T00:00:00",
+        "niNumber": "SS349378C",
+        "qtsAwardDate": "2015-07-04T00:00:00",
+        "ittSubject1Code": "G100",
+        "ittSubject2Code": "NULL",
+        "ittSubject3Code": "NULL",
+        "activeAlert": false,
+        "qualificationName": "Professional Graduate Certificate in Education",
+        "ittStartDate": "2014-08-31T00:00:00"
+      }' | ConvertFrom-Json
+
+    $actual = $result.data[0]
+
+    if (Compare-Object $expected.PSObject.Properties $actual.PSObject.Properties) {
+        throw 'Actual result doesnot match response'
+    }
+    else {
+        Write-Host 'Received response successfully'
+    }
 }
