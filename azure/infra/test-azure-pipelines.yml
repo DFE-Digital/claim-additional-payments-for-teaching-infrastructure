@@ -65,6 +65,34 @@ stages:
           }
           While ($null -eq $AccessAllowed -and $LoopCount -lt 6)
         azurePowerShellVersion: 'LatestVersion'
+
+    - task: AzurePowerShell@5
+      displayName: 'Open Dev KeyVault Firewall ONLY NEEDED IN TEST'
+      inputs:
+        azureSubscription: "azdo.pipelines.cip.S118D.armfe1ef140-8bef-4043-b5ee-c449e6f951ef"
+        TargetAzurePs: LatestVersion      
+        ScriptType: InlineScript
+        Inline: |
+          # Setting Variables
+          $KeyVaultId = '/subscriptions/8655985a-2f87-44d7-a541-0be9a8c2779d/resourceGroups/s118d01-secrets/providers/Microsoft.KeyVault/vaults/s118d01-secrets-kv'
+          $KeyVault = Get-AzResource -ResourceId $KeyVaultId -ErrorAction SilentlyContinue
+          If ($null -eq $KeyVault) {
+            Write-Output "##vso[task.logissue type=warning;]The Key Vault with Id $KeyVaultId does not exist"
+            Exit 0
+          }
+          $KeyVault = Get-AzKeyVault -ResourceGroupName $KeyVault.ResourceGroupName -VaultName $KeyVault.Name
+          Write-Output 'Updating Key Vault rules...'
+          $KeyVault | Update-AzKeyVaultNetworkRuleSet -DefaultAction Allow 
+          $LoopCount = 0
+          Write-Output "Waiting for Access..." 
+          # This will check every 5 seconds, up to a maximum of 30 seconds
+          Do {
+              $AccessAllowed = $KeyVault | Get-AzKeyVaultSecret -ErrorAction SilentlyContinue
+              $LoopCount++
+              Start-Sleep -Seconds 5
+          }
+          While ($null -eq $AccessAllowed -and $LoopCount -lt 6)
+
     - task: TerraformTaskV1@0
       displayName: "TerraForm plan"
       name: TFPlan
@@ -89,6 +117,22 @@ stages:
           Write-Output 'Updating Key Vault rules...'
           $KeyVault | Update-AzKeyVaultNetworkRuleSet -DefaultAction Deny
         azurePowerShellVersion: 'LatestVersion'
+
+    - task: AzurePowerShell@5
+      displayName: 'Close Dev KeyVault Firewall ONLY NEEDED IN TEST'
+      condition: always()
+      inputs:
+        azureSubscription: "azdo.pipelines.cip.S118D.armfe1ef140-8bef-4043-b5ee-c449e6f951ef"
+        TargetAzurePs: LatestVersion 
+        ScriptType: InlineScript
+        Inline: |
+          # Setting Variables
+          $KeyVaultId = '/subscriptions/8655985a-2f87-44d7-a541-0be9a8c2779d/resourceGroups/s118d01-secrets/providers/Microsoft.KeyVault/vaults/s118d01-secrets-kv'
+          $KeyVault = Get-AzResource -ResourceId $KeyVaultId -ErrorAction SilentlyContinue
+          $KeyVault = Get-AzKeyVault -ResourceGroupName $KeyVault.ResourceGroupName -VaultName $KeyVault.Name
+          Write-Output 'Updating Key Vault rules...'
+          $KeyVault | Update-AzKeyVaultNetworkRuleSet -DefaultAction Deny 
+
 
     - task: CopyFiles@2
       displayName: 'Stage Artifacts'
