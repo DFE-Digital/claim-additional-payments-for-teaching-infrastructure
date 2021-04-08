@@ -4,9 +4,9 @@ provider "azurerm" {
 
   #source.com
   #dev
-  # subscription_id = "8655985a-2f87-44d7-a541-0be9a8c2779d"
+  subscription_id = "8655985a-2f87-44d7-a541-0be9a8c2779d"
   #test
-  subscription_id = "e9299169-9666-4f15-9da9-5332680145af"
+  # subscription_id = "e9299169-9666-4f15-9da9-5332680145af"
   #prod west
   # subscription_id = "88bd392f-df19-458b-a100-22b4429060ed"
   #prod north
@@ -28,9 +28,9 @@ terraform {
     storage_account_name = "s118t01tfbackendsa"
     # container_name       = "s118d01tfstate"
     # dev
-    # container_name = "s118d01devtfstate"
+    container_name = "s118d01devtfstate"
     #test
-    container_name = "s118t01testtfstate"
+    # container_name = "s118t01testtfstate"
     # prodwest
     # container_name       = "s118p01westprodtfstate"
     # prod north
