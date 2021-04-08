@@ -70,11 +70,11 @@ data "azurerm_key_vault_secret" "RollbarAccessToken" {
   name         = "RollbarAccessToken"
   key_vault_id = data.azurerm_key_vault.secrets_kv.id
 }
-data "azurerm_key_vault_secret" "TeacherPaymentsDevVspSamlEncryption2Key" {
-  name         = "TeacherPaymentsDevVspSamlEncryption2Key"
-  key_vault_id = data.azurerm_key_vault.secrets_kv.id
-}
 
+# data "azurerm_key_vault_secret" "TeacherPaymentsDevVspSamlEncryption2Key" {
+#   name         = "TeacherPaymentsDevVspSamlEncryption2Key"
+#   key_vault_id = data.azurerm_key_vault.secrets_kv.id
+# }
 # data "azurerm_app_service" "app_vsp_as" {
 #   name                = format("%s-%s", var.app_rg_name, "vsp-as")
 #   resource_group_name = var.app_rg_name
