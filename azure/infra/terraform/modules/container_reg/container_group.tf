@@ -44,7 +44,8 @@ resource "azurerm_container_group" "cont_reg_01" {
     }
 
     ports {
-      port     = 443
+      port = 443
+      # port     = 3000
       protocol = "TCP"
     }
   }
@@ -105,7 +106,8 @@ resource "azurerm_container_group" "cont_reg_02" {
     memory = "1.5"
 
     ports {
-      port     = 443
+      port = 443
+      #port     = 3000
       protocol = "TCP"
     }
 
