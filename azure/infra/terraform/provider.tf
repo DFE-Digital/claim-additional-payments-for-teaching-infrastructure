@@ -25,7 +25,7 @@ provider "random" {
 
 terraform {
   backend "azurerm" {
-    storage_account_name = "s118t01tfbackendsa"
+    storage_account_name = "s118d01tfbackendsa"
     # container_name       = "s118d01tfstate"
     # dev
     container_name = "s118d01devtfstate"

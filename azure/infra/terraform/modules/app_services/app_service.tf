@@ -47,7 +47,7 @@ resource "azurerm_app_service" "app_as" {
     "LOGSTASH_HOST"                                  = data.azurerm_key_vault_secret.LogstashHost.value
     "LOGSTASH_PORT"                                  = local.stash_port
     "NOTIFY_API_KEY"                                 = data.azurerm_key_vault_secret.NotifyApiKey.value
-    "RAILS_ENV"                                      = "production"
+    "RAILS_ENV"                                      = local.environment
     "RAILS_SERVE_STATIC_FILES"                       = "true"
     "ROLLBAR_ACCESS_TOKEN"                           = data.azurerm_key_vault_secret.RollbarAccessToken.value
     "SECRET_KEY_BASE"                                = data.azurerm_key_vault_secret.SecretKeyBase.value
