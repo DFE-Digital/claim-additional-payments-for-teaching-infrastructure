@@ -4,7 +4,7 @@ resource "azurerm_virtual_network" "projcore_vn_01" {
   location              = var.rg_location
   vm_protection_enabled = false
   address_space         = local.ip_address_space
-  dns_servers           = local.ip_dns_servers
+  # dns_servers           = local.ip_dns_servers
 
   tags = merge({
     },
