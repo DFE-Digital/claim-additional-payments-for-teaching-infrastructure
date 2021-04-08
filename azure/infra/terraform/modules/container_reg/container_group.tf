@@ -43,10 +43,10 @@ resource "azurerm_container_group" "cont_reg_01" {
       "WORKER_COUNT"             = "2"
     }
 
-    # ports {
-    #   port     = 443
-    #   protocol = "TCP"
-    # }
+    ports {
+      port     = 443
+      protocol = "TCP"
+    }
   }
 
   tags = merge({
@@ -104,10 +104,10 @@ resource "azurerm_container_group" "cont_reg_02" {
     cpu    = "1"
     memory = "1.5"
 
-    # ports {
-    #   port     = 443
-    #   protocol = "TCP"
-    # }
+    ports {
+      port     = 443
+      protocol = "TCP"
+    }
 
   }
 
