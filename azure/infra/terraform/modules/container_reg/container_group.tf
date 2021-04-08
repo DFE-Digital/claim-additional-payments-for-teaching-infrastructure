@@ -4,9 +4,9 @@ resource "azurerm_container_group" "cont_reg_01" {
   resource_group_name = var.app_rg_name
   ip_address_type     = "Private"
   # ip_address_type = "Public"
-  dns_name_label     = "s118d01-aci-label-01"
-  os_type            = "Linux"
-  network_profile_id = var.projcore_network_prof
+  dns_name_label = "s118d01-aci-label-01"
+  os_type        = "Linux"
+  # network_profile_id = var.projcore_network_prof
 
   container {
     name   = format("%s-%s", var.app_rg_name, "worker-container")
