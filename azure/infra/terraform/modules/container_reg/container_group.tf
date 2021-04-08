@@ -4,7 +4,7 @@ resource "azurerm_container_group" "cont_reg_01" {
   resource_group_name = var.app_rg_name
   ip_address_type     = "Private"
   # ip_address_type = "Public"
-  #dns_name_label      = "s118d01-aci-label-01"
+  dns_name_label     = "s118d01-aci-label-01"
   os_type            = "Linux"
   network_profile_id = var.projcore_network_prof
 
@@ -32,15 +32,15 @@ resource "azurerm_container_group" "cont_reg_01" {
       "ENVIRONMENT_NAME"                               = "development"                                                                                                 #local.environment
       "GECKOBOARD_API_KEY"                             = data.azurerm_key_vault_secret.GeckoboardAPIKey.value
       "GOOGLE_ANALYTICS_ID"                            = ""
-      #      "GOVUK_VERIFY_VSP_HOST"                          = format("%s%s.%s", "https://", data.azurerm_app_service.app_vsp_as.name, "azurewebsites.net")
-      "LOGSTASH_HOST"            = data.azurerm_key_vault_secret.LogstashHost.value
-      "LOGSTASH_PORT"            = "17000" #local.stash_port
-      "NOTIFY_API_KEY"           = data.azurerm_key_vault_secret.NotifyApiKey.value
-      "RAILS_ENV"                = "production" #local.environment
-      "RAILS_SERVE_STATIC_FILES" = "true"
-      "ROLLBAR_ACCESS_TOKEN"     = data.azurerm_key_vault_secret.RollbarAccessToken.value
-      "SECRET_KEY_BASE"          = data.azurerm_key_vault_secret.SecretKeyBase.value
-      "WORKER_COUNT"             = "2"
+      "GOVUK_VERIFY_VSP_HOST"                          = format("%s%s.%s", "https://", data.azurerm_app_service.app_vsp_as.name, "azurewebsites.net")
+      "LOGSTASH_HOST"                                  = data.azurerm_key_vault_secret.LogstashHost.value
+      "LOGSTASH_PORT"                                  = "17000" #local.stash_port
+      "NOTIFY_API_KEY"                                 = data.azurerm_key_vault_secret.NotifyApiKey.value
+      "RAILS_ENV"                                      = "production" #local.environment
+      "RAILS_SERVE_STATIC_FILES"                       = "true"
+      "ROLLBAR_ACCESS_TOKEN"                           = data.azurerm_key_vault_secret.RollbarAccessToken.value
+      "SECRET_KEY_BASE"                                = data.azurerm_key_vault_secret.SecretKeyBase.value
+      "WORKER_COUNT"                                   = "2"
     }
 
     ports {
@@ -59,11 +59,11 @@ resource "azurerm_container_group" "cont_reg_02" {
   name                = format("%s-%s", var.app_rg_name, "migration-runner-aci")
   location            = var.rg_location
   resource_group_name = var.app_rg_name
-  #dns_name_label      = "s118d01-aci-label-01"
-  os_type = "Linux"
+  dns_name_label      = "s118d01-aci-label-01"
+  os_type             = "Linux"
   #  network_profile_id = var.projcore_network_prof
   restart_policy  = "OnFailure"
-  ip_address_type = "Public"
+  ip_address_type = "Private"
 
   container {
     commands = [
@@ -87,15 +87,15 @@ resource "azurerm_container_group" "cont_reg_02" {
       "ENVIRONMENT_NAME"                               = "development"
       "GECKOBOARD_API_KEY"                             = data.azurerm_key_vault_secret.GeckoboardAPIKey.value
       "GOOGLE_ANALYTICS_ID"                            = ""
-      #      "GOVUK_VERIFY_VSP_HOST"                          = format("%s%s.%s", "https://", data.azurerm_app_service.app_vsp_as.name, "azurewebsites.net")
-      "LOGSTASH_HOST"            = data.azurerm_key_vault_secret.LogstashHost.value
-      "LOGSTASH_PORT"            = "17000"
-      "NOTIFY_API_KEY"           = data.azurerm_key_vault_secret.NotifyApiKey.value
-      "RAILS_ENV"                = "production"
-      "RAILS_SERVE_STATIC_FILES" = "true"
-      "ROLLBAR_ACCESS_TOKEN"     = data.azurerm_key_vault_secret.RollbarAccessToken.value
-      "SECRET_KEY_BASE"          = data.azurerm_key_vault_secret.SecretKeyBase.value
-      "WORKER_COUNT"             = "2"
+      "GOVUK_VERIFY_VSP_HOST"                          = format("%s%s.%s", "https://", data.azurerm_app_service.app_vsp_as.name, "azurewebsites.net")
+      "LOGSTASH_HOST"                                  = data.azurerm_key_vault_secret.LogstashHost.value
+      "LOGSTASH_PORT"                                  = "17000"
+      "NOTIFY_API_KEY"                                 = data.azurerm_key_vault_secret.NotifyApiKey.value
+      "RAILS_ENV"                                      = "production"
+      "RAILS_SERVE_STATIC_FILES"                       = "true"
+      "ROLLBAR_ACCESS_TOKEN"                           = data.azurerm_key_vault_secret.RollbarAccessToken.value
+      "SECRET_KEY_BASE"                                = data.azurerm_key_vault_secret.SecretKeyBase.value
+      "WORKER_COUNT"                                   = "2"
 
     }
 
