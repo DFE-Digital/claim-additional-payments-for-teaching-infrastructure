@@ -17,11 +17,7 @@ provider "random" {
 }
 
 terraform {
-  backend "azurerm" {
-    # storage_account_name = "s118d01dfbackendsa"
-    # container_name       = "s118d01devtfstate"
-    # key = "terraform.tfstate"    
-  }
+  backend "azurerm" {}
 
   required_providers {
     azuread = {
@@ -32,14 +28,6 @@ terraform {
       source  = "hashicorp/azurerm"
       version = "=2.49.0"
     }
-    # local = {
-    #   source  = "hashicorp/local"
-    #   version = "=2.1.0"
-    # }
-    # null = {
-    #   source  = "hashicorp/null"
-    #   version = "=3.1.0"
-    # }
     random = {
       source  = "hashicorp/random"
       version = "=3.1.0"
