@@ -93,7 +93,7 @@ resource "azurerm_container_group" "cont_reg_02" {
       "NOTIFY_API_KEY"           = data.azurerm_key_vault_secret.NotifyApiKey.value
       "RAILS_ENV"                = "production"
       "RAILS_SERVE_STATIC_FILES" = "true"
-      "ROLLBAR_ACCESS_TOKEN"     = "5e19fe0dd4d2424086574089731b6be0" #data.azurerm_key_vault_secret.RollbarAccessToken.value
+      "ROLLBAR_ACCESS_TOKEN"     = data.azurerm_key_vault_secret.RollbarInfraToken.value
       "SECRET_KEY_BASE"          = data.azurerm_key_vault_secret.SecretKeyBase.value
       "WORKER_COUNT"             = "2"
 
