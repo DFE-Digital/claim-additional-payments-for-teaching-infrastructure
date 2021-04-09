@@ -47,9 +47,9 @@ resource "azurerm_app_service" "app_as" {
     "LOGSTASH_HOST"                                  = data.azurerm_key_vault_secret.LogstashHost.value
     "LOGSTASH_PORT"                                  = local.stash_port
     "NOTIFY_API_KEY"                                 = data.azurerm_key_vault_secret.NotifyApiKey.value
-    "RAILS_ENV"                                      = local.environment
+    "RAILS_ENV"                                      = "production" #local.environment
     "RAILS_SERVE_STATIC_FILES"                       = "true"
-    "ROLLBAR_ACCESS_TOKEN"                           = data.azurerm_key_vault_secret.RollbarAccessToken.value
+    "ROLLBAR_ACCESS_TOKEN"                           = data.azurerm_key_vault_secret.RollbarInfraToken.value
     "SECRET_KEY_BASE"                                = data.azurerm_key_vault_secret.SecretKeyBase.value
     "WORKER_COUNT"                                   = "2"
     #    "GOVUK_VERIFY_VSP_HOST"                          = format("%s%s.%s", "https://", azurerm_app_service.app_vsp_as.name, "azurewebsites.net")    
