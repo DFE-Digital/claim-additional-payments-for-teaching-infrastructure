@@ -34,7 +34,7 @@ stages:
         provider: 'azurerm'
         command: 'init'
         workingDirectory: '$(System.DefaultWorkingDirectory)/azure/infra/terraform'
-        commandOptions: '-backend-config="storage_account_name=s118d01dfbackendsa" -backend-config="container_name=s118d01devtfstate" -backend-config="key=terraform.tfstate"'
+        commandOptions: '-backend-config="storage_account_name=s118d01dfbackendsa" -backend-config="container_name=s118d01devtfstate"'
         backendServiceArm: 'azdo.pipelines.cip.S118D.armfe1ef140-8bef-4043-b5ee-c449e6f951ef'
         backendAzureRmResourceGroupName: 's118d01-tfbackend'
         backendAzureRmStorageAccountName: 's118d01tfbackendsa'
@@ -141,7 +141,7 @@ stages:
           provider: "azurerm"
           command: "init"
           workingDirectory: "$(System.DefaultWorkingDirectory)/azure/infra/terraform"
-          commandOptions: '-backend-config="storage_account_name=s118d01dfbackendsa" -backend-config="container_name=s118d01devtfstate" -backend-config="key=terraform.tfstate"'
+          commandOptions: '-backend-config="storage_account_name=s118d01dfbackendsa" -backend-config="container_name=s118d01devtfstate"'
           backendServiceArm: "azdo.pipelines.cip.S118D.armfe1ef140-8bef-4043-b5ee-c449e6f951ef"
           backendAzureRmResourceGroupName: "s118d01-tfbackend"
           backendAzureRmStorageAccountName: "s118d01tfbackendsa"
