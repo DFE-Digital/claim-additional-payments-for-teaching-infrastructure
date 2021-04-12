@@ -33,8 +33,8 @@ stages:
         provider: 'azurerm'
         command: 'init'
         workingDirectory: '$(System.DefaultWorkingDirectory)/azure/infra/terraform'
-        commandOptions: '-backend-config="storage_account_name=s118d01tfbackendsa" -backend-config="container_name=s118p01testfstate"' 
-        backendServiceArm: 'azdo.pipelines.cip.s118p.arm03ce3ff5-9a61-4525-a063-6ecde34874cf'
+        commandOptions: '-backend-config="storage_account_name=s118p01tfbackendsa" -backend-config="container_name=s118p01westprodtfstate"'
+        backendServiceArm: 'azdo.pipelines.cip.S118P.armf895c908-777c-49ec-b814-3c50d459c6ab'
         backendAzureRmResourceGroupName: 's118p01-tfbackend'
         backendAzureRmStorageAccountName: 's118p01tfbackendsa'
         backendAzureRmContainerName: 's118p01westprodtfstate'
@@ -43,7 +43,7 @@ stages:
     - task: AzurePowerShell@5
       displayName: 'Open KeyVault Firewall'
       inputs:
-        azureSubscription: 'azdo.pipelines.cip.s118p.arm03ce3ff5-9a61-4525-a063-6ecde34874cf'
+        azureSubscription: 'azdo.pipelines.cip.S118P.armf895c908-777c-49ec-b814-3c50d459c6ab'
         ScriptType: 'InlineScript'
         Inline: |
           # Setting Variables
@@ -75,13 +75,13 @@ stages:
         command: 'plan'
         workingDirectory: '$(System.DefaultWorkingDirectory)/azure/infra/terraform'
         commandOptions: '-var="input_region=$(REGION)" -var="input_environment=$(environment)"'
-        environmentServiceNameAzureRM: 'azdo.pipelines.cip.s118p.arm03ce3ff5-9a61-4525-a063-6ecde34874cf'
+        environmentServiceNameAzureRM: 'azdo.pipelines.cip.S118P.armf895c908-777c-49ec-b814-3c50d459c6ab'
 
     - task: AzurePowerShell@5
       displayName: 'Close KeyVault Firewall'
       condition: always()
       inputs:
-        azureSubscription: 'azdo.pipelines.cip.s118p.arm03ce3ff5-9a61-4525-a063-6ecde34874cf'
+        azureSubscription: 'azdo.pipelines.cip.S118P.armf895c908-777c-49ec-b814-3c50d459c6ab'
         ScriptType: 'InlineScript'
         Inline: |
           # Setting Variables
@@ -141,8 +141,8 @@ stages:
           provider: 'azurerm'
           command: 'init'
           workingDirectory: '$(System.DefaultWorkingDirectory)/azure/infra/terraform'
-          commandOptions: '-backend-config="storage_account_name=s118d01tfbackendsa" -backend-config="container_name=s118p01testfstate"' 
-          backendServiceArm: 'azdo.pipelines.cip.s118p.arm03ce3ff5-9a61-4525-a063-6ecde34874cf'
+          commandOptions: '-backend-config="storage_account_name=s118p01tfbackendsa" -backend-config="container_name=s118p01westprodtfstate"'
+          backendServiceArm: 'azdo.pipelines.cip.S118P.armf895c908-777c-49ec-b814-3c50d459c6ab'
           backendAzureRmResourceGroupName: 's118p01-tfbackend'
           backendAzureRmStorageAccountName: 's118p01tfbackendsa'
           backendAzureRmContainerName: 's118p01testtfstate'
@@ -151,7 +151,7 @@ stages:
       - task: AzurePowerShell@5
         displayName: 'Open KeyVault Firewall'
         inputs:
-          azureSubscription: 'azdo.pipelines.cip.s118p.arm03ce3ff5-9a61-4525-a063-6ecde34874cf'
+          azureSubscription: 'azdo.pipelines.cip.S118P.armf895c908-777c-49ec-b814-3c50d459c6ab'
           ScriptType: 'InlineScript'
           Inline: |
             # Setting Variables
@@ -181,7 +181,7 @@ stages:
         inputs:
           command: 'apply'
           workingDirectory: '$(System.DefaultWorkingDirectory)/azure/infra/terraform'
-          environmentServiceName: 'azdo.pipelines.cip.s118p.arm03ce3ff5-9a61-4525-a063-6ecde34874cf'
+          environmentServiceName: 'azdo.pipelines.cip.S118P.armf895c908-777c-49ec-b814-3c50d459c6ab'
           runAzLogin: true
           commandOptions: '-var="input_region=$(REGION)" -var="input_environment=$(environment)"'
           allowTelemetryCollection: true
@@ -200,7 +200,7 @@ stages:
         displayName: 'Close KeyVault Firewall'
         condition: always()
         inputs:
-          azureSubscription: 'azdo.pipelines.cip.s118p.arm03ce3ff5-9a61-4525-a063-6ecde34874cf'
+          azureSubscription: 'azdo.pipelines.cip.S118P.armf895c908-777c-49ec-b814-3c50d459c6ab'
           ScriptType: 'InlineScript'
           Inline: |
             # Setting Variables
