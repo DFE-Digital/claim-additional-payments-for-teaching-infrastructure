@@ -67,7 +67,7 @@ data "azurerm_key_vault_secret" "NotifyApiKey" {
   key_vault_id = data.azurerm_key_vault.secrets_kv.id
 }
 data "azurerm_key_vault_secret" "RollbarInfraToken" {
-  name         = "RollbarInfraToken"
+  name         = "RollbarAccessToken"
   key_vault_id = data.azurerm_key_vault.secrets_kv.id
 }
 
