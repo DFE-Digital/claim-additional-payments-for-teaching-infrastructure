@@ -33,8 +33,8 @@ variable "input_environment" {
 #   calculated_local_value = uuid()
 # }
 
-# locals {
+locals {
 
-#   #                            env is               "dev"                                          env is                      "test"                                            env is Production                    region is north eur                 "prod north Europe"                     else "prod West Europe"                   else "Dev"
-#   sub_id = var.input_environment == "Development" ? "8655985a-2f87-44d7-a541-0be9a8c2779d" : var.input_environment == "Test" ? "e9299169-9666-4f15-9da9-5332680145af" : var.input_environment == "Production" ? (var.input_environment == "northeurope" ? "8655985a-2f87-44d7-a541-0be9a8c2779d" : "88bd392f-df19-458b-a100-22b4429060ed") : "8655985a-2f87-44d7-a541-0be9a8c2779d"
-# }
+  #                            env is               "dev"                                          env is                      "test"                                            env is Production                    region is north eur                 "prod north Europe"                     else "prod West Europe"                   else "Dev"
+  sub_id = var.input_environment == "Development" ? "8655985a-2f87-44d7-a541-0be9a8c2779d" : var.input_environment == "Test" ? "e9299169-9666-4f15-9da9-5332680145af" : var.input_environment == "Production" ? (var.input_environment == "northeurope" ? "8655985a-2f87-44d7-a541-0be9a8c2779d" : "88bd392f-df19-458b-a100-22b4429060ed") : "8655985a-2f87-44d7-a541-0be9a8c2779d"
+}
