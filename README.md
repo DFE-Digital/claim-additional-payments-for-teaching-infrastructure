@@ -1,24 +1,25 @@
 # Claim Additional Payments for Teaching
 
-## Documentation
+#### Documentation
 
-Most documentation for the service can be found on the
-[project's Confluence wiki](https://dfedigital.atlassian.net/wiki/spaces/TP/pages/2467004479/ECP+DQT+Integration+Useful+Links).
-Some app-specific technical documentation can be found in the [docs](docs)
-directory.
+	Most documentation for the service can be found on the
+	[project's Confluence wiki](https://dfedigital.atlassian.net/wiki/spaces/TP/pages/2467004479/ECP+DQT+Integration+Useful+Links).
+	Some app-specific technical documentation can be found in the [docs](docs)
+	directory.
 
-### First-line support developers
+#### First-line support developers
 
-If you�re a developer on first-line support who is new to this project, see the
-[support runbook (`docs/first-line-support-developer-runbook.md`)](docs/first-line-support-developer-runbook.md)
-for help with common support tasks.
+	If you�re a developer on first-line support who is new to this project, see the
+	[support runbook (`docs/first-line-support-developer-runbook.md`)](docs/first-line-support-developer-runbook.md)
+	for help with common support tasks.
 
-### Service architecture
+#### Service architecture
+	https://dfedigital.atlassian.net/wiki/spaces/TP/pages/2552528960/DQT+Integration+-+solution
 
 ### Documentation for common developer tasks
 
-- Release process for production:
-  [`docs/release-process.md`](docs/release-process.md)
+	Release process for production:
+	  [`docs/release-process.md`](docs/release-process.md)
 
 
 ## Project structure
@@ -42,25 +43,21 @@ for help with common support tasks.
         ├── dqt.unittests
 ```
 
-### Setting up the functions locally
+#### Setting up the functions locally
 
-  ## Prerequisites
-     Net Core 3.1 microsoft.net.sdk.function 3.0.11
+### Prerequisites
+  	 - Net Core 3.1 microsoft.net.sdk.function 3.0.11
+     - Azure Datastudio 
+       	https://docs.microsoft.com/en-us/sql/azure-data-studio/download-azure-data-studio?view=sql-server-ver15
+     - Azure StorageExplorer
+      	https://azure.microsoft.com/en-gb/features/storage-explorer/
+      	https://go.microsoft.com/fwlink/?linkid=717179&clcid=0x409
+     - WinSCP
+       	https://winscp.net/eng/index.php
+     - VisualStudio(2019) or VisualStudio Code
+     - Postman
 
-     Azure Datastudio 
-       https://docs.microsoft.com/en-us/sql/azure-data-studio/download-azure-data-studio?view=sql-server-ver15
-
-     Azure StorageExplorer
-      https://azure.microsoft.com/en-gb/features/storage-explorer/
-      https://go.microsoft.com/fwlink/?linkid=717179&clcid=0x409
-
-     WinSCP
-     https://winscp.net/eng/index.php
-
-     VisualStudio(2019) or VisualStudio Code
-     Postman
-
-  ## Steps to run Locally
+  ### Steps to run Locally
 
       1. Setup Azure storage explorer
            - Start Azure storage emulator and then Azure storage explorer
