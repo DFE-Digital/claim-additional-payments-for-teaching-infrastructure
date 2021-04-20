@@ -6,15 +6,13 @@ trigger: none
 
 parameters:
   - name: RunDeploy
-    displayName: "Run Deployment step"
+    displayName: "run deployment step"
     type: boolean
     default: true
 
 stages:
--stage: plan
+- stage: plan
   displayName: Plan
-#  dependsOn: build
-#  condition: ${{ parameters.RunDeploy }}  
 
   jobs:
   - job: plan 
