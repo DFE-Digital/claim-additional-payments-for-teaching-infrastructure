@@ -11,16 +11,12 @@ parameters:
     default: true
 
 stages:
-- stage: build
-  displayName: BuildDocker
-
 - stage: dockerbuild
   displayname: DockerBuild
 
   jobs:
   - job: build
     displayName: Build
-# #############
 
     pool:
       vmImage: ubuntu-latest
@@ -68,6 +64,7 @@ stages:
           .
       displayName: Build web dependencies Docker image using 'cache-web-dependencies' as cache
       condition: ne(variables['Build.SourceBranch'], 'refs/heads/master')
+
     - script: |
         docker build \
           --file=Dockerfile \
@@ -91,6 +88,7 @@ stages:
           .
       displayName: Build web Docker image using 'latest' as cache
       condition: ne(variables['Build.SourceBranch'], 'refs/heads/master')
+
     - script: |
         docker build \
           --file=Dockerfile \
