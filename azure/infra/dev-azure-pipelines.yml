@@ -12,7 +12,7 @@ parameters:
 
 stages:
 - stage: dockerbuild
-  displayname: DockerBuild
+displayname: DockerBuild
 
   jobs:
   - job: build
