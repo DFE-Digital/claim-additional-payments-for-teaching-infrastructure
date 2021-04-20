@@ -15,8 +15,8 @@ stages:
   displayname: DockerBuild
 
   jobs:
-  - job: build
-    displayName: Build
+  - job: builddckr
+    displayName: Builddckr
 
     pool:
       vmImage: ubuntu-latest
