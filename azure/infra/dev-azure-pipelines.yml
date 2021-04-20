@@ -31,7 +31,7 @@ stages:
     steps:
       # Login to DockerHub
     - script: docker login -u $(dockerId) -p $pass
-       env:
+      env:
         pass: $(dockerPassword)
       displayName: Login to DockerHub
 
