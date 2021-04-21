@@ -33,7 +33,7 @@ steps:
     inputs:
       azureSubscription: "${{ parameters.service_connection_name }}"
       KeyVaultName: "${{ parameters.keyvault_name }}"
-      SecretsFilter: "DatabaseName,DatabaseServerName,DatabaseUsername,DatabasePassword,DQTApiKey,DQTFunctionAppKey,DQTRollbarAccessToken,DQTRollbarEnvironment, SFTPScheduleTriggerTime,SFTPHostName,SFTPUserName,SFTPPassword,SFTPSshHostKeyFingerprint,SFTPRemotePath,DQTBlobContainerName"
+      SecretsFilter: "DatabaseName,DatabaseServerName,DatabaseUsername,DatabasePassword,DQTApiKey,DQTFunctionAppKey,DQTRollbarAccessToken,DQTRollbarEnvironment, SFTPScheduleTriggerTime,SFTPHostName,SFTPUserName,SFTPPassword,SFTPSshHostKeyFingerprint,SFTPRemotePath,DQTBlobContainerName,SFTPPortNUmber"
       RunAsPreJob: false
 
   - task: AzureCLI@2
