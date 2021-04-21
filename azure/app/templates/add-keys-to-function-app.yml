@@ -126,7 +126,7 @@ steps:
           },
           {
             "name": "SFTPPortNUmber",
-            "value": "$(SFTPPortNUmber)"
+            "value": "$(SFTPPortNUmber)",
             "slotSetting": false
           }
         ]
