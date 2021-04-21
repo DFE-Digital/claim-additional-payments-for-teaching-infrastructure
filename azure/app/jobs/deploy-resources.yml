@@ -17,6 +17,8 @@ parameters:
    type: string
  - name: vmImage 
    type: string
+#  - name: runSmokeTests
+#    value: string
  - name: run_after
    type: object
    default: []
@@ -39,13 +41,14 @@ jobs:
     keyvault_name: '${{parameters.subscription_identifier }}${{parameters.environment_id}}-secrets-kv'
     keyvault_secret_name: DQTFunctionAppKey
    
-- template: ../smoketests/run-smoketest.yml
-  parameters:
-    run_after: "job_deploy_sln_${{ parameters.subscription_identifier }}${{parameters.environment_id}}funcappfapp"
-    keyvault_name: '${{parameters.subscription_identifier }}${{parameters.environment_id}}-secrets-kv'
-    service_connection_name: '${{ parameters.service_connection_name }}'
-    WinSCPnetDLLPath: 'azure/app/smoketests/WinSCPnet.dll'
-    FileToUploadPath: '$(Pipeline.Workspace)\s\azure\app\smoketests\DqtTestData.csv'
-    functionapp_name: '${{ parameters.subscription_identifier }}${{parameters.environment_id}}funcappfapp'  
-    functionapp_resourcegroup: '${{ parameters.subscription_identifier }}${{parameters.environment_id}}-funcapp'
-    SmokeTestScriptPath: 'azure/app/smoketests/test_qts_api_returns202.ps1'
+# - template: ../smoketests/run-smoketest.yml
+#   condition: eq('${{ parameters.runSmokeTests}}', 'true')
+#   parameters:
+#     run_after: "job_deploy_sln_${{ parameters.subscription_identifier }}${{parameters.environment_id}}funcappfapp"
+#     keyvault_name: '${{parameters.subscription_identifier }}${{parameters.environment_id}}-secrets-kv'
+#     service_connection_name: '${{ parameters.service_connection_name }}'
+#     WinSCPnetDLLPath: 'azure/app/smoketests/WinSCPnet.dll'
+#     FileToUploadPath: '$(Pipeline.Workspace)\s\azure\app\smoketests\DqtTestData.csv'
+#     functionapp_name: '${{ parameters.subscription_identifier }}${{parameters.environment_id}}funcappfapp'  
+#     functionapp_resourcegroup: '${{ parameters.subscription_identifier }}${{parameters.environment_id}}-funcapp'
+#     SmokeTestScriptPath: 'azure/app/smoketests/test_qts_api_returns202.ps1'

@@ -123,6 +123,11 @@ steps:
             "name": "DQTBlobContainerName",
             "value": "$(DQTBlobContainerName)",
             "slotSetting": false
+          },
+          {
+            "name": "SFTPPortNUmber",
+            "value": "$(SFTPPortNUmber)"
+            "slotSetting": false
           }
         ]
 
