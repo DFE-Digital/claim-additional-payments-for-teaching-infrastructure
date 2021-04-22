@@ -12,11 +12,7 @@ variables:
   - group: docker-settings
 
 steps:
-  # Login to DockerHub
-  - script: docker login -u $(dockerId) -p $pass
-    env:
-      pass: $(dockerPassword)
-    displayName: Login to DockerHub
+
 
   # Build and run tests
   - script: |
@@ -27,6 +23,16 @@ steps:
     displayName: Build test Docker image
   - script: docker-compose --file=docker-compose.test.yml run --rm test
     displayName: Run tests on Docker
+
+  - task: Docker@2
+    displayName: Build and push an image to container registry
+    inputs:
+      command: buildAndPush
+      repository: 's118d01contreg.azurecr.io'
+      dockerfile: $(dockerfilePath)
+      containerRegistry: $(dockerRegistryServiceConnection)
+      tags: |
+        $(tag)
 
   # Clean up
   - script: |
