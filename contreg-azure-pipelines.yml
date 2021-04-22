@@ -1,4 +1,3 @@
-# #################
 - stage: dockerbuild
   displayname: DockerBuild
 
