@@ -21,6 +21,7 @@ steps:
 
       docker-compose --file=docker-compose.test.yml build
     displayName: Build test Docker image
+
   - script: docker-compose --file=docker-compose.test.yml run --rm test
     displayName: Run tests on Docker
 
@@ -57,6 +58,7 @@ steps:
         .
     displayName: Build web dependencies Docker image using 'cache-web-dependencies' as cache
     condition: ne(variables['Build.SourceBranch'], 'refs/heads/master')
+
   - script: |
       docker build \
         --file=Dockerfile \
@@ -80,6 +82,7 @@ steps:
         .
     displayName: Build web Docker image using 'latest' as cache
     condition: ne(variables['Build.SourceBranch'], 'refs/heads/master')
+
   - script: |
       docker build \
         --file=Dockerfile \
@@ -98,6 +101,7 @@ steps:
       docker push $(dockerRegistry)/$(dockerImageName):cache-test-dependencies
     displayName: Push test dependencies Docker image for caching
     condition: eq(variables['Build.SourceBranch'], 'refs/heads/master')
+
   - script: |
       docker tag local/dfe-teachers-payment-service:test $(dockerRegistry)/$(dockerImageName):cache-test
 
@@ -112,6 +116,7 @@ steps:
       docker push $(dockerRegistry)/$(dockerImageName):cache-web-dependencies
     displayName: Push web dependencies Docker image for caching
     condition: eq(variables['Build.SourceBranch'], 'refs/heads/master')
+    
   - script: |
       docker tag local/dfe-teachers-payment-service:web $(dockerRegistry)/$(dockerImageName):$(Build.BuildNumber)
       docker tag local/dfe-teachers-payment-service:web $(dockerRegistry)/$(dockerImageName):latest
