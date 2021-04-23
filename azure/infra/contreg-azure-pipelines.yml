@@ -11,6 +11,14 @@ variables:
 
 steps:
 
+  - task: DockerCompose@0
+    inputs:
+      containerregistrytype: 'Azure Container Registry'
+      azureSubscription: 'azdo.pipelines.cip.S118D.armfe1ef140-8bef-4043-b5ee-c449e6f951ef'
+      azureContainerRegistry: '{"loginServer":"s118d01contreg.azurecr.io", "id" : "/subscriptions/8655985a-2f87-44d7-a541-0be9a8c2779d/resourceGroups/s118d01-contreg/providers/Microsoft.ContainerRegistry/registries/s118d01contreg"}'
+      dockerComposeFile: '**/docker-compose.test.yml'
+      action: 'Run a Docker Compose command'
+
   - task: Docker@2
     displayName: Build and push an image to container registry
     inputs:
