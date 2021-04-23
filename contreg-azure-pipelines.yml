@@ -1,9 +1,7 @@
-pr: none
-
-trigger:
-  branches:
-    include:
-    - '*'
+trigger: none
+  # branches:
+  #   include:
+  #   - main
 
 pool:
   vmImage: ubuntu-latest
@@ -13,6 +11,14 @@ variables:
 
 steps:
 
+  - task: Docker@2
+    displayName: Build and push an image to container registry
+    inputs:
+      containerRegistry: 's118d01contreg'
+      repository: 's118d01contreg.azurecr.io'
+      command: 'buildAndPush'
+      Dockerfile: '**/Dockerfile'
+      tags: '$(tag)'
 
   # Build and run tests
   - script: |
@@ -24,17 +30,7 @@ steps:
 
   - script: docker-compose --file=docker-compose.test.yml run --rm test
     displayName: Run tests on Docker
-
-  - task: Docker@2
-    displayName: Build and push an image to container registry
-    inputs:
-      command: buildAndPush
-      repository: 's118d01contreg.azurecr.io'
-      dockerfile: $(dockerfilePath)
-      containerRegistry: $(dockerRegistryServiceConnection)
-      tags: |
-        $(tag)
-
+    
   # Clean up
   - script: |
       git reset --hard
