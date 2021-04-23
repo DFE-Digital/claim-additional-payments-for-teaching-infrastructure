@@ -33,7 +33,7 @@ namespace dqt.domain.SFTPToBlob
                 HostName = _configSettings.SFTPHostName,
                 UserName = _configSettings.SFTPUserName,
                 Password = _configSettings.SFTPPassword,
-                //SshHostKeyFingerprint = _configSettings.SFTPSshHostKeyFingerprint,
+                SshHostKeyFingerprint = _configSettings.SFTPSshHostKeyFingerprint,
                 PortNumber = int.Parse(_configSettings.SFTPPortNUmber)
             });
 
