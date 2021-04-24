@@ -22,10 +22,10 @@ parameters:
   - name: run_Smoketests
     displayName: RunSmokeTests
     type: string
-    default: 'false'
+    default: no_run
     values:
-    - 'true'
-    - 'false'
+    - run
+    - no_run
 
 variables:
   - name: system_identifier
