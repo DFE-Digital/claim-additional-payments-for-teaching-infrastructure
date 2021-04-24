@@ -36,6 +36,6 @@ namespace dqt.domain
 
         public string DQTBlobContainerName { get; }
 
-        public string SFTPPortNUmber { get; }
+        public string SFTPPortNumber { get; }
     }
 }
