@@ -42,7 +42,7 @@ jobs:
     keyvault_secret_name: DQTFunctionAppKey
    
 - template: ../smoketests/run-smoketest.yml
-  condition: eq('${{ parameters.run_SmokeTests}}', 'run')
+  condition: eq('${{ parameters.run_SmokeTests}}', yes)
   parameters:
     run_after: "job_deploy_sln_${{ parameters.subscription_identifier }}${{parameters.environment_id}}funcappfapp"
     keyvault_name: '${{parameters.subscription_identifier }}${{parameters.environment_id}}-secrets-kv'
