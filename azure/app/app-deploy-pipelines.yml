@@ -20,11 +20,12 @@ parameters:
     - production
     - none
   - name: run_Smoketests
+    displayName: RunSmokeTests
     type: string
-    default: false
+    default: 'false'
     values:
-    - true
-    - false
+    - 'true'
+    - 'false'
 
 variables:
   - name: system_identifier
