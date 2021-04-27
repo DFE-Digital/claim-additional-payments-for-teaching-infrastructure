@@ -117,3 +117,6 @@
             qualified-teacher-status-api: [GET] http://localhost:7071/api/qualified-teachers/qualified-teaching-status
             Swagger document for api can be found in confluence page below
             https://dfedigital.atlassian.net/wiki/spaces/TP/pages/2552528934/DQT+Integration+Components
+ ### Postman Collection
+ 	Postman Collection can be found in
+ 	https://dfedigital.atlassian.net/wiki/spaces/TP/pages/2838790145/DQT+API+Postman+Scripts
