@@ -31,6 +31,13 @@ steps:
       docker tag dfedigital/teacher-payments-service:cache-test s118d01contreg.azurecr.io/teacher-payments-service:cache-test
       docker tag dfedigital/teacher-payments-service:cache-test-dependencies s118d01contreg.azurecr.io/teacher-payments-service:cache-test-dependencies
 
+# docker push ***/teacher-services-payments:cache-web-dependencies
+  - task: Docker@2
+    displayName: login into ACR
+    inputs:
+      containerRegistry: 's118d01contreg'
+      command: 'login'
+
   - task: Docker@2
     displayName: push web-dependencies
     inputs:
