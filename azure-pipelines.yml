@@ -1,0 +1,59 @@
+# Starter pipeline
+# Start with a minimal pipeline that you can customize to build and deploy your code.
+# Add steps that build, run tests, deploy, and more:
+# https://aka.ms/yaml
+
+trigger:
+- master
+
+pool:
+  vmImage: ubuntu-latest
+
+variables:
+  - group: docker-settings
+
+steps:
+  # Login to DockerHub
+  - script: docker login -u $(dockerId) -p $pass
+    env:
+      pass: $(dockerPassword)
+    displayName: Login to DockerHub
+
+  # Build and run tests
+  - script: |
+      docker pull $(dockerRegistry)/$(dockerImageName):cache-web-dependencies
+      docker pull $(dockerRegistry)/$(dockerImageName):cache-test-dependencies || true
+      docker pull $(dockerRegistry)/$(dockerImageName):cache-test || true    
+      docker pull $(dockerRegistry)/$(dockerImageName):latest 
+
+  - task: Docker@2
+    displayName: push web-dependencies
+    inputs:
+      containerRegistry: 's118d01contreg'
+      repository: 'teacher-services-payments'
+      command: 'push'
+      tags: '$(dockerImageName):cache-web-dependencies'
+
+  - task: Docker@2
+    displayName: push web-dependencies
+    inputs:
+      containerRegistry: 's118d01contreg'
+      repository: 'teacher-services-payments'
+      command: 'push'
+      tags: '$(dockerImageName):cache-test-dependencies'
+
+  - task: Docker@2
+    displayName: push web-dependencies
+    inputs:
+      containerRegistry: 's118d01contreg'
+      repository: 'teacher-services-payments'
+      command: 'push'
+      tags: '$(dockerImageName):cache-test'
+
+  - task: Docker@2
+    displayName: push web-dependencies
+    inputs:
+      containerRegistry: 's118d01contreg'
+      repository: 'teacher-services-payments'
+      command: 'push'
+      tags: '$(dockerImageName):latest'
