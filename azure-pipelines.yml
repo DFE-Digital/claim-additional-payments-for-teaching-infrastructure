@@ -37,28 +37,28 @@ steps:
       containerRegistry: 's118d01contreg'
       repository: 'teacher-services-payments'
       command: 'push'
-      tags: '$(dockerImageName):cache-web-dependencies'
+      tags: 'cache-web-dependencies'
 
   - task: Docker@2
-    displayName: push web-dependencies
+    displayName: push test-dependencies
     inputs:
       containerRegistry: 's118d01contreg'
       repository: 'teacher-services-payments'
       command: 'push'
-      tags: '$(dockerImageName):cache-test-dependencies'
+      tags: 'cache-test-dependencies'
 
   - task: Docker@2
-    displayName: push web-dependencies
+    displayName: push test
     inputs:
       containerRegistry: 's118d01contreg'
       repository: 'teacher-services-payments'
       command: 'push'
-      tags: '$(dockerImageName):cache-test'
+      tags: 'cache-test'
 
   - task: Docker@2
-    displayName: push web-dependencies
+    displayName: push latest
     inputs:
       containerRegistry: 's118d01contreg'
       repository: 'teacher-services-payments'
       command: 'push'
-      tags: '$(dockerImageName):latest'
+      tags: ':latest'
