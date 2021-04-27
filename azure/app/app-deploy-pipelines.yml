@@ -19,6 +19,13 @@ parameters:
     - test
     - production
     - none
+  - name: run_Smoketests
+    displayName: RunSmokeTests
+    type: string
+    default: no
+    values:
+    - yes
+    - no
 
 variables:
   - name: system_identifier
@@ -58,6 +65,7 @@ stages:
       datalayer_project_directory: 'solution/dqt.datalayer'
       sln_artifact_name: 'drop-sln'
       vmImage: 'windows-latest'
+      run_Smoketests: ${{parameters.run_Smoketests}}
       run_after: stage_build
 
 - stage: stage_deploy_test
@@ -75,6 +83,7 @@ stages:
       datalayer_project_directory: 'solution/dqt.datalayer'
       sln_artifact_name: 'drop-sln'
       vmImage: 'windows-latest'
+      run_Smoketests: ${{parameters.run_Smoketests}}
       run_after: stage_build
 
 
@@ -93,4 +102,5 @@ stages:
       datalayer_project_directory: 'solution/dqt.datalayer'
       sln_artifact_name: 'drop-sln'
       vmImage: 'windows-latest'
+      run_Smoketests: ${{parameters.run_Smoketests}}
       run_after: stage_build

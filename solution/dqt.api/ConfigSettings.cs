@@ -36,5 +36,7 @@ namespace dqt.api
         public string SFTPRemotePath => Environment.GetEnvironmentVariable("SFTPRemotePath");
 
         public string DQTBlobContainerName => Environment.GetEnvironmentVariable("DQTBlobContainerName");
+
+        public string SFTPPortNumber => Environment.GetEnvironmentVariable("SFTPPortNumber");
     }
 }
