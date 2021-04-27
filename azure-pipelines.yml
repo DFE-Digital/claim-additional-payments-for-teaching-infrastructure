@@ -42,7 +42,7 @@ steps:
     displayName: push web-dependencies
     inputs:
       containerRegistry: 's118d01contreg'
-      repository: 'teacher-services-payments'
+      repository: 'teacher-payments-service'
       command: 'push'
       tags: 'cache-web-dependencies'
 
@@ -50,7 +50,7 @@ steps:
     displayName: push test-dependencies
     inputs:
       containerRegistry: 's118d01contreg'
-      repository: 'teacher-services-payments'
+      repository: 'teacher-payments-service'
       command: 'push'
       tags: 'cache-test-dependencies'
 
@@ -58,7 +58,7 @@ steps:
     displayName: push test
     inputs:
       containerRegistry: 's118d01contreg'
-      repository: 'teacher-services-payments'
+      repository: 'teacher-payments-service'
       command: 'push'
       tags: 'cache-test'
 
@@ -66,6 +66,6 @@ steps:
     displayName: push latest
     inputs:
       containerRegistry: 's118d01contreg'
-      repository: 'teacher-services-payments'
+      repository: 'teacher-payments-service'
       command: 'push'
       tags: ':latest'
