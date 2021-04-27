@@ -8,18 +8,35 @@
 	directory.
 
 #### First-line support developers
-
-	If you�re a developer on first-line support who is new to this project, see the
-	[support runbook (`docs/first-line-support-developer-runbook.md`)](docs/first-line-support-developer-runbook.md)
-	for help with common support tasks.
+	TODO:
 
 #### Service architecture
 	https://dfedigital.atlassian.net/wiki/spaces/TP/pages/2552528960/DQT+Integration+-+solution
 
 ### Documentation for common developer tasks
 
-	Release process for production:
-	  [`docs/release-process.md`](docs/release-process.md)
+	Release process:
+	  There are 3 environements - Development, Test (Pre-Production) and Production. Deployment to this environements are automated but have to be triggered manually
+	  The pipeline for this project can be found here https://dev.azure.com/dfe-ssp/S118-Teacher-Payments-Service/_build?definitionId=1003&_a=summary.
+	  Steps to Trigger Deployment
+	  1. Open the above link
+	  2. Click on Run pipeline
+	  3. Select Branch/tag. Usually Master for prodcution and a feature branch for development and test environment
+	  4. Select Environment from the dropdown box. options are 
+		none - will only build and run untits
+		development - will deploy to development environment
+		test - will deploy to pre-production environment
+		produciton - will deploy to produciton environement
+	     by default none will be selectes
+			
+	  5. Select RunSmokeTests. Options are
+	       yes - to run smoke tests
+	       no - to run moke tests
+	     by default no is selected
+	  6. Optionally select Enable system diagnostics
+	  7. Leave other options with default values
+	  8. Click Run- This will trigget the deployment to the selected environment.
+	 
 
 
 ## Project structure
