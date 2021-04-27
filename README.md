@@ -85,7 +85,7 @@
       2. Setup WinSCP
            - Run WinSCP
            - Login to Dev SFTP Server.
-             Dev SFTP Credentials can be found in s118d01-secrets-kv. You will need SFTPHostName, SFTPUserName and SFTPPassword
+             Dev or Local SFTP Credentials can be found in s118d01-secrets-kv. You will need LocalSFTPHostName, LocalSFTPUserName and LocalSFTPPassword and replace 		    SFTPHostName, SFTPUserName and SFTPPassword respectively
              Once loged in you will see the folder structure as below
                  \Upload
                       \dev
