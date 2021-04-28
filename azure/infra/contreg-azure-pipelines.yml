@@ -18,6 +18,7 @@ steps:
       azureContainerRegistry: '{"loginServer":"s118d01contreg.azurecr.io", "id" : "/subscriptions/8655985a-2f87-44d7-a541-0be9a8c2779d/resourceGroups/s118d01-contreg/providers/Microsoft.ContainerRegistry/registries/s118d01contreg"}'
       dockerComposeFile: '$(System.DefaultWorkingDirectory)/azure/infra/container/docker-compose.test.yml'
       action: 'Run a Docker Compose command'
+    displayName: Build test Docker image
 
   - task: Docker@2
     displayName: Build and push an image to container registry
