@@ -11,6 +11,10 @@ variable "app_rg_name" {
   type        = string
   description = "Resource group for the application"
 }
+variable "cont_rg_name" {
+  type        = string
+  description = "Resource group for the Container Registry"
+}
 variable "projcore_network_prof" {
   type        = string
   description = "Project Core network profile"

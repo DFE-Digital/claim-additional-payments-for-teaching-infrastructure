@@ -28,6 +28,11 @@ output "func_rg_name" {
   description = "Resource Group name"
 }
 
+output "cont_rg_name" {
+  value       = azurerm_resource_group.rg_creation["contreg"].name
+  description = "Resource Group name"
+}
+
 output "rg_location" {
   value       = var.region
   description = "Location variable for Resource Group"
