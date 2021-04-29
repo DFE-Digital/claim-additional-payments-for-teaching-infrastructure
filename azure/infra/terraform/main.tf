@@ -171,6 +171,28 @@ module "container" {
   depends_on = [module.network_profile, module.app_insights]
 }
 
+#pip
+module "pip" {
+  source       = "./modules/public_ip"
+  func_rg_name = module.resource_group.func_rg_name
+  rg_prefix    = module.env_vars.rg_prefix
+  rg_location  = module.resource_group.rg_location
+  common_tags  = module.env_vars.common_tags
+
+  depends_on = [module.network]
+}
+
+#nat_gateway
+module "nat_gateway" {
+  source       = "./modules/nat_gateway"
+  func_rg_name = module.resource_group.func_rg_name
+  rg_prefix    = module.env_vars.rg_prefix
+  rg_location  = module.resource_group.rg_location
+  common_tags  = module.env_vars.common_tags
+
+  depends_on = [module.network, module.pip]
+}
+
 # # below two modules are commented out as the two components are currently not required
 # # # #ddos
 # # # module "ddos" {
