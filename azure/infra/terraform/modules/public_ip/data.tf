@@ -5,6 +5,6 @@ data "azurerm_subnet" "subnet_01" {
 }
 
 data "azurerm_nat_gateway" "nat_gateway_01" {
-  name                = format("%s-%s", var.rg_prefix, "nat-gateway")
+  name                = format("%s-%s", var.func_rg_name, "nat-gateway")
   resource_group_name = var.func_rg_name
 }

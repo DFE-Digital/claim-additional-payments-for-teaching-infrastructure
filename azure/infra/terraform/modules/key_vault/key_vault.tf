@@ -43,7 +43,7 @@ resource "azurerm_key_vault" "secrets_kv" {
       "81.98.192.53/32",
       "82.24.130.89/32",
     "94.10.62.74/32", ]
-    virtual_network_subnet_ids = ["/subscriptions/8655985a-2f87-44d7-a541-0be9a8c2779d/resourceGroups/s118d01-ProjectCore/providers/Microsoft.Network/virtualNetworks/s118d01-ProjectCore-wkrvn/subnets/default"] # [var.projcore_default_sn_id]
+    virtual_network_subnet_ids = [var.projcore_default_sn_id] # ["/subscriptions/8655985a-2f87-44d7-a541-0be9a8c2779d/resourceGroups/s118d01-ProjectCore/providers/Microsoft.Network/virtualNetworks/s118d01-ProjectCore-wkrvn/subnets/default"] 
   }
 
   lifecycle {

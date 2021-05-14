@@ -11,10 +11,10 @@ variable "app_rg_name" {
   type        = string
   description = "Application resource group for the network profile"
 }
-# variable "projcore_sn_worker_id" {
-#   type        = string
-#   description = "The ID of the projcore worker subnet"
-# }
+variable "projcore_sn_worker_id" {
+  type        = string
+  description = "The ID of the projcore worker subnet"
+}
 variable "rg_prefix" {
   type        = string
   description = "The prefix to be used for all resources"

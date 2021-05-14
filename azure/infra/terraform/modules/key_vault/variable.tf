@@ -15,10 +15,10 @@ variable "secrets_rg_name" {
   type        = string
   description = "Secrets resource group for the key vault"
 }
-# variable "projcore_default_sn_id" {
-#   type        = string
-#   description = "The ID of the projcore default subnet"
-# }
+variable "projcore_default_sn_id" {
+  type        = string
+  description = "The ID of the projcore default subnet"
+}
 variable "rg_prefix" {
   type        = string
   description = "The prefix to be used for all resources"
