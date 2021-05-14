@@ -31,24 +31,24 @@ module "network" {
   common_tags      = module.env_vars.common_tags
 }
 
-# # subnet section
-# module "subnet" {
-#   source              = "./modules/subnet"
-#   projcore_rg_name    = module.resource_group.projcore_rg_name
-#   projcore_vn_01_name = module.network.projcore_vn_01_name
-#   rg_prefix           = module.env_vars.rg_prefix
-#   rg_location         = module.resource_group.rg_location
-#   common_tags         = module.env_vars.common_tags
-# }
+# subnet section
+module "subnet" {
+  source              = "./modules/subnet"
+  projcore_rg_name    = module.resource_group.projcore_rg_name
+  projcore_vn_01_name = module.network.projcore_vn_01_name
+  rg_prefix           = module.env_vars.rg_prefix
+  rg_location         = module.resource_group.rg_location
+  common_tags         = module.env_vars.common_tags
+}
 
 #network profiles
 module "network_profile" {
-  source                = "./modules/network_profile"
-  projcore_rg_name      = module.resource_group.projcore_rg_name
-#  projcore_worker_sn_id = module.subnet.projcore_sn_worker_id
-  rg_prefix             = module.env_vars.rg_prefix
-  rg_location           = module.resource_group.rg_location
-  common_tags           = module.env_vars.common_tags
+  source           = "./modules/network_profile"
+  projcore_rg_name = module.resource_group.projcore_rg_name
+  #  projcore_worker_sn_id = module.subnet.projcore_sn_worker_id
+  rg_prefix   = module.env_vars.rg_prefix
+  rg_location = module.resource_group.rg_location
+  common_tags = module.env_vars.common_tags
 
   # depends_on = [module.subnet]
 }
@@ -84,12 +84,12 @@ module "network_profile" {
 
 #key vault
 module "key_vault" {
-  source                 = "./modules/key_vault"
-  secrets_rg_name        = module.resource_group.secrets_rg_name
-#  projcore_default_sn_id = module.subnet.projcore_sn_default_id
-  rg_prefix              = module.env_vars.rg_prefix
-  rg_location            = module.resource_group.rg_location
-  common_tags            = module.env_vars.common_tags
+  source          = "./modules/key_vault"
+  secrets_rg_name = module.resource_group.secrets_rg_name
+  #  projcore_default_sn_id = module.subnet.projcore_sn_default_id
+  rg_prefix   = module.env_vars.rg_prefix
+  rg_location = module.resource_group.rg_location
+  common_tags = module.env_vars.common_tags
 }
 
 # log analytics
@@ -101,16 +101,16 @@ module "log_analytics" {
   common_tags      = module.env_vars.common_tags
 }
 
-# #sentinal
-# module "sentinel" {
-#   source           = "./modules/sentinel"
-#   projcore_rg_name = module.resource_group.projcore_rg_name
-#   la_id            = module.log_analytics.la_id
-#   la_name          = module.log_analytics.la_name
-#   rg_prefix        = module.env_vars.rg_prefix
-#   rg_location      = module.resource_group.rg_location
-#   common_tags      = module.env_vars.common_tags
-# }
+#sentinal
+module "sentinel" {
+  source           = "./modules/sentinel"
+  projcore_rg_name = module.resource_group.projcore_rg_name
+  la_id            = module.log_analytics.la_id
+  la_name          = module.log_analytics.la_name
+  rg_prefix        = module.env_vars.rg_prefix
+  rg_location      = module.resource_group.rg_location
+  common_tags      = module.env_vars.common_tags
+}
 
 # app insights
 module "app_insights" {
@@ -147,12 +147,12 @@ module "function_app" {
 
 # postgres
 module "postgres" {
-  source                = "./modules/postgres"
-  app_rg_name           = module.resource_group.app_rg_name
-#  projcore_sn_worker_id = module.subnet.projcore_sn_worker_id
-  rg_prefix             = module.env_vars.rg_prefix
-  rg_location           = module.resource_group.rg_location
-  common_tags           = module.env_vars.common_tags
+  source      = "./modules/postgres"
+  app_rg_name = module.resource_group.app_rg_name
+  #  projcore_sn_worker_id = module.subnet.projcore_sn_worker_id
+  rg_prefix   = module.env_vars.rg_prefix
+  rg_location = module.resource_group.rg_location
+  common_tags = module.env_vars.common_tags
 
   # depends_on = [module.subnet]
 }
