@@ -4,7 +4,7 @@ resource "azurerm_public_ip" "pip_01" {
   location            = var.rg_location
   allocation_method   = "Static"
   sku                 = "Standard"
-  zones               = ["1"]
+  zones               = []
 
   tags = merge({
     },

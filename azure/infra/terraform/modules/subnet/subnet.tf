@@ -7,6 +7,17 @@ resource "azurerm_subnet" "projcore_subnet_default" {
   service_endpoints                              = ["Microsoft.Storage", "Microsoft.KeyVault"]
   enforce_private_link_endpoint_network_policies = false
   enforce_private_link_service_network_policies  = false
+  delegation {
+    name = "Microsoft.Web.serverFarms"
+
+    service_delegation {
+      actions = [
+        "Microsoft.Network/virtualNetworks/subnets/action",
+      ]
+      name = "Microsoft.Web/serverFarms"
+    }
+  }
+
 }
 
 # projcore Subnet 2
