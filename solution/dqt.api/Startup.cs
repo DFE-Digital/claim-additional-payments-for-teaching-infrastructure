@@ -30,6 +30,7 @@ namespace dqt.api
             builder.Services.AddTransient<IAuthorize, Authorize>();
             builder.Services.AddTransient<IBlobService, BlobService>();
             builder.Services.AddTransient<IConfigSettings, ConfigSettings>();
+            builder.Services.AddLogging();
         }
 
         private string GetConnStr()

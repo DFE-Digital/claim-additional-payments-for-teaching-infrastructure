@@ -34,5 +34,7 @@ namespace dqt.datalayer.Model
 
         [Column(TypeName = "Date")]
         public DateTime ITTStartDate { get; set; }
+
+        public string TeacherStatus { get; set; }
     }
 }
