@@ -22,33 +22,6 @@ stages:
       vmImage: "ubuntu-latest"
 
     steps:
-    - task: AzurePowerShell@5
-      displayName: 'Check MPN ID'
-      timeoutInMinutes: 3
-      inputs:
-        azureSubscription: "azdo.pipelines.cip.S118D.armfe1ef140-8bef-4043-b5ee-c449e6f951ef"
-        ScriptType: 'InlineScript'
-        Inline: |
-          # Set variable
-          $PartnerId = "5168752"
-          # Install management partner module
-          Install-Module -Name Az.ManagementPartner -RequiredVersion 0.7.1 -Force -Scope CurrentUser -AllowClobber  
-          # Get the current partner info, don't throw an error if not set
-          $PartnerInfo = Get-AzManagementPartner -ErrorAction SilentlyContinue
-          if ($null -eq $PartnerInfo) {
-              # Is null, so set partner id
-              New-AzManagementPartner -PartnerId $PartnerId
-          } else {
-            if ($PartnerId -eq $PartnerInfo.PartnerId) {
-              # Is already set to the desired Id, output to console
-              Write-Output $PartnerInfo
-            } else {
-              # Is set but not to desired Id
-              Update-AzManagementPartner -PartnerId $PartnerId
-            }
-          }
-        errorActionPreference: 'silentlyContinue'
-        azurePowerShellVersion: 'LatestVersion'
 
     - task: charleszipp.azure-pipelines-tasks-terraform.azure-pipelines-tasks-terraform-installer.TerraformInstaller@0
       displayName: 'Installing Terraform $(Terraform.Version) for plan'
