@@ -62,7 +62,7 @@ namespace dqt.api.Functions
 
                 _log.Info($"Fetching records. CorrelationId : {requestReference}");
 
-                var results = await _qtsService.GetQualifiedTeacherRecords(trn, ni);
+                var results = await _qtsService.GetQualifiedTeacherRecords(trn.ToString().Trim(), ni.ToString().Trim());
 
                 if (!results.Any())
                 {
