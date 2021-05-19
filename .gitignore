@@ -30,3 +30,18 @@ override.tf.json
 # example: *tfplan*
 
 .DS_Store
+﻿.vs
+/solution/dqt.datalayer/obj
+/solution/dqt.domain/obj
+/solution/dqt.api/obj
+/solution/dqt.domain/bin
+/solution/dqt.datalayer/bin
+/solution/dqt.api/bin
+/solution/dqt.api/bin/Debug
+/solution/dqt.api/bin/Debug/netcoreapp3.1
+/solution/dqt.api/bin/Debug/netcoreapp3.1/bin/
+/solution/dqt.unittests/obj
+/solution/dqt.unittests/bin/Debug/netcoreapp3.1
+/solution/dqt.integrationtests/obj
+/solution/dqt.integrationtests/bin/Debug/netcoreapp3.1
+*.user
