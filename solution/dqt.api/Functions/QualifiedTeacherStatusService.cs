@@ -12,7 +12,6 @@ using dqt.api.Authorization;
 using System.Collections.Generic;
 using dqt.datalayer.Model;
 using System.Text;
-using dqt.domain.Encoding;
 
 namespace dqt.api.Functions
 {

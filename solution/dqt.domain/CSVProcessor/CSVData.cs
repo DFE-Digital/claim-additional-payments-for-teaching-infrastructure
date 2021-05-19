@@ -15,5 +15,6 @@ namespace dqt.domain
         public string itt_sub3value { get; set; }
         public string active_alert { get; set; }
         public string qual_name { get; set; }
+        public String dfeta_teacherstatus { get; set; }
     }
 }

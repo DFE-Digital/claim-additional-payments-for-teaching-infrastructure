@@ -46,7 +46,7 @@ namespace dqt.domain
             using var truncateTableCommand = new NpgsqlCommand("TRUNCATE TABLE \"QualifiedTeachers\";", conn);
             await truncateTableCommand.ExecuteNonQueryAsync();
 
-            using var revertBackupCommand = new NpgsqlCommand("INSERT INTO \"QualifiedTeachers\" ( \"Id\", \"Trn\", \"Name\", \"DoB\", \"NINumber\", \"QTSAwardDate\", \"ITTSubject1Code\", \"ITTSubject2Code\", \"ITTSubject3Code\", \"ActiveAlert\", \"ITTStartDate\", \"QualificationName\") SELECT * from \"QualifiedTeachersBackup\"", conn);
+            using var revertBackupCommand = new NpgsqlCommand("INSERT INTO \"QualifiedTeachers\" ( \"Id\", \"Trn\", \"Name\", \"DoB\", \"NINumber\", \"QTSAwardDate\", \"ITTSubject1Code\", \"ITTSubject2Code\", \"ITTSubject3Code\", \"ActiveAlert\", \"ITTStartDate\", \"QualificationName\", \"TeacherStatus\") SELECT * from \"QualifiedTeachersBackup\"", conn);
             await revertBackupCommand.ExecuteNonQueryAsync();
             await tran.CommitAsync();
 
@@ -56,7 +56,7 @@ namespace dqt.domain
         {
             try
             {
-                using var writer = conn.BeginBinaryImport("COPY \"QualifiedTeachersBackup\" (\"Id\", \"Name\", \"DoB\", \"ITTSubject1Code\", \"ITTSubject2Code\", \"ITTSubject3Code\", \"NINumber\", \"QTSAwardDate\",\"Trn\" , \"ActiveAlert\", \"QualificationName\", \"ITTStartDate\") FROM STDIN (FORMAT BINARY)");
+                using var writer = conn.BeginBinaryImport("COPY \"QualifiedTeachersBackup\" (\"Id\", \"Name\", \"DoB\", \"ITTSubject1Code\", \"ITTSubject2Code\", \"ITTSubject3Code\", \"NINumber\", \"QTSAwardDate\",\"Trn\" , \"ActiveAlert\", \"QualificationName\", \"ITTStartDate\", \"TeacherStatus\") FROM STDIN (FORMAT BINARY)");
 
                 using (var memoryStream = new MemoryStream())
                 {
@@ -82,6 +82,7 @@ namespace dqt.domain
                         writer.Write(ConvertStringToBoolean(row.active_alert), NpgsqlTypes.NpgsqlDbType.Boolean);
                         writer.Write(row.qual_name, NpgsqlTypes.NpgsqlDbType.Text);
                         writer.Write(DateTime.Parse(row.itt_startdate.Date.ToString("yyyy-MM-dd")), NpgsqlTypes.NpgsqlDbType.Date);
+                        writer.Write(row.dfeta_teacherstatus, NpgsqlTypes.NpgsqlDbType.Text);
                     }
                 }
                 await writer.CompleteAsync();
