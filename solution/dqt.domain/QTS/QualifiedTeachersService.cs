@@ -17,13 +17,13 @@ namespace dqt.domain.QTS
 
         public async Task<IEnumerable<QualifiedTeacher>> GetQualifiedTeacherRecords(string teacherReferenceNumber, string nationalInsuranceNumber)
         {
-            var qts = await _qualifiedTeachersRepository.FindAsync(x => x.Trn.Trim() == teacherReferenceNumber.Trim());
+            var qts = await _qualifiedTeachersRepository.FindAsync(x => x.Trn == teacherReferenceNumber);
             
             if (!qts.Any())
             {
                 if (!string.IsNullOrWhiteSpace(nationalInsuranceNumber))
                 {
-                    qts = await _qualifiedTeachersRepository.FindAsync(x => x.NINumber.Trim() == nationalInsuranceNumber.Trim());
+                    qts = await _qualifiedTeachersRepository.FindAsync(x => x.NINumber == nationalInsuranceNumber);
                 }
             }
 
