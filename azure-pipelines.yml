@@ -19,7 +19,7 @@ steps:
       pass: $(dockerPassword)
     displayName: Login to DockerHub
 
-  # Build and run tests
+  # get the latest copies from dockerhub
   - script: |
       docker pull $(dockerRegistry)/$(dockerImageName):cache-web-dependencies
       docker pull $(dockerRegistry)/$(dockerImageName):cache-test-dependencies || true
@@ -30,6 +30,7 @@ steps:
       docker tag dfedigital/teacher-payments-service:cache-web-dependencies s118d01contreg.azurecr.io/teacher-payments-service:cache-web-dependencies
       docker tag dfedigital/teacher-payments-service:cache-test s118d01contreg.azurecr.io/teacher-payments-service:cache-test
       docker tag dfedigital/teacher-payments-service:cache-test-dependencies s118d01contreg.azurecr.io/teacher-payments-service:cache-test-dependencies
+    displayName: pull latestest images from dockerhub and tag for ACR
 
 # docker push ***/teacher-services-payments:cache-web-dependencies
   - task: Docker@2
@@ -39,7 +40,7 @@ steps:
       command: 'login'
 
   - task: Docker@2
-    displayName: push web-dependencies
+    displayName: push cache-web-dependencies container to ACR
     inputs:
       containerRegistry: 's118d01contreg'
       repository: 'teacher-payments-service'
@@ -47,7 +48,7 @@ steps:
       tags: 'cache-web-dependencies'
 
   - task: Docker@2
-    displayName: push test-dependencies
+    displayName: push cache-test-dependencies container to ACR
     inputs:
       containerRegistry: 's118d01contreg'
       repository: 'teacher-payments-service'
@@ -55,7 +56,7 @@ steps:
       tags: 'cache-test-dependencies'
 
   - task: Docker@2
-    displayName: push test
+    displayName: push cache-test container to ACR
     inputs:
       containerRegistry: 's118d01contreg'
       repository: 'teacher-payments-service'
@@ -63,7 +64,7 @@ steps:
       tags: 'cache-test'
 
   - task: Docker@2
-    displayName: push latest
+    displayName: push latest container to ACR
     inputs:
       containerRegistry: 's118d01contreg'
       repository: 'teacher-payments-service'
