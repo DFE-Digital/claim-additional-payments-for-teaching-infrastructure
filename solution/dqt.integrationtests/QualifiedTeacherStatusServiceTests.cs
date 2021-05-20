@@ -17,6 +17,7 @@ using dqt.datalayer.Database;
 using Microsoft.EntityFrameworkCore;
 using System.Linq;
 using dqt.datalayer.Repository;
+using dqt.domain.DTOs;
 
 namespace dqt.integrationtests
 {
@@ -80,7 +81,7 @@ namespace dqt.integrationtests
 
             var request = CreateMockHttpRequest(requestInfo);
             var response = (BadRequestObjectResult)await _qualifiedTeacherStatusService.Run(request.Object);
-            var resultDto = (ResultDTO<List<QualifiedTeacher>>)response.Value;
+            var resultDto = (ResultDTO<List<QualifiedTeacherDTO>>)response.Value;
 
             Assert.Equal(400, response.StatusCode);
             Assert.Equal("TeacherReferenceNumber is mandatory.", resultDto.Message);
@@ -97,7 +98,7 @@ namespace dqt.integrationtests
 
             var request = CreateMockHttpRequest(requestInfo);
             var response = (NotFoundObjectResult)await _qualifiedTeacherStatusService.Run(request.Object);
-            var resultDto = (ResultDTO<List<QualifiedTeacher>>)response.Value;
+            var resultDto = (ResultDTO<List<QualifiedTeacherDTO>>)response.Value;
 
             Assert.Equal(404, response.StatusCode);
             Assert.Equal("No records found.", resultDto.Message);
@@ -115,7 +116,7 @@ namespace dqt.integrationtests
             var request = CreateMockHttpRequest(requestInfo);
 
             var response = (OkObjectResult)await _qualifiedTeacherStatusService.Run(request.Object);
-            var resultDto = (ResultDTO<List<QualifiedTeacher>>)response.Value;
+            var resultDto = (ResultDTO<List<QualifiedTeacherDTO>>)response.Value;
 
             Assert.Equal(200, response.StatusCode);
             Assert.Single(resultDto.Data);
