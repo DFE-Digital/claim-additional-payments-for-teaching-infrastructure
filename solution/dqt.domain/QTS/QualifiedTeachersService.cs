@@ -62,7 +62,7 @@ namespace dqt.domain.QTS
             };
         }
         private DateTime? StringToDate(string date) {
-            if(string.IsNullOrEmpty(date)|| date == "NULL")
+            if(string.IsNullOrEmpty(date)|| date.ToLower() == "NULL".ToLower())
                 return null;
             return Convert.ToDateTime(date);
         }
