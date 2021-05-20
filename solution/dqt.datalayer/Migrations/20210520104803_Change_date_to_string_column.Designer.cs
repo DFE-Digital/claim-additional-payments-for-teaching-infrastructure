@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 using dqt.datalayer.Database;
@@ -9,9 +10,10 @@ using dqt.datalayer.Database;
 namespace dqt.datalayer.Migrations
 {
     [DbContext(typeof(DQTDataContext))]
-    partial class DQTDataContextModelSnapshot : ModelSnapshot
+    [Migration("20210520104803_Change_date_to_string_column")]
+    partial class Change_date_to_string_column
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder

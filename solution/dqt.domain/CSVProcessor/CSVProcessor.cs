@@ -72,16 +72,16 @@ namespace dqt.domain
                         writer.StartRow();
                         writer.Write(i, NpgsqlTypes.NpgsqlDbType.Integer);
                         writer.Write(row.fullname, NpgsqlTypes.NpgsqlDbType.Text);
-                        writer.Write(DateTime.Parse(row.birthdate.Date.ToString("yyyy-MM-dd")), NpgsqlTypes.NpgsqlDbType.Date);
+                        writer.Write(row.birthdate, NpgsqlTypes.NpgsqlDbType.Text);
                         writer.Write(row.itt_sub1value, NpgsqlTypes.NpgsqlDbType.Text);
                         writer.Write(row.itt_sub2value, NpgsqlTypes.NpgsqlDbType.Text);
                         writer.Write(row.itt_sub3value, NpgsqlTypes.NpgsqlDbType.Text);
                         writer.Write(row.dfeta_ninumber, NpgsqlTypes.NpgsqlDbType.Text);
-                        writer.Write(DateTime.Parse(row.dfeta_qtsdate.Date.ToString("yyyy-MM-dd")), NpgsqlTypes.NpgsqlDbType.Date);
+                        writer.Write(row.dfeta_qtsdate, NpgsqlTypes.NpgsqlDbType.Text);
                         writer.Write(row.dfeta_trn, NpgsqlTypes.NpgsqlDbType.Text);
                         writer.Write(ConvertStringToBoolean(row.active_alert), NpgsqlTypes.NpgsqlDbType.Boolean);
                         writer.Write(row.qual_name, NpgsqlTypes.NpgsqlDbType.Text);
-                        writer.Write(DateTime.Parse(row.itt_startdate.Date.ToString("yyyy-MM-dd")), NpgsqlTypes.NpgsqlDbType.Date);
+                        writer.Write(row.itt_startdate, NpgsqlTypes.NpgsqlDbType.Text);
                         writer.Write(row.dfeta_teacherstatus, NpgsqlTypes.NpgsqlDbType.Text);
                     }
                 }
