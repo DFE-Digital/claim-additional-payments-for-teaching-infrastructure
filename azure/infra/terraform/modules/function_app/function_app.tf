@@ -10,6 +10,7 @@ resource "azurerm_function_app" "dqt_func_app" {
   version                    = "~3"
   https_only                 = true
 
+
   tags = merge({
     },
     var.common_tags
