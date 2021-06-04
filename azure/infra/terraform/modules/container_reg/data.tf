@@ -8,11 +8,14 @@ data "azurerm_key_vault" "secrets_kv" {
   resource_group_name = format("%s-%s", var.rg_prefix, "secrets")
 }
 
-
 data "azurerm_key_vault_secret" "AdminAllowedIPs" {
   name         = "AdminAllowedIPs"
   key_vault_id = data.azurerm_key_vault.secrets_kv.id
 }
+
+# output "AdminAllowedIPs_value" {
+#   value = data.azurerm_key_vault_secret.AdminAllowedIPs.value
+# }
 
 data "azurerm_key_vault_secret" "DfeSignInApiClientId" {
   name         = "DfeSignInApiClientId"
@@ -40,6 +43,18 @@ data "azurerm_key_vault_secret" "DfeSignInRedirectBaseUrl" {
 }
 data "azurerm_key_vault_secret" "DfeSignInSecret" {
   name         = "DfeSignInSecret"
+  key_vault_id = data.azurerm_key_vault.secrets_kv.id
+}
+data "azurerm_key_vault_secret" "DQTClientHeaders" {
+  name         = "DqtClientHeaders"
+  key_vault_id = data.azurerm_key_vault.secrets_kv.id
+}
+data "azurerm_key_vault_secret" "DQTClientHost" {
+  name         = "DqtClientHost"
+  key_vault_id = data.azurerm_key_vault.secrets_kv.id
+}
+data "azurerm_key_vault_secret" "DQTClientParams" {
+  name         = "DqtClientParams"
   key_vault_id = data.azurerm_key_vault.secrets_kv.id
 }
 data "azurerm_key_vault_secret" "DatabasePassword" {
@@ -71,12 +86,11 @@ data "azurerm_key_vault_secret" "RollbarInfraToken" {
   key_vault_id = data.azurerm_key_vault.secrets_kv.id
 }
 
-# data "azurerm_key_vault_secret" "TeacherPaymentsDevVspSamlEncryption2Key" {
-#   name         = "TeacherPaymentsDevVspSamlEncryption2Key"
+# data "azurerm_key_vault_secret" "SamlEncryptionKey" {
+#   name         = "TeacherPaymentsDevVspSamlEncryption8KeyBase64"
 #   key_vault_id = data.azurerm_key_vault.secrets_kv.id
 # }
-
-# data "azurerm_app_service" "app_vsp_as" {
-#   name                = format("%s-%s", var.app_rg_name, "vsp-as")
-#   resource_group_name = var.app_rg_name
+# data "azurerm_key_vault_secret" "SamlSigningKey" {
+#   name         = "TeacherPaymentsDevVspSamlSigning8KeyBase64"
+#   key_vault_id = data.azurerm_key_vault.secrets_kv.id
 # }
