@@ -12,6 +12,7 @@ using dqt.api.Authorization;
 using System.Collections.Generic;
 using dqt.datalayer.Model;
 using System.Text;
+using dqt.domain.DTOs;
 
 namespace dqt.api.Functions
 {
@@ -62,7 +63,7 @@ namespace dqt.api.Functions
 
                 _log.Info($"Fetching records. CorrelationId : {requestReference}");
 
-                var results = await _qtsService.GetQualifiedTeacherRecords(trn, ni);
+                var results = await _qtsService.GetQualifiedTeacherRecords(trn.ToString().Trim(), ni.ToString().Trim());
 
                 if (!results.Any())
                 {
@@ -86,9 +87,9 @@ namespace dqt.api.Functions
                 return new ObjectResult(GetResultDto(null, errorMsg)) { StatusCode = 500 };
             }
 
-            static ResultDTO<List<QualifiedTeacher>> GetResultDto(List<QualifiedTeacher> data, string message = null)
+            static ResultDTO<List<QualifiedTeacherDTO>> GetResultDto(List<QualifiedTeacherDTO> data, string message = null)
             {
-                return new ResultDTO<List<QualifiedTeacher>>(data, message);
+                return new ResultDTO<List<QualifiedTeacherDTO>>(data, message);
             }
         }
 

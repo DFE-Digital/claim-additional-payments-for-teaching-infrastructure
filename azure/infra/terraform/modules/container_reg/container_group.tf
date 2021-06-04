@@ -1,4 +1,6 @@
+
 resource "azurerm_container_group" "cont_grp_01" {
+
   name                = format("%s-%s", var.app_rg_name, "worker-aci")
   location            = var.rg_location
   resource_group_name = var.app_rg_name
@@ -16,7 +18,6 @@ resource "azurerm_container_group" "cont_grp_01" {
     name = format("%s-%s", var.app_rg_name, "worker-container")
     # image = format("%s%s", "s118d01contreg.azurecr.io/teacher-payments-service:", var.container_version)
     image = format("%s%s", "dfedigital/teacher-payments-service:", var.container_version)
-
     cpu    = "1"
     memory = "1.5"
 
@@ -82,6 +83,7 @@ resource "azurerm_container_group" "cont_grp_02" {
   container {
 
     commands = ["bin/prepare-database"]
+
 
     environment_variables = {
       "ADMIN_ALLOWED_IPS"                              = data.azurerm_key_vault_secret.AdminAllowedIPs.value

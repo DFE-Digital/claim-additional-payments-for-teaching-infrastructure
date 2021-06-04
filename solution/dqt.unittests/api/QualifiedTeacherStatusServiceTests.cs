@@ -17,6 +17,7 @@ using Microsoft.Extensions.Primitives;
 using Microsoft.AspNetCore.Http.Internal;
 using System.Text;
 using dqt.domain.Encoding;
+using dqt.domain.DTOs;
 
 namespace dqt.unittests.api
 {
@@ -29,7 +30,7 @@ namespace dqt.unittests.api
         private readonly Mock<IRollbarService> _loggerMock;
         private readonly Mock<IQualifiedTeachersService> _qualifiedTeachersServiceMock;
         private readonly QualifiedTeacherStatusService _qualifiedTeacherStatusService;
-        private readonly List<QualifiedTeacher> _mockQualifiedTeachers;
+        private readonly List<QualifiedTeacherDTO> _mockQualifiedTeachers;
         private readonly Mock<IAuthorize> _mockAuth;
 
         public QualifiedTeacherStatusServiceTests()
@@ -41,9 +42,9 @@ namespace dqt.unittests.api
             _mockAuth = new Mock<IAuthorize>();
             _qualifiedTeacherStatusService = new QualifiedTeacherStatusService(_qualifiedTeachersServiceMock.Object, _loggerMock.Object, _mockAuth.Object);
 
-            _mockQualifiedTeachers = new List<QualifiedTeacher>
+            _mockQualifiedTeachers = new List<QualifiedTeacherDTO>
             {
-                new QualifiedTeacher() { Name = "TEST1", Trn = TRN, NINumber = NI }
+                new QualifiedTeacherDTO() { Name = "TEST1", Trn = TRN, NINumber = NI }
             };
         }
 
@@ -75,7 +76,7 @@ namespace dqt.unittests.api
             _mockAuth.Setup(x => x.AuthorizeRequest(It.IsAny<HttpRequest>())).Returns(true);
             var request = CreateMockHttpRequest(requestInfo);
             var response = (BadRequestObjectResult)await _qualifiedTeacherStatusService.Run(request.Object);
-            var resultDto = (ResultDTO<List<QualifiedTeacher>>)response.Value;
+            var resultDto = (ResultDTO<List<QualifiedTeacherDTO>>)response.Value;
 
             Assert.Equal(400, response.StatusCode);
             Assert.Equal("TeacherReferenceNumber is mandatory.", resultDto.Message);
@@ -91,11 +92,11 @@ namespace dqt.unittests.api
             };
 
             _mockAuth.Setup(x => x.AuthorizeRequest(It.IsAny<HttpRequest>())).Returns(true);
-            _qualifiedTeachersServiceMock.Setup(x => x.GetQualifiedTeacherRecords(It.IsAny<string>(), It.IsAny<string>())).ReturnsAsync(new List<QualifiedTeacher>());
+            _qualifiedTeachersServiceMock.Setup(x => x.GetQualifiedTeacherRecords(It.IsAny<string>(), It.IsAny<string>())).ReturnsAsync(new List<QualifiedTeacherDTO>());
 
             var request = CreateMockHttpRequest(requestInfo);
             var response = (NotFoundObjectResult)await _qualifiedTeacherStatusService.Run(request.Object);
-            var resultDto = (ResultDTO<List<QualifiedTeacher>>)response.Value;
+            var resultDto = (ResultDTO<List<QualifiedTeacherDTO>>)response.Value;
 
             Assert.Equal(404, response.StatusCode);
             Assert.Equal("No records found.", resultDto.Message);
@@ -117,7 +118,7 @@ namespace dqt.unittests.api
 
             var request = CreateMockHttpRequest(requestInfo);
             var response = (ObjectResult)await _qualifiedTeacherStatusService.Run(request.Object);
-            var resultDto = (ResultDTO<List<QualifiedTeacher>>)response.Value;
+            var resultDto = (ResultDTO<List<QualifiedTeacherDTO>>)response.Value;
 
             Assert.Equal(500, response.StatusCode);
             Assert.Equal($"Error retrieving qualified teacher status data. {exceptionMessage}", resultDto.Message);
@@ -138,7 +139,7 @@ namespace dqt.unittests.api
             var request = CreateMockHttpRequest(requestInfo);
 
             var response = (OkObjectResult)await _qualifiedTeacherStatusService.Run(request.Object);
-            var resultDto = (ResultDTO<List<QualifiedTeacher>>)response.Value;
+            var resultDto = (ResultDTO<List<QualifiedTeacherDTO>>)response.Value;
 
             Assert.Equal(200, response.StatusCode);
             Assert.Equal(_mockQualifiedTeachers, resultDto.Data);

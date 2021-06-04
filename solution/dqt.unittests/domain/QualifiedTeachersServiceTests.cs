@@ -4,6 +4,7 @@ using Xunit;
 using dqt.datalayer.Model;
 using dqt.datalayer.Repository;
 using dqt.domain.QTS;
+using System.Linq;
 
 namespace dqt.unittests.domain
 {
@@ -36,7 +37,7 @@ namespace dqt.unittests.domain
 
             var results = await _qualifiedTeachersService.GetQualifiedTeacherRecords(TRN, NI);
 
-            Assert.Equal(results, mockQualifiedTeachers);
+            Assert.Equal(results.ToList().FirstOrDefault().Trn, mockQualifiedTeachers[0].Trn);
         }
 
         [Fact]
@@ -48,7 +49,7 @@ namespace dqt.unittests.domain
 
             var results = await _qualifiedTeachersService.GetQualifiedTeacherRecords(TRN, NI);
 
-            Assert.Equal(results, mockQualifiedTeachers);
+            Assert.Equal(results.ToList().FirstOrDefault().NINumber, mockQualifiedTeachers[0].NINumber);
         }
 
         [Fact]

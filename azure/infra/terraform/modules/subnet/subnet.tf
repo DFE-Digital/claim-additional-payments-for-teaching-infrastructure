@@ -5,6 +5,7 @@ resource "azurerm_subnet" "projcore_subnet_default" {
   address_prefixes                               = local.default_ip
   virtual_network_name                           = var.projcore_vn_01_name
   service_endpoints                              = ["Microsoft.Storage", "Microsoft.KeyVault", "Microsoft.ContainerRegistry"]
+
   enforce_private_link_endpoint_network_policies = false
   enforce_private_link_service_network_policies  = false
   delegation {

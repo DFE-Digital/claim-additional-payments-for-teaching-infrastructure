@@ -1,13 +1,8 @@
-﻿using System;
-using System.ComponentModel.DataAnnotations;
-using System.ComponentModel.DataAnnotations.Schema;
-
-namespace dqt.datalayer.Model
+using System;
+namespace dqt.domain.DTOs
 {
-    public class QualifiedTeacherBackup
+    public class QualifiedTeacherDTO
     {
-        [Key]
-        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public int Id { get; set; }
 
         public string Trn { get; set; }
@@ -30,7 +25,7 @@ namespace dqt.datalayer.Model
 
         public string QualificationName { get; set; }
 
-        public string ITTStartDate { get; set; }
+        public DateTime? ITTStartDate { get; set; }
 
         public string TeacherStatus { get; set; }
     }
