@@ -145,7 +145,7 @@ stages:
           backendServiceArm: 'azdo.pipelines.cip.S118P.armf895c908-777c-49ec-b814-3c50d459c6ab'
           backendAzureRmResourceGroupName: 's118p01-tfbackend'
           backendAzureRmStorageAccountName: 's118p01tfbackendsa'
-          backendAzureRmContainerName: 's118p01testtfstate'
+          backendAzureRmContainerName: 's118p01westprodtfstate'
           backendAzureRmKey: 'terraform.tfstate'
 
       - task: AzurePowerShell@5
