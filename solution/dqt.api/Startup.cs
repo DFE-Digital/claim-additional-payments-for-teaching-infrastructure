@@ -11,6 +11,7 @@ using dqt.api.Authorization;
 using dqt.domain.Blob;
 using dqt.domain.FileTransfer;
 using dqt.domain.QTS;
+using System;
 
 [assembly: FunctionsStartup(typeof(dqt.api.Startup))]
 namespace dqt.api
@@ -19,7 +20,11 @@ namespace dqt.api
     {
         public override void Configure(IFunctionsHostBuilder builder)
         {
-            builder.Services.AddDbContext<DQTDataContext>(options => options.UseNpgsql(GetConnStr()));
+            builder.Services.AddDbContext<DQTDataContext>(options => options.UseNpgsql(GetConnStr(),
+            sqlOptions =>
+            {
+                sqlOptions.EnableRetryOnFailure(3, TimeSpan.FromSeconds(3), null);
+            }));
             builder.Services.AddTransient<IRollbarService, RollbarService>();
             builder.Services.AddTransient<IDQTFileTransferService, DQTFileTransferService>();
             builder.Services.AddTransient<IQualifiedTeachersService, QualifiedTeachersService>();

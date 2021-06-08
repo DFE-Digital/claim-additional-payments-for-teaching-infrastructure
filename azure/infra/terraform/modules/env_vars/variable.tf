@@ -36,4 +36,5 @@ locals {
   rg_prefix         = var.input_environment == "Development" ? "s118d01" : var.input_environment == "Test" ? "s118t01" : var.input_environment == "Production" ? "s118p01" : "s118d01-infradev"
   env_tag           = var.input_environment == "Development" ? "Dev" : var.input_environment == "Test" ? "Test" : var.input_environment == "Production" ? "Prod" : "Dev"
   container_version = var.input_environment == "Development" ? "20210604.2" : var.input_environment == "Test" ? "20210604.2" : var.input_environment == "Production" ? "20210305.7" : "20210201.3"
+
 }

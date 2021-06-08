@@ -14,13 +14,11 @@ namespace dqt.datalayer.Model
 
         public string Name { get; set; }
 
-        [Column(TypeName = "Date")]
-        public DateTime DoB { get; set; }
+        public string DoB { get; set; }
 
         public string NINumber { get; set; }
 
-        [Column(TypeName = "Date")]
-        public DateTime QTSAwardDate { get; set; }
+        public string QTSAwardDate { get; set; }
 
         public string ITTSubject1Code { get; set; }
 
@@ -32,8 +30,7 @@ namespace dqt.datalayer.Model
 
         public string QualificationName { get; set; }
 
-        [Column(TypeName = "Date")]
-        public DateTime ITTStartDate { get; set; }
+        public string ITTStartDate { get; set; }
 
         public string TeacherStatus { get; set; }
     }

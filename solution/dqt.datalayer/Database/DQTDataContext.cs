@@ -1,6 +1,7 @@
 ﻿using dqt.datalayer.Model;
 using Microsoft.EntityFrameworkCore;
 using Newtonsoft.Json.Linq;
+using System;
 using System.IO;
 using System.Reflection;
 
@@ -12,7 +13,7 @@ namespace dqt.datalayer.Database
         internal DbSet<QualifiedTeacherBackup> QualifiedTeachersBackup { get; set; }
         internal DbSet<DQTFileTransfer> DQTFileTransfer { get; set; }
 
-    public DQTDataContext() { }
+        public DQTDataContext() { }
         public DQTDataContext(DbContextOptions options)
             : base(options)
         { }
@@ -32,14 +33,18 @@ namespace dqt.datalayer.Database
                 var password = jObject["Values"]["DatabasePassword"].ToString();
 
                 var connectionstring = @$"Server={server};Database={database};Port=5432;User Id={username};Password={password};Ssl Mode=Require;";
-                optionsBuilder.UseNpgsql(connectionstring);
+                optionsBuilder.UseNpgsql(connectionstring,
+                    buider =>
+                    {
+                        buider.EnableRetryOnFailure(5, TimeSpan.FromSeconds(10), null);
+                    });
             }
 #endif
         }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            modelBuilder.UseSerialColumns(); 
+            modelBuilder.UseSerialColumns();
         }
     }
 }
