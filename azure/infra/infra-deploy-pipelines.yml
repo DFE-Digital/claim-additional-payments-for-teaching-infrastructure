@@ -6,17 +6,17 @@ trigger: none
 
 parameters:
   - name: RunDeploy
-    displayName: "run deployment step"
+    displayName: "Run deployment step"
     type: boolean
     default: false
 
 stages:
 - stage: devplan
-  displayName: DevPlan
+  displayName: "Development Plan"
 
   jobs:
   - job: devplan 
-    displayName: DevelopmentPlan
+    displayName: "Development Plan"
 
     pool:
       vmImage: "ubuntu-latest"
@@ -118,7 +118,7 @@ stages:
 
   jobs:
   - job: Devapply
-    displayName: DevelopmentApply
+    displayName: "Development Apply"
 
     pool:
       vmImage: 'ubuntu-latest'
@@ -217,11 +217,11 @@ stages:
 ####################################################################
 
 - stage: testplan
-  displayName: TestPlan
+  displayName: "Test Plan"
 
   jobs:
   - job: testplan 
-    displayName: TestPlan
+    displayName: "Test Plan"
 
     pool:
       vmImage: "ubuntu-latest"
@@ -317,14 +317,14 @@ stages:
         artifact: 'test_plan'
         publishLocation: 'pipeline'
 
-- stage: Testapply
-  displayName: TestApply
+- stage: testapply
+  displayName: "Test Apply"
   dependsOn: testplan
   condition: ${{ parameters.RunDeploy }}
 
   jobs:
   - job: testapply
-    displayName: TestApply
+    displayName: "Test Apply"
 
     pool:
       vmImage: 'ubuntu-latest'
@@ -416,11 +416,11 @@ stages:
 ####################################################################
 
 - stage: prodplan
-  displayName: ProductionPlan
+  displayName: "Production Plan"
 
   jobs:
   - job: prodplan 
-    displayName: ProductionPlan
+    displayName: "Production Plan"
 
     pool:
       vmImage: "ubuntu-latest"
