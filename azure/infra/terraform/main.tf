@@ -53,35 +53,6 @@ module "network_profile" {
   # depends_on = [module.subnet]
 }
 
-# # # route table section
-# # module "route_table" {
-# #   source = "./modules/route_table"
-# #   core_rg_name = module.resource_group.core_rg_name
-# #   core_sn_id   = module.subnet.core_sn_id
-# #   rg_location = module.resource_group.rg_location
-# #   common_tags = module.env_vars.common_tags
-# # }
-
-# # # NSG
-# # module "network_security_group" {
-# #   source          = "./modules/nsg"
-# #   core_rg_name    = module.resource_group.core_rg_name
-# #   core_vn_01_name = module.network.core_vn_01_name
-# #   rg_location     = module.resource_group.rg_location
-# #   common_tags     = module.env_vars.common_tags
-
-# #   depends_on = [module.subnet]
-# # }
-
-# # recover_services managed centrally in CORE
-# module "recovery_services_vault" {
-#   source           = "./modules/recovery_services_vault"
-#   projcore_rg_name = module.resource_group.core_rg_name
-#   rg_location      = module.resource_group.rg_location
-#   common_tags      = module.env_vars.common_tags
-
-# }
-
 #key vault
 module "key_vault" {
   source                 = "./modules/key_vault"
@@ -171,27 +142,29 @@ module "container" {
   depends_on = [module.network_profile, module.app_insights]
 }
 
-#pip
-module "pip" {
-  source       = "./modules/public_ip"
-  func_rg_name = module.resource_group.func_rg_name
-  rg_prefix    = module.env_vars.rg_prefix
-  rg_location  = module.resource_group.rg_location
-  common_tags  = module.env_vars.common_tags
+# PIP and nat_gateway commented out as was implemneted as a temp fix for DQT
 
-  depends_on = [module.network]
-}
+# #pip
+# module "pip" {
+#   source       = "./modules/public_ip"
+#   func_rg_name = module.resource_group.func_rg_name
+#   rg_prefix    = module.env_vars.rg_prefix
+#   rg_location  = module.resource_group.rg_location
+#   common_tags  = module.env_vars.common_tags
 
-#nat_gateway
-module "nat_gateway" {
-  source       = "./modules/nat_gateway"
-  func_rg_name = module.resource_group.func_rg_name
-  rg_prefix    = module.env_vars.rg_prefix
-  rg_location  = module.resource_group.rg_location
-  common_tags  = module.env_vars.common_tags
+#   depends_on = [module.network]
+# }
 
-  depends_on = [module.network, module.pip]
-}
+# #nat_gateway
+# module "nat_gateway" {
+#   source       = "./modules/nat_gateway"
+#   func_rg_name = module.resource_group.func_rg_name
+#   rg_prefix    = module.env_vars.rg_prefix
+#   rg_location  = module.resource_group.rg_location
+#   common_tags  = module.env_vars.common_tags
+
+#   depends_on = [module.network, module.pip]
+# }
 
 # # below two modules are commented out as the two components are currently not required
 # # # #ddos
