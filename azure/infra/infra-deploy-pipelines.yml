@@ -8,7 +8,7 @@ parameters:
   - name: RunDeploy
     displayName: "run deployment step"
     type: boolean
-    default: true
+    default: false
 
 stages:
 - stage: devplan
@@ -216,7 +216,6 @@ stages:
 # Test
 ####################################################################
 
-stages:
 - stage: testplan
   displayName: TestPlan
 
@@ -416,13 +415,6 @@ stages:
 # Production
 ####################################################################
 
-parameters:
-  - name: RunDeploy
-    displayName: "run deployment step"
-    type: boolean
-    default: true
-
-stages:
 - stage: prodplan
   displayName: ProductionPlan
 
