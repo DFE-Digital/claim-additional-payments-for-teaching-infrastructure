@@ -11,12 +11,12 @@ parameters:
     default: true
 
 stages:
-- stage: plan
-  displayName: Plan
+- stage: devplan
+  displayName: DevPlan
 
   jobs:
-  - job: plan 
-    displayName: Plan
+  - job: devplan 
+    displayName: DevelopmentPlan
 
     pool:
       vmImage: "ubuntu-latest"
@@ -111,14 +111,14 @@ stages:
         artifact: 'dev_plan'
         publishLocation: 'pipeline'
 
-- stage: apply
-  displayName: Apply
-  dependsOn: plan
+- stage: devapply
+  displayName: DevApply
+  dependsOn: devplan
   condition: ${{ parameters.RunDeploy }}
 
   jobs:
-  - job: apply
-    displayName: Apply
+  - job: Devapply
+    displayName: DevelopmentApply
 
     pool:
       vmImage: 'ubuntu-latest'
@@ -216,24 +216,13 @@ stages:
 # Test
 ####################################################################
 
-trigger: none
-  # branches:
-  #   include:
-  #   - main
-
-parameters:
-  - name: RunDeploy
-    displayName: "run deployment step"
-    type: boolean
-    default: true
-
 stages:
-- stage: plan
-  displayName: Plan
+- stage: testplan
+  displayName: TestPlan
 
   jobs:
-  - job: plan 
-    displayName: Plan
+  - job: testplan 
+    displayName: TestPlan
 
     pool:
       vmImage: "ubuntu-latest"
@@ -326,17 +315,17 @@ stages:
       displayName: 'Publish Artifact'
       inputs:
         targetPath: '$(Build.ArtifactStagingDirectory)'
-        artifact: 'dev_plan'
+        artifact: 'test_plan'
         publishLocation: 'pipeline'
 
-- stage: apply
-  displayName: Apply
-  dependsOn: plan
+- stage: Testapply
+  displayName: TestApply
+  dependsOn: testplan
   condition: ${{ parameters.RunDeploy }}
 
   jobs:
-  - job: apply
-    displayName: Apply
+  - job: testapply
+    displayName: TestApply
 
     pool:
       vmImage: 'ubuntu-latest'
@@ -346,7 +335,7 @@ stages:
 #      deploy:
     steps:
       - download: current
-        artifact: 'dev_plan'
+        artifact: 'test_plan'
 
       - task: charleszipp.azure-pipelines-tasks-terraform.azure-pipelines-tasks-terraform-installer.TerraformInstaller@0
         displayName: 'Installing Terraform $(Terraform.Version) for apply'
@@ -405,16 +394,6 @@ stages:
           commandOptions: '-var="input_region=$(REGION)" -var="input_environment=$(environment)"'
           allowTelemetryCollection: true
 
-  # - task: TerraformTaskV1@0
-  #   displayName: 'TF destroy example'
-  #   name: TFDestroy
-  #   inputs:
-  #     provider: 'azurerm'
-  #     command: 'destroy'
-  #     workingDirectory: '$(System.DefaultWorkingDirectory)/azure/infra/terraform'
-  #.    commandOptions: '-var="input_region=$(REGION)" -var="input_rg_prefix=$(rg_prefix)"'
-  #     environmentServiceNameAzureRM: 'azdo.pipelines.cip.S118D.armfe1ef140-8bef-4043-b5ee-c449e6f951ef'
-
       - task: AzurePowerShell@5
         displayName: 'Close KeyVault Firewall'
         condition: always()
@@ -437,12 +416,6 @@ stages:
 # Production
 ####################################################################
 
-
-trigger: none
-  # branches:
-  #   include:
-  #   - main
-
 parameters:
   - name: RunDeploy
     displayName: "run deployment step"
@@ -450,12 +423,12 @@ parameters:
     default: true
 
 stages:
-- stage: plan
-  displayName: Plan
+- stage: prodplan
+  displayName: ProductionPlan
 
   jobs:
-  - job: plan 
-    displayName: Plan
+  - job: prodplan 
+    displayName: ProductionPlan
 
     pool:
       vmImage: "ubuntu-latest"
@@ -547,17 +520,17 @@ stages:
       displayName: 'Publish Artifact'
       inputs:
         targetPath: '$(Build.ArtifactStagingDirectory)'
-        artifact: 'dev_plan'
+        artifact: 'prod_plan'
         publishLocation: 'pipeline'
 
-- stage: apply
-  displayName: Apply
-  dependsOn: plan
+- stage: prodapply
+  displayName: ProdApply
+  dependsOn: prodplan
   condition: ${{ parameters.RunDeploy }}
 
   jobs:
-  - job: apply
-    displayName: Apply
+  - job: prodapply
+    displayName: ProductionApply
 
     pool:
       vmImage: 'ubuntu-latest'
@@ -567,7 +540,7 @@ stages:
 #      deploy:
     steps:
       - download: current
-        artifact: 'dev_plan'
+        artifact: 'prod_plan'
 
       - task: charleszipp.azure-pipelines-tasks-terraform.azure-pipelines-tasks-terraform-installer.TerraformInstaller@0
         displayName: 'Installing Terraform $(Terraform.Version) for apply'
