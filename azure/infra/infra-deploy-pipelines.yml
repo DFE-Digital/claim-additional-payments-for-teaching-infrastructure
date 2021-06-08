@@ -112,7 +112,7 @@ stages:
         publishLocation: 'pipeline'
 
 - stage: devapply
-  displayName: DevApply
+  displayName: "Development Apply"
   dependsOn: devplan
   condition: ${{ parameters.RunDeploy }}
 
@@ -218,6 +218,7 @@ stages:
 
 - stage: testplan
   displayName: "Test Plan"
+  dependsOn: devplan
 
   jobs:
   - job: testplan 
@@ -417,6 +418,7 @@ stages:
 
 - stage: prodplan
   displayName: "Production Plan"
+  dependsOn: devplan  
 
   jobs:
   - job: prodplan 
