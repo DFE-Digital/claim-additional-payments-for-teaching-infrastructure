@@ -26,7 +26,7 @@ stages:
     - task: charleszipp.azure-pipelines-tasks-terraform.azure-pipelines-tasks-terraform-installer.TerraformInstaller@0
       displayName: 'Installing Terraform $(Terraform.Version) for plan'
       inputs:
-        terraformVersion: '0.15.0'
+        terraformVersion: '0.14.6'
 
     - task: TerraformTaskV1@0
       name: TFInit
@@ -133,7 +133,7 @@ stages:
       - task: charleszipp.azure-pipelines-tasks-terraform.azure-pipelines-tasks-terraform-installer.TerraformInstaller@0
         displayName: 'Installing Terraform $(Terraform.Version) for apply'
         inputs:
-          terraformVersion: '0.15.0'
+          terraformVersion: '0.14.6'
 
       - task: TerraformTaskV1@0
         name: TFInit
@@ -232,7 +232,7 @@ stages:
     - task: charleszipp.azure-pipelines-tasks-terraform.azure-pipelines-tasks-terraform-installer.TerraformInstaller@0
       displayName: 'Installing Terraform $(Terraform.Version) for plan'
       inputs:
-        terraformVersion: '0.15.0'
+        terraformVersion: '0.14.6'
 
     - task: TerraformTaskV1@0
       name: TFInit
@@ -340,7 +340,7 @@ stages:
       - task: charleszipp.azure-pipelines-tasks-terraform.azure-pipelines-tasks-terraform-installer.TerraformInstaller@0
         displayName: 'Installing Terraform $(Terraform.Version) for apply'
         inputs:
-          terraformVersion: '0.15.0'
+          terraformVersion: '0.14.6'
 
       - task: TerraformTaskV1@0
         name: TFInit
@@ -431,7 +431,7 @@ stages:
     - task: charleszipp.azure-pipelines-tasks-terraform.azure-pipelines-tasks-terraform-installer.TerraformInstaller@0
       displayName: 'Installing Terraform $(Terraform.Version) for plan'
       inputs:
-        terraformVersion: '0.15.0'
+        terraformVersion: '0.14.6'
 
     - task: TerraformTaskV1@0
       name: TFInit
@@ -539,7 +539,7 @@ stages:
       - task: charleszipp.azure-pipelines-tasks-terraform.azure-pipelines-tasks-terraform-installer.TerraformInstaller@0
         displayName: 'Installing Terraform $(Terraform.Version) for apply'
         inputs:
-          terraformVersion: '0.15.0'
+          terraformVersion: '0.14.6'
 
       - task: TerraformTaskV1@0
         name: TFInit
