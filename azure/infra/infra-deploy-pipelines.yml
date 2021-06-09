@@ -26,7 +26,7 @@ stages:
     - task: charleszipp.azure-pipelines-tasks-terraform.azure-pipelines-tasks-terraform-installer.TerraformInstaller@0
       displayName: 'Installing Terraform $(Terraform.Version) for plan'
       inputs:
-        terraformVersion: '0.14.6'
+        terraformVersion: '0.15.0'
 
     - task: TerraformTaskV1@0
       name: TFInit
@@ -133,7 +133,7 @@ stages:
       - task: charleszipp.azure-pipelines-tasks-terraform.azure-pipelines-tasks-terraform-installer.TerraformInstaller@0
         displayName: 'Installing Terraform $(Terraform.Version) for apply'
         inputs:
-          terraformVersion: '0.14.6'
+          terraformVersion: '0.15.0'
 
       - task: TerraformTaskV1@0
         name: TFInit
@@ -218,7 +218,7 @@ stages:
 
 - stage: testplan
   displayName: "Test Plan"
-  dependsOn: devapply
+  dependsOn: devplan
 
   jobs:
   - job: testplan 
@@ -232,7 +232,7 @@ stages:
     - task: charleszipp.azure-pipelines-tasks-terraform.azure-pipelines-tasks-terraform-installer.TerraformInstaller@0
       displayName: 'Installing Terraform $(Terraform.Version) for plan'
       inputs:
-        terraformVersion: '0.14.6'
+        terraformVersion: '0.15.0'
 
     - task: TerraformTaskV1@0
       name: TFInit
@@ -340,7 +340,7 @@ stages:
       - task: charleszipp.azure-pipelines-tasks-terraform.azure-pipelines-tasks-terraform-installer.TerraformInstaller@0
         displayName: 'Installing Terraform $(Terraform.Version) for apply'
         inputs:
-          terraformVersion: '0.14.6'
+          terraformVersion: '0.15.0'
 
       - task: TerraformTaskV1@0
         name: TFInit
@@ -418,7 +418,7 @@ stages:
 
 - stage: prodplan
   displayName: "Production Plan"
-  dependsOn: testplan  
+  dependsOn: devplan  
 
   jobs:
   - job: prodplan 
@@ -431,7 +431,7 @@ stages:
     - task: charleszipp.azure-pipelines-tasks-terraform.azure-pipelines-tasks-terraform-installer.TerraformInstaller@0
       displayName: 'Installing Terraform $(Terraform.Version) for plan'
       inputs:
-        terraformVersion: '0.14.6'
+        terraformVersion: '0.15.0'
 
     - task: TerraformTaskV1@0
       name: TFInit
@@ -539,7 +539,7 @@ stages:
       - task: charleszipp.azure-pipelines-tasks-terraform.azure-pipelines-tasks-terraform-installer.TerraformInstaller@0
         displayName: 'Installing Terraform $(Terraform.Version) for apply'
         inputs:
-          terraformVersion: '0.14.6'
+          terraformVersion: '0.15.0'
 
       - task: TerraformTaskV1@0
         name: TFInit
