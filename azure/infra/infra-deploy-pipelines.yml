@@ -135,8 +135,8 @@ stages:
             - download: current
               artifact: 'dev_plan'
 
-            - task: charleszipp.azure-pipelines-tasks-terraform.azure-pipelines-tasks-terraform-installer.TerraformInstaller@0
-              displayName: 'Installing Terraform $(Terraform.Version) for apply'
+            - task: TerraformInstaller@0
+              displayName: "TerraForm install"
               inputs:
                 terraformVersion: '0.14.6'
 
@@ -157,10 +157,10 @@ stages:
             - task: AzurePowerShell@5
               displayName: 'Open KeyVault Firewall'
               inputs:
-              azureSubscription: "azdo.pipelines.cip.S118D.armfe1ef140-8bef-4043-b5ee-c449e6f951ef"
-              TargetAzurePs: LatestVersion      
-              ScriptType: InlineScript
-              Inline: |
+                azureSubscription: "azdo.pipelines.cip.S118D.armfe1ef140-8bef-4043-b5ee-c449e6f951ef"
+                TargetAzurePs: LatestVersion      
+                ScriptType: InlineScript
+                Inline: |
                     # Setting Variables
                     $KeyVaultId = '/subscriptions/8655985a-2f87-44d7-a541-0be9a8c2779d/resourceGroups/s118d01-secrets/providers/Microsoft.KeyVault/vaults/s118d01-secrets-kv'
                     $KeyVault = Get-AzResource -ResourceId $KeyVaultId -ErrorAction SilentlyContinue
@@ -206,10 +206,10 @@ stages:
               displayName: 'Close KeyVault Firewall'
               condition: always()
               inputs:
-              azureSubscription: "azdo.pipelines.cip.S118D.armfe1ef140-8bef-4043-b5ee-c449e6f951ef"
-              TargetAzurePs: LatestVersion 
-              ScriptType: InlineScript
-              Inline: |
+                azureSubscription: "azdo.pipelines.cip.S118D.armfe1ef140-8bef-4043-b5ee-c449e6f951ef"
+                TargetAzurePs: LatestVersion 
+                ScriptType: InlineScript
+                Inline: |
                     # Setting Variables
                     $KeyVaultId = '/subscriptions/8655985a-2f87-44d7-a541-0be9a8c2779d/resourceGroups/s118d01-secrets/providers/Microsoft.KeyVault/vaults/s118d01-secrets-kv'
                     $KeyVault = Get-AzResource -ResourceId $KeyVaultId -ErrorAction SilentlyContinue
