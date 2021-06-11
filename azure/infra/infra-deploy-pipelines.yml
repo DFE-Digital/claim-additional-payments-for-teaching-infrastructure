@@ -144,26 +144,26 @@ stages:
             #     backendAzureRmContainerName: 's118d01devtfstate'
             #     backendAzureRmKey: 'terraform.tfstate'
 
-            - task: PowerShell@2
-              inputs:
-                targetType: 'inline'
-                script: |
-                    # Write your PowerShell commands here.
-                    Write-Host "Hello World"
-                    dir /opt/
-                    dir /opt/hostedtoolcache/
-                    dir /opt/hostedtoolcache/terraform/
-                    dir /opt/hostedtoolcache/terraform/0.14.6/
-                    dir /opt/hostedtoolcache/terraform/0.14.6/x64/
-                    dir /opt/hostedtoolcache/terraform/0.14.6/x64/terraform
-                workingDirectory: '$(System.DefaultWorkingDirectory/azure/infra/terraform'
+            # - task: PowerShell@2
+            #   inputs:
+            #     targetType: 'inline'
+            #     script: |
+            #         # Write your PowerShell commands here.
+            #         Write-Host "Hello World"
+            #         dir /opt/
+            #         dir /opt/hostedtoolcache/
+            #         dir /opt/hostedtoolcache/terraform/
+            #         dir /opt/hostedtoolcache/terraform/0.14.6/
+            #         dir /opt/hostedtoolcache/terraform/0.14.6/x64/
+            #         dir /opt/hostedtoolcache/terraform/0.14.6/x64/terraform
+            #     workingDirectory: '$(System.DefaultWorkingDirectory)/azure/infra/terraform'
 
             - task: TerraformCLI@0
               name: TFInit
               displayName: "TerraForm init"
               inputs:
                 command: 'init'
-                workingDirectory: '$(System.DefaultWorkingDirectory/azure/infra/terraform'
+                workingDirectory: '$(System.DefaultWorkingDirectory)/azure/infra/terraform'
                 backendType: 'azurerm'
                 backendServiceArm: 'azdo.pipelines.cip.S118D.armfe1ef140-8bef-4043-b5ee-c449e6f951ef'
                 backendAzureRmResourceGroupName: 's118d01-tfbackend'
