@@ -144,7 +144,7 @@ stages:
             #     backendAzureRmContainerName: 's118d01devtfstate'
             #     backendAzureRmKey: 'terraform.tfstate'
 
-            - task: TerraformCLI
+            - task: TerraformCLI@1
               displayName: 'terraform init'
               inputs:
                 command: init
