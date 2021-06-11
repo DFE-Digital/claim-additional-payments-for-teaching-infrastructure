@@ -131,6 +131,8 @@ stages:
                 terraformVersion: '0.14.6'
 
             - checkout: self  # self represents the repo where the initial Pipelines YAML file was found
+              name: RepoCheckout
+              displayName: "Repo Checkout"
               clean: true
               fetchDepth: 5
               lfs: true
@@ -148,36 +150,6 @@ stages:
                 backendAzureRmStorageAccountName: 's118d01tfbackendsa'
                 backendAzureRmContainerName: 's118d01devtfstate'
                 backendAzureRmKey: 'terraform.tfstate'
-
-            # - task: TerraformCLI@0
-            #   displayName: 'terraform init'
-            #   inputs:
-            #     command: init
-            #     workingDirectory: '$(System.DefaultWorkingDirectory)/azure/infra/terraform'
-            #     backendType: azurerm
-            #     backendServiceArm: 'azdo.pipelines.cip.S118D.armfe1ef140-8bef-4043-b5ee-c449e6f951ef'
-            #     backendAzureRmResourceGroupName: 's118d01-tfbackend'
-            #     # azure location shortname of the backend resource group and storage account
-            #     backendAzureRmResourceGroupLocation: 'westeurope'
-            #     backendAzureRmStorageAccountName: 's118d01tfbackendsa'
-            #     # azure blob container to store the state file
-            #     backendAzureRmContainerName: 's118d01devtfstate'
-            #     # azure blob file name
-            #     backendAzureRmKey: terraform.tfstate
-
-            # - task: TerraformCLI@0
-            #   name: TFInit
-            #   displayName: "TerraForm init"
-            #   inputs:
-            #     command: 'init'
-            #     workingDirectory: '$(System.DefaultWorkingDirectory)/azure/infra/terraform'
-            #     backendType: 'azurerm'
-            #     backendServiceArm: 'azdo.pipelines.cip.S118D.armfe1ef140-8bef-4043-b5ee-c449e6f951ef'
-            #     backendAzureRmResourceGroupName: 's118d01-tfbackend'
-            #     backendAzureRmStorageAccountName: 's118d01tfbackendsa'
-            #     backendAzureRmContainerName: 's118d01devtfstate'
-            #     backendAzureRmKey: 'terraform.tfstate'
-            #     allowTelemetryCollection: true
 
             - task: AzurePowerShell@5
               displayName: 'Open KeyVault Firewall'
@@ -375,6 +347,13 @@ stages:
             displayName: 'Installing Terraform $(Terraform.Version) for apply'
             inputs:
               terraformVersion: '0.14.6'
+
+          - checkout: self  # self represents the repo where the initial Pipelines YAML file was found
+            name: RepoCheckout
+            displayName: "Repo Checkout"
+            clean: true
+            fetchDepth: 5
+            lfs: true
 
           - task: TerraformTaskV1@0
             name: TFInit
@@ -575,6 +554,13 @@ stages:
             displayName: 'Installing Terraform $(Terraform.Version) for apply'
             inputs:
               terraformVersion: '0.14.6'
+
+          - checkout: self  # self represents the repo where the initial Pipelines YAML file was found
+            name: RepoCheckout
+            displayName: "Repo Checkout"
+            clean: true
+            fetchDepth: 5
+            lfs: true
 
           - task: TerraformTaskV1@0
             name: TFInit
