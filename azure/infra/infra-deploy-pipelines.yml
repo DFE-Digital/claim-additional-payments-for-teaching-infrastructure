@@ -112,7 +112,7 @@ stages:
   jobs:
 
   - deployment: devapply
-    displayName: DevApply
+    displayName: "Development Apply"
     environment: s118-dev-infra
 
     pool:
@@ -143,6 +143,20 @@ stages:
             #     backendAzureRmStorageAccountName: 's118d01tfbackendsa'
             #     backendAzureRmContainerName: 's118d01devtfstate'
             #     backendAzureRmKey: 'terraform.tfstate'
+
+            - task: PowerShell@2
+              inputs:
+                targetType: 'inline'
+                script: |
+                    # Write your PowerShell commands here.
+                    Write-Host "Hello World"
+                    dir /opt/
+                    dir /opt/hostedtoolcache/
+                    dir /opt/hostedtoolcache/terraform/
+                    dir /opt/hostedtoolcache/terraform/0.14.6/
+                    dir /opt/hostedtoolcache/terraform/0.14.6/x64/
+                    dir /opt/hostedtoolcache/terraform/0.14.6/x64/terraform
+                workingDirectory: '$(System.DefaultWorkingDirectory/azure/infra/terraform'
 
             - task: TerraformCLI@0
               name: TFInit
