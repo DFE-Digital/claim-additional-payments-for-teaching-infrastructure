@@ -130,38 +130,40 @@ stages:
               inputs:
                 terraformVersion: '0.14.6'
 
-            # - task: TerraformTaskV1@0
-            #   name: TFInit
-            #   displayName: "TerraForm init"
+            - checkout: self  # self represents the repo where the initial Pipelines YAML file was found
+              clean: true
+              fetchDepth: 5
+              lfs: true
+
+            - task: TerraformTaskV1@0
+              name: TFInit
+              displayName: "TerraForm init"
+              inputs:
+                provider: 'azurerm'
+                command: 'init'
+                workingDirectory: '$(System.DefaultWorkingDirectory)/azure/infra/terraform'
+                commandOptions: '-backend-config="storage_account_name=s118d01dfbackendsa" -backend-config="container_name=s118d01devtfstate"'
+                backendServiceArm: 'azdo.pipelines.cip.S118D.armfe1ef140-8bef-4043-b5ee-c449e6f951ef'
+                backendAzureRmResourceGroupName: 's118d01-tfbackend'
+                backendAzureRmStorageAccountName: 's118d01tfbackendsa'
+                backendAzureRmContainerName: 's118d01devtfstate'
+                backendAzureRmKey: 'terraform.tfstate'
+
+            # - task: TerraformCLI@0
+            #   displayName: 'terraform init'
             #   inputs:
-            #     provider: 'azurerm'
-            #     command: 'init'
+            #     command: init
             #     workingDirectory: '$(System.DefaultWorkingDirectory)/azure/infra/terraform'
-            #     commandOptions: '-backend-config="storage_account_name=s118d01dfbackendsa" -backend-config="container_name=s118d01devtfstate"'
+            #     backendType: azurerm
             #     backendServiceArm: 'azdo.pipelines.cip.S118D.armfe1ef140-8bef-4043-b5ee-c449e6f951ef'
             #     backendAzureRmResourceGroupName: 's118d01-tfbackend'
+            #     # azure location shortname of the backend resource group and storage account
+            #     backendAzureRmResourceGroupLocation: 'westeurope'
             #     backendAzureRmStorageAccountName: 's118d01tfbackendsa'
+            #     # azure blob container to store the state file
             #     backendAzureRmContainerName: 's118d01devtfstate'
-            #     backendAzureRmKey: 'terraform.tfstate'
-
-            - task: TerraformCLI@0
-              displayName: 'terraform init'
-              inputs:
-                command: init
-                backendType: azurerm
-                backendServiceArm: 'azdo.pipelines.cip.S118D.armfe1ef140-8bef-4043-b5ee-c449e6f951ef'
-                # create backend storage account if doesn't exist
-                ensureBackend: true
-                backendAzureRmResourceGroupName: 's118d01-tfbackend'
-                # azure location shortname of the backend resource group and storage account
-                backendAzureRmResourceGroupLocation: 'westeurope'
-                backendAzureRmStorageAccountName: 's118d01tfbackendsa'
-                # azure storage account sku, used when creating the storage account
-                backendAzureRmStorageAccountSku: 'Standard_RAGRS'
-                # azure blob container to store the state file
-                backendAzureRmContainerName: 's118d01devtfstate'
-                # azure blob file name
-                backendAzureRmKey: terraform.tfstate
+            #     # azure blob file name
+            #     backendAzureRmKey: terraform.tfstate
 
             # - task: TerraformCLI@0
             #   name: TFInit
@@ -211,7 +213,7 @@ stages:
                 command: 'apply'
                 runAzLogin: true  
                 environmentServiceName: 'azdo.pipelines.cip.S118D.armfe1ef140-8bef-4043-b5ee-c449e6f951ef'
-                workingDirectory: '$(System.DefaultWorkingDirectory)/azure/infra/terraform'          
+                workingDirectory: '$(System.DefaultWorkingDirectory)/azure/infra/terraform'
                 commandOptions: '-var="input_region=$(REGION)" -var="input_environment=$(environment)"'
                 allowTelemetryCollection: true
 
