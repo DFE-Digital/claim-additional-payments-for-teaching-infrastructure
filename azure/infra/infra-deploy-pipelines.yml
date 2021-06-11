@@ -219,7 +219,7 @@ stages:
 
 - stage: testplan
   displayName: "Test Plan"
-  dependsOn: devplan
+  dependsOn: devplan, devapply
 
   jobs:
   - job: testplan 
@@ -321,7 +321,7 @@ stages:
 
 - stage: testapply
   displayName: "Test Apply"
-  dependsOn: testplan
+  dependsOn: testplan, devapply
 
   jobs:
 
@@ -417,7 +417,7 @@ stages:
 
 - stage: prodplan
   displayName: "Production Plan"
-  dependsOn: devplan  
+  dependsOn: devplan, testapply, prodplan  
 
   jobs:
   - job: prodplan 
