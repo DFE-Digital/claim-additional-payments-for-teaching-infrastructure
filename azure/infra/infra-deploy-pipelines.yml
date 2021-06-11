@@ -136,6 +136,7 @@ stages:
               artifact: 'dev_plan'
 
             - task: TerraformInstaller@0
+              name: TFInstall
               displayName: "TerraForm install"
               inputs:
                 terraformVersion: '0.14.6'
