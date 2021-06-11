@@ -4,12 +4,6 @@ trigger: none
   #   include:
   #   - main
 
-parameters:
-  - name: RunDeploy
-    displayName: "Run deployment step"
-    type: boolean
-    default: false
-
 stages:
 - stage: devplan
   displayName: "Development Plan"
@@ -221,7 +215,6 @@ stages:
   displayName: "Test Plan"
   dependsOn: 
   - devplan
-  - devapply
 
   jobs:
   - job: testplan 
@@ -423,9 +416,7 @@ stages:
   displayName: "Production Plan"
   dependsOn: 
   - devplan
-  - devapply
   - testplan
-  - testapply  
 
   jobs:
   - job: prodplan 
@@ -526,7 +517,9 @@ stages:
 
 - stage: prodapply
   displayName: "Production Apply"
-  dependsOn: prodplan
+  dependsOn: 
+  - testapply
+  - prodplan
 
   jobs:
   - deployment: prodapply
