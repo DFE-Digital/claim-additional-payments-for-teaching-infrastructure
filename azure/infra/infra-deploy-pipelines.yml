@@ -135,9 +135,8 @@ stages:
             - download: current
               artifact: 'dev_plan'
 
-            - task: TerraformInstaller@0
-              name: TFInstall
-              displayName: "TerraForm install"
+            - task: charleszipp.azure-pipelines-tasks-terraform.azure-pipelines-tasks-terraform-installer.TerraformInstaller@0
+              displayName: 'Installing Terraform $(Terraform.Version) for apply'
               inputs:
                 terraformVersion: '0.14.6'
 
