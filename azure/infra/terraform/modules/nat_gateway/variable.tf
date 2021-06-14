@@ -28,6 +28,6 @@ variable "common_tags" {
 # LOCAL CALCULATED
 # ---------------------------------------------------------------------------------------------------------------------
 locals {
-  pip_name_prefix = var.rg_prefix == "s118d01" ? "s118d-funcapp" : "s118p01" ? "s118p-funcapp" : "s118t01-funcapp"
+  pip_name_prefix = var.rg_prefix == "s118d01" ? "s118d-funcapp" : var.rg_prefix == "s118p01" ? "s118p-funcapp" : "s118t01-funcapp"
 }
 
