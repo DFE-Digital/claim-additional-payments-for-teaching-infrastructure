@@ -13,9 +13,9 @@ $backendsa = "s118d01tfbackendsa"
 # $backendsa = "s118t01tfbackendsa"
 
 #prod
-# $AzureSubscriptionId = "88bd392f-df19-458b-a100-22b4429060ed"
-# $backendrg = "s118p01-tfbackend"
-# $backendsa = "s118p01tfbackendsa"
+#$AzureSubscriptionId = "88bd392f-df19-458b-a100-22b4429060ed"
+#$backendrg = "s118p01-tfbackend"
+#$backendsa = "s118p01tfbackendsa"
 
 # You can set TF_LOG to one of the log levels TRACE, DEBUG, INFO, WARN or ERROR to change the verbosity of the logs. 
 # TRACE is the most verbose and it is the default if TF_LOG is set to something other than a log level name.

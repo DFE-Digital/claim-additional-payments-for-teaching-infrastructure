@@ -5,7 +5,6 @@
 #   ip_address_type     = "Private"
 #   os_type             = "Linux"
 #   network_profile_id  = var.projcore_network_prof
-
 #   # image_registry_credential {
 #   #   username = data.azurerm_container_registry.acr.admin_username
 #   #   password = data.azurerm_container_registry.acr.admin_password
