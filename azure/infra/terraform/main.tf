@@ -53,35 +53,6 @@ module "network_profile" {
   # depends_on = [module.subnet]
 }
 
-# # # route table section
-# # module "route_table" {
-# #   source = "./modules/route_table"
-# #   core_rg_name = module.resource_group.core_rg_name
-# #   core_sn_id   = module.subnet.core_sn_id
-# #   rg_location = module.resource_group.rg_location
-# #   common_tags = module.env_vars.common_tags
-# # }
-
-# # # NSG
-# # module "network_security_group" {
-# #   source          = "./modules/nsg"
-# #   core_rg_name    = module.resource_group.core_rg_name
-# #   core_vn_01_name = module.network.core_vn_01_name
-# #   rg_location     = module.resource_group.rg_location
-# #   common_tags     = module.env_vars.common_tags
-
-# #   depends_on = [module.subnet]
-# # }
-
-# # recover_services managed centrally in CORE
-# module "recovery_services_vault" {
-#   source           = "./modules/recovery_services_vault"
-#   projcore_rg_name = module.resource_group.core_rg_name
-#   rg_location      = module.resource_group.rg_location
-#   common_tags      = module.env_vars.common_tags
-
-# }
-
 #key vault
 module "key_vault" {
   source                 = "./modules/key_vault"
@@ -170,6 +141,8 @@ module "container" {
 
   depends_on = [module.network_profile, module.app_insights]
 }
+
+# PIP and nat_gateway commented out as was implemneted as a temp fix for DQT
 
 #pip
 module "pip" {

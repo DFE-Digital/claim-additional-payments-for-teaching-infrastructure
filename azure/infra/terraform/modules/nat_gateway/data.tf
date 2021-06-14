@@ -1,5 +1,5 @@
 data "azurerm_public_ip" "pip" {
-  name                = format("%s-%s", var.func_rg_name, "pip")
+  name                = format("%s-%s", local.pip_name_prefix, "pip")
   resource_group_name = var.func_rg_name
 }
 

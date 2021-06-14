@@ -13,10 +13,6 @@ data "azurerm_key_vault_secret" "AdminAllowedIPs" {
   key_vault_id = data.azurerm_key_vault.secrets_kv.id
 }
 
-# output "AdminAllowedIPs_value" {
-#   value = data.azurerm_key_vault_secret.AdminAllowedIPs.value
-# }
-
 data "azurerm_key_vault_secret" "DfeSignInApiClientId" {
   name         = "DfeSignInApiClientId"
   key_vault_id = data.azurerm_key_vault.secrets_kv.id
@@ -74,11 +70,3 @@ data "azurerm_key_vault_secret" "RollbarInfraToken" {
   key_vault_id = data.azurerm_key_vault.secrets_kv.id
 }
 
-# data "azurerm_key_vault_secret" "SamlEncryptionKey" {
-#   name         = "TeacherPaymentsDevVspSamlEncryption8KeyBase64"
-#   key_vault_id = data.azurerm_key_vault.secrets_kv.id
-# }
-# data "azurerm_key_vault_secret" "SamlSigningKey" {
-#   name         = "TeacherPaymentsDevVspSamlSigning8KeyBase64"
-#   key_vault_id = data.azurerm_key_vault.secrets_kv.id
-# }

@@ -1,5 +1,5 @@
 resource "azurerm_nat_gateway" "nat_gateway_01" {
-  name                = format("%s-%s", var.func_rg_name, "nat-gateway")
+  name                = format("%s-%s", local.nat_gateway_name_prefix, "nat-gateway")
   resource_group_name = var.func_rg_name
   location            = var.rg_location
   # public_ip_prefix_ids    = [data.azurerm_public_ip_prefix.pipprefix.id]

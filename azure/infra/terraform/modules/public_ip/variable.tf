@@ -27,7 +27,8 @@ variable "common_tags" {
 # ---------------------------------------------------------------------------------------------------------------------
 # LOCAL CALCULATED
 # ---------------------------------------------------------------------------------------------------------------------
-# locals {
-#   calculated_local_value = uuid()
-# }
+locals {
+  pip_name_prefix         = var.rg_prefix == "s118d01" ? "s118d-funcapp" : var.rg_prefix == "s118p01" ? "s118p-funcapp" : "s118t01-funcapp"
+  nat_gateway_name_prefix = var.rg_prefix == "s118p01" ? "s118p01" : var.func_rg_name
+}
 
