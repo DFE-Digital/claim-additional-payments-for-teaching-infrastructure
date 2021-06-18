@@ -178,7 +178,7 @@ stages:
               displayName: "TerraForm init"
               inputs:
                 command: 'init'
-                workingDirectory: '$(Pipeline.Workspace)/azure/infra/terraform'
+                workingDirectory: '$(System.DefaultWorkingDirectory)/$(Pipeline.Workspace)/azure/infra/terraform'
                 backendType: 'azurerm'
                 backendServiceArm: 'azdo.pipelines.cip.S118D.armfe1ef140-8bef-4043-b5ee-c449e6f951ef'
                 backendAzureRmResourceGroupName: 's118d01-tfbackend'
