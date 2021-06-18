@@ -62,6 +62,7 @@ stages:
               Start-Sleep -Seconds 5
           }
           While ($null -eq $AccessAllowed -and $LoopCount -lt 6)
+
     - task: TerraformTaskV1@0
       displayName: "TerraForm plan"
       name: TFPlan
@@ -130,12 +131,33 @@ stages:
               inputs:
                 terraformVersion: '0.14.6'
 
+            - task: Bash@3
+              inputs:
+                targetType: 'inline'
+                script: |
+                  echo "$(System.DefaultWorkingDirectory)"
+                  ls $(System.DefaultWorkingDirectory)
+                  echo "$(Pipeline.Workspace)"
+                  ls $(Pipeline.Workspace)
+
             - checkout: self  # self represents the repo where the initial Pipelines YAML file was found
               name: RepoCheckout
               displayName: "Repo Checkout"
               clean: true
               fetchDepth: 5
               lfs: true
+
+                
+            - task: Bash@3
+              inputs:
+                targetType: 'inline'
+                script: |
+                  echo "$(System.DefaultWorkingDirectory)"
+                  ls $(System.DefaultWorkingDirectory)
+                  echo "$(Pipeline.Workspace)"
+                  ls $(Pipeline.Workspace)
+
+
 
             - task: TerraformTaskV1@0
               name: TFInit
