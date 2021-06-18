@@ -140,24 +140,22 @@ stages:
                   echo "$(Pipeline.Workspace)"
                   ls $(Pipeline.Workspace)
 
-            # - checkout: self  # self represents the repo where the initial Pipelines YAML file was found
-            #   name: RepoCheckout
-            #   displayName: "Repo Checkout"
-            #   clean: true
-            #   fetchDepth: 5
-            #   lfs: true
+            - checkout: self  # self represents the repo where the initial Pipelines YAML file was found
+              name: RepoCheckout
+              displayName: "Repo Checkout"
+              clean: true
+              fetchDepth: 5
+              lfs: true
 
                 
-            # - task: Bash@3
-            #   inputs:
-            #     targetType: 'inline'
-            #     script: |
-            #       echo "$(System.DefaultWorkingDirectory)"
-            #       ls $(System.DefaultWorkingDirectory)
-            #       echo "$(Pipeline.Workspace)"
-            #       ls $(Pipeline.Workspace)
-
-
+            - task: Bash@3
+              inputs:
+                targetType: 'inline'
+                script: |
+                  echo "$(System.DefaultWorkingDirectory)"
+                  ls $(System.DefaultWorkingDirectory)
+                  echo "$(Pipeline.Workspace)"
+                  ls $(Pipeline.Workspace)
 
             # - task: TerraformTaskV1@0
             #   name: TFInit
