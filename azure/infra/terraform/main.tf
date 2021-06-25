@@ -142,8 +142,6 @@ module "container" {
   depends_on = [module.network_profile, module.app_insights]
 }
 
-# PIP and nat_gateway commented out as was implemneted as a temp fix for DQT
-
 #pip
 module "pip" {
   source       = "./modules/public_ip"
@@ -165,19 +163,3 @@ module "nat_gateway" {
 
   depends_on = [module.network, module.pip]
 }
-
-# # below two modules are commented out as the two components are currently not required
-# # # #ddos
-# # # module "ddos" {
-# # #   source      = "./modules/ddos"
-# # #   rg_name     = module.resource_group.infra_rg_name
-# # #   rg_location = module.resource_group.rg_location
-# # #   common_tags = module.env_vars.common_tags
-# # # }
-
-# # # #security Centre
-# # # module "security_centre" {
-# # #   source = "./modules/security_centre"
-# # #   la_id  = module.log_analytics.la_id
-# # #   common_tags = module.env_vars.common_tags
-# # # }
