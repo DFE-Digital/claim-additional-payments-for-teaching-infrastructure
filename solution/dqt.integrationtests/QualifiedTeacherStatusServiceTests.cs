@@ -122,6 +122,24 @@ namespace dqt.integrationtests
             Assert.Single(resultDto.Data);
         }
 
+        [Fact]
+        public async void Returns_SuccessResponseWithQualifiedTeacherRecords_WhenNIMatchesCaseInsenitively()
+        {
+            RequestInfo requestInfo = new RequestInfo()
+            {
+                TRN = "Test-TRN",
+                NINumber = "aP558641W"
+            };
+
+            var request = CreateMockHttpRequest(requestInfo);
+
+            var response = (OkObjectResult)await _qualifiedTeacherStatusService.Run(request.Object);
+            var resultDto = (ResultDTO<List<QualifiedTeacherDTO>>)response.Value;
+
+            Assert.Equal(200, response.StatusCode);
+            Assert.Single(resultDto.Data);
+        }
+
         private Mock<HttpRequest> CreateMockHttpRequest(RequestInfo requestDto, bool addAuthKey = true)
         {
             var mockRequest = new Mock<HttpRequest>();

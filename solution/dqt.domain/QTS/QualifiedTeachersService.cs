@@ -18,21 +18,23 @@ namespace dqt.domain.QTS
         {
             _qualifiedTeachersRepository = repo;
         }
-        
+
         public async Task<IEnumerable<QualifiedTeacherDTO>> GetQualifiedTeacherRecords(string teacherReferenceNumber, string nationalInsuranceNumber)
         {
             var qts = await _qualifiedTeachersRepository.FindAsync(x => x.Trn == teacherReferenceNumber);
-            
+
             if (!qts.Any())
             {
                 if (!string.IsNullOrWhiteSpace(nationalInsuranceNumber))
                 {
-                    qts = await _qualifiedTeachersRepository.FindAsync(x => x.NINumber == nationalInsuranceNumber);
+                    qts = await _qualifiedTeachersRepository.FindAsync(
+                        x => string.Equals(x.NINumber, nationalInsuranceNumber, StringComparison.CurrentCultureIgnoreCase)
+                        );
                 }
             }
             if(qts == null)
                 return null;
-            
+
             var qtsList = new List<QualifiedTeacherDTO>();
             qts.ToList().ForEach(model=> {
                 qtsList.Add(ConvertToDto(model));
