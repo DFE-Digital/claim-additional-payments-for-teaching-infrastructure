@@ -31,7 +31,7 @@ namespace dqt.unittests.domain
         public async void Returns_QualifiedTeacherRecords_WhenTrnMatchFound()
         {
             var record = new QualifiedTeacher {Name = "TEST1", Trn = TRN, NINumber = NI};
-            
+
             _qualifiedTeachersRepositoryMock
                 .Setup(q => q.FindAsync(x => x.Trn == TRN))
                 .ReturnsAsync(new List<QualifiedTeacher>{ record });
@@ -45,14 +45,29 @@ namespace dqt.unittests.domain
         public async void Returns_QualifiedTeacherRecords_WhenNIMatchFound()
         {
             var record = new QualifiedTeacher {Name = "TEST1", Trn = TRN, NINumber = NI};
-            
+
             _qualifiedTeachersRepositoryMock
-                .Setup(q => q.FindAsync(x => x.NINumber == NI))
+                .Setup(q => q.FindAsync(x => string.Equals(x.NINumber, NI, StringComparison.CurrentCultureIgnoreCase)))
                 .ReturnsAsync(new List<QualifiedTeacher>{ record });
 
             var results = await _qualifiedTeachersService.GetQualifiedTeacherRecords(TRN, NI);
 
-            Assert.Equal(results.ToList().FirstOrDefault()?.NINumber, record.NINumber);
+            Assert.Equal(record.NINumber, results.ToList().FirstOrDefault()?.NINumber);
+        }
+
+        [Fact]
+        public async void Returns_QualifiedTeacherRecords_WhenCaseInsensitiveNIMatchFound()
+        {
+            var record = new QualifiedTeacher {Name = "TEST1", Trn = TRN, NINumber = NI};
+            var lowerNI = NI.ToLower();
+
+            _qualifiedTeachersRepositoryMock
+                .Setup(q => q.FindAsync(x => string.Equals(x.NINumber, lowerNI, StringComparison.CurrentCultureIgnoreCase)))
+                .ReturnsAsync(new List<QualifiedTeacher>{ record });
+
+            var results = await _qualifiedTeachersService.GetQualifiedTeacherRecords(TRN, lowerNI);
+
+            Assert.Equal(record.NINumber, results.ToList().FirstOrDefault()?.NINumber);
         }
 
         [Fact]
@@ -80,21 +95,21 @@ namespace dqt.unittests.domain
         {
             var originalCulture = Thread.CurrentThread.CurrentCulture;
             Thread.CurrentThread.CurrentCulture = CultureInfo.GetCultureInfo("en-US");
-            
+
             var record = new QualifiedTeacher
             {
-                Trn = trn, 
-                DoB = date1, 
-                QTSAwardDate = date2, 
+                Trn = trn,
+                DoB = date1,
+                QTSAwardDate = date2,
                 ITTStartDate = date3
             };
-            
+
             _qualifiedTeachersRepositoryMock
                 .Setup(q => q.FindAsync(x => x.Trn == trn))
                 .ReturnsAsync(new List<QualifiedTeacher>{ record });
 
             var result = (await _qualifiedTeachersService.GetQualifiedTeacherRecords(trn, string.Empty)).FirstOrDefault();
-            
+
             Assert.Equal(trn, result?.Trn);
             Assert.Equal(date1 + " 00:00:00", result?.DoB.Value.ToString(CultureInfo.CreateSpecificCulture("en-GB").DateTimeFormat));
             Assert.Equal(date2 + " 00:00:00", result?.QTSAwardDate.Value.ToString(CultureInfo.CreateSpecificCulture("en-GB").DateTimeFormat));
