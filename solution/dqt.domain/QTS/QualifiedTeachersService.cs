@@ -6,6 +6,7 @@ using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.EntityFrameworkCore;
 
 namespace dqt.domain.QTS
 {
@@ -28,7 +29,7 @@ namespace dqt.domain.QTS
                 if (!string.IsNullOrWhiteSpace(nationalInsuranceNumber))
                 {
                     qts = await _qualifiedTeachersRepository.FindAsync(
-                        x => string.Equals(x.NINumber, nationalInsuranceNumber, StringComparison.CurrentCultureIgnoreCase)
+                        x => EF.Functions.ILike(x.NINumber, nationalInsuranceNumber)
                         );
                 }
             }

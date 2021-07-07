@@ -47,7 +47,7 @@ namespace dqt.unittests.domain
             var record = new QualifiedTeacher {Name = "TEST1", Trn = TRN, NINumber = NI};
 
             _qualifiedTeachersRepositoryMock
-                .Setup(q => q.FindAsync(x => string.Equals(x.NINumber, NI, StringComparison.CurrentCultureIgnoreCase)))
+                .Setup(q => q.FindAsync(x => EF.Functions.ILike(x.NINumber, NI)))
                 .ReturnsAsync(new List<QualifiedTeacher>{ record });
 
             var results = await _qualifiedTeachersService.GetQualifiedTeacherRecords(TRN, NI);
@@ -62,7 +62,7 @@ namespace dqt.unittests.domain
             var lowerNI = NI.ToLower();
 
             _qualifiedTeachersRepositoryMock
-                .Setup(q => q.FindAsync(x => string.Equals(x.NINumber, lowerNI, StringComparison.CurrentCultureIgnoreCase)))
+                .Setup(q => q.FindAsync(x => EF.Functions.ILike(x.NINumber, lowerNI)))
                 .ReturnsAsync(new List<QualifiedTeacher>{ record });
 
             var results = await _qualifiedTeachersService.GetQualifiedTeacherRecords(TRN, lowerNI);
