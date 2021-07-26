@@ -145,7 +145,7 @@ namespace dqt.integrationtests
         {
             var requestInfo = new RequestInfo
             {
-                TRN = "12345"
+                TRN = "53100"
             };
 
             var request = CreateMockHttpRequest(requestInfo);
