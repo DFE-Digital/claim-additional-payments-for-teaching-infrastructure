@@ -22,7 +22,9 @@ namespace dqt.domain.QTS
 
         public async Task<IEnumerable<QualifiedTeacherDTO>> GetQualifiedTeacherRecords(string teacherReferenceNumber, string nationalInsuranceNumber)
         {
-            var qts = await _qualifiedTeachersRepository.FindAsync(x => x.Trn == teacherReferenceNumber);
+            var fullTeacherReferenceNumber = teacherReferenceNumber.PadLeft(7, '0');
+            var trimmedTeacherReferenceNumber = teacherReferenceNumber.TrimStart('0');
+            var qts = await _qualifiedTeachersRepository.FindAsync(x => x.Trn == fullTeacherReferenceNumber || x.Trn == trimmedTeacherReferenceNumber);
 
             if (!qts.Any())
             {

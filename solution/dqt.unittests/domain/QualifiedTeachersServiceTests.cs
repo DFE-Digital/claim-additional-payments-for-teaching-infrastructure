@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Globalization;
 using Moq;
 using Xunit;
@@ -17,9 +16,9 @@ namespace dqt.unittests.domain
         private const string TRN = "TRN";
         private const string NI = "NI";
 
-        private IQualifiedTeachersService _qualifiedTeachersService;
+        private readonly IQualifiedTeachersService _qualifiedTeachersService;
 
-        private Mock<IRepository<QualifiedTeacher>> _qualifiedTeachersRepositoryMock;
+        private readonly Mock<IRepository<QualifiedTeacher>> _qualifiedTeachersRepositoryMock;
 
         public QualifiedTeachersServiceTests()
         {
@@ -32,8 +31,10 @@ namespace dqt.unittests.domain
         {
             var record = new QualifiedTeacher {Name = "TEST1", Trn = TRN, NINumber = NI};
 
+            var fullTeacherReferenceNumber = TRN.PadLeft(7, '0');
+            var trimmedTeacherReferenceNumber = TRN.TrimStart('0');
             _qualifiedTeachersRepositoryMock
-                .Setup(q => q.FindAsync(x => x.Trn == TRN))
+                .Setup(q => q.FindAsync(x => x.Trn == fullTeacherReferenceNumber || x.Trn == trimmedTeacherReferenceNumber))
                 .ReturnsAsync(new List<QualifiedTeacher>{ record });
 
             var results = await _qualifiedTeachersService.GetQualifiedTeacherRecords(TRN, NI);
@@ -105,7 +106,7 @@ namespace dqt.unittests.domain
             };
 
             _qualifiedTeachersRepositoryMock
-                .Setup(q => q.FindAsync(x => x.Trn == trn))
+                .Setup(q => q.FindAsync(x => x.Trn == trn || x.Trn == trn))
                 .ReturnsAsync(new List<QualifiedTeacher>{ record });
 
             var result = (await _qualifiedTeachersService.GetQualifiedTeacherRecords(trn, string.Empty)).FirstOrDefault();

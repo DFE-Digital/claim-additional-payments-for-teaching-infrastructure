@@ -6,7 +6,6 @@ using dqt.api.Functions;
 using dqt.api.Authorization;
 using Microsoft.AspNetCore.Http;
 using System.Collections.Generic;
-using dqt.domain.Encoding;
 using Microsoft.AspNetCore.Http.Internal;
 using Microsoft.Extensions.Primitives;
 using System;
@@ -24,11 +23,13 @@ namespace dqt.integrationtests
     public class QualifiedTeacherStatusServiceTests
     {
         private const string API_KEY = "api-key";
-        private readonly List<QualifiedTeacher> qualifiedTeachers = new List<QualifiedTeacher>()
+        private readonly List<QualifiedTeacher> _qualifiedTeachers = new List<QualifiedTeacher>
         {
-            new QualifiedTeacher(){ Trn="1229708", NINumber="AP558641W"},
-            new QualifiedTeacher(){ Trn="1234708", NINumber="TS9Y5841Q"},
-            new QualifiedTeacher(){ Trn="3429708", NINumber="SX9Y5841P"}
+            new QualifiedTeacher{ Trn="1229708", NINumber="AP558641W"},
+            new QualifiedTeacher{ Trn="1234708", NINumber="TS9Y5841Q"},
+            new QualifiedTeacher{ Trn="3429708", NINumber="SX9Y5841P"},
+            new QualifiedTeacher{ Trn="12345", NINumber="MS8T6541Q"},
+            new QualifiedTeacher{ Trn="0053100", NINumber="WE3X9356A"},
         };
 
         private readonly QualifiedTeacherStatusService _qualifiedTeacherStatusService;
@@ -41,10 +42,10 @@ namespace dqt.integrationtests
 
             var dbSetMock = new Mock<DbSet<QualifiedTeacher>>();
 
-            dbSetMock.As<IQueryable<QualifiedTeacher>>().Setup(x => x.Provider).Returns(qualifiedTeachers.AsQueryable().Provider);
-            dbSetMock.As<IQueryable<QualifiedTeacher>>().Setup(x => x.Expression).Returns(qualifiedTeachers.AsQueryable().Expression);
-            dbSetMock.As<IQueryable<QualifiedTeacher>>().Setup(x => x.ElementType).Returns(qualifiedTeachers.AsQueryable().ElementType);
-            dbSetMock.As<IQueryable<QualifiedTeacher>>().Setup(x => x.GetEnumerator()).Returns(qualifiedTeachers.AsQueryable().GetEnumerator());
+            dbSetMock.As<IQueryable<QualifiedTeacher>>().Setup(x => x.Provider).Returns(_qualifiedTeachers.AsQueryable().Provider);
+            dbSetMock.As<IQueryable<QualifiedTeacher>>().Setup(x => x.Expression).Returns(_qualifiedTeachers.AsQueryable().Expression);
+            dbSetMock.As<IQueryable<QualifiedTeacher>>().Setup(x => x.ElementType).Returns(_qualifiedTeachers.AsQueryable().ElementType);
+            dbSetMock.As<IQueryable<QualifiedTeacher>>().Setup(x => x.GetEnumerator()).Returns(_qualifiedTeachers.AsQueryable().GetEnumerator());
 
             var dbContextMock = new Mock<DQTDataContext>();
             dbContextMock.Setup(x => x.Set<QualifiedTeacher>()).Returns(dbSetMock.Object);
@@ -123,7 +124,41 @@ namespace dqt.integrationtests
         }
 
         [Fact]
-        public async void Returns_SuccessResponseWithQualifiedTeacherRecords_WhenNIMatchesCaseInsenitively()
+        public async void Returns_SuccessResponseWithQualifiedTeacherRecords_WhenTrnStartsWithZeros()
+        {
+            var requestInfo = new RequestInfo
+            {
+                TRN = "0012345"
+            };
+
+            var request = CreateMockHttpRequest(requestInfo);
+
+            var response = (OkObjectResult)await _qualifiedTeacherStatusService.Run(request.Object);
+            var resultDto = (ResultDTO<List<QualifiedTeacherDTO>>)response.Value;
+
+            Assert.Equal(200, response.StatusCode);
+            Assert.Single(resultDto.Data);
+        }
+
+        [Fact]
+        public async void Returns_SuccessResponseWithQualifiedTeacherRecords_WhenTrnNeedsToBePaddedWithZeros()
+        {
+            var requestInfo = new RequestInfo
+            {
+                TRN = "12345"
+            };
+
+            var request = CreateMockHttpRequest(requestInfo);
+
+            var response = (OkObjectResult)await _qualifiedTeacherStatusService.Run(request.Object);
+            var resultDto = (ResultDTO<List<QualifiedTeacherDTO>>)response.Value;
+
+            Assert.Equal(200, response.StatusCode);
+            Assert.Single(resultDto.Data);
+        }
+
+        [Fact]
+        public async void Returns_SuccessResponseWithQualifiedTeacherRecords_WhenNIMatchesCaseInsensitively()
         {
             RequestInfo requestInfo = new RequestInfo()
             {
@@ -140,7 +175,7 @@ namespace dqt.integrationtests
             Assert.Single(resultDto.Data);
         }
 
-        private Mock<HttpRequest> CreateMockHttpRequest(RequestInfo requestDto, bool addAuthKey = true)
+        private static Mock<HttpRequest> CreateMockHttpRequest(RequestInfo requestDto, bool addAuthKey = true)
         {
             var mockRequest = new Mock<HttpRequest>();
 
