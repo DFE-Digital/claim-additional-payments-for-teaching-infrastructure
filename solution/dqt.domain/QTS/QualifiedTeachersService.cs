@@ -53,7 +53,7 @@ namespace dqt.domain.QTS
             return new QualifiedTeacherDTO
             {
                 Id = model.Id,
-                Trn = model.Trn,
+                Trn = model.Trn.PadLeft(7, '0'),
                 Name = model.Name,
                 DoB = StringToDate(model.DoB),
                 NINumber = model.NINumber,

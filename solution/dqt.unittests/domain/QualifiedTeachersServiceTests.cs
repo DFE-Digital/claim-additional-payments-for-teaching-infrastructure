@@ -31,15 +31,47 @@ namespace dqt.unittests.domain
         {
             var record = new QualifiedTeacher {Name = "TEST1", Trn = TRN, NINumber = NI};
 
-            var fullTeacherReferenceNumber = TRN.PadLeft(7, '0');
-            var trimmedTeacherReferenceNumber = TRN.TrimStart('0');
+            var fullTeacherReferenceNumber = record.Trn.PadLeft(7, '0');
+            var trimmedTeacherReferenceNumber = record.Trn.TrimStart('0');
             _qualifiedTeachersRepositoryMock
                 .Setup(q => q.FindAsync(x => x.Trn == fullTeacherReferenceNumber || x.Trn == trimmedTeacherReferenceNumber))
                 .ReturnsAsync(new List<QualifiedTeacher>{ record });
 
             var results = await _qualifiedTeachersService.GetQualifiedTeacherRecords(TRN, NI);
 
-            Assert.Equal(results.ToList().FirstOrDefault()?.Trn, record.Trn);
+            Assert.Equal(results.ToList().FirstOrDefault()?.Trn, fullTeacherReferenceNumber);
+        }
+
+        [Fact]
+        public async void Returns_FullTrn_WhenTrnMatchFoundWithFullTrn()
+        {
+            var record = new QualifiedTeacher {Name = "TEST1", Trn = TRN, NINumber = NI};
+
+            var fullTeacherReferenceNumber = record.Trn.PadLeft(7, '0');
+            var trimmedTeacherReferenceNumber = record.Trn.TrimStart('0');
+            _qualifiedTeachersRepositoryMock
+                .Setup(q => q.FindAsync(x => x.Trn == fullTeacherReferenceNumber || x.Trn == trimmedTeacherReferenceNumber))
+                .ReturnsAsync(new List<QualifiedTeacher>{ record });
+
+            var results = await _qualifiedTeachersService.GetQualifiedTeacherRecords(fullTeacherReferenceNumber, NI);
+
+            Assert.Equal(results.ToList().FirstOrDefault()?.Trn, fullTeacherReferenceNumber);
+        }
+
+        [Fact]
+        public async void Returns_FullTrn_WhenTrnMatchFoundWithTrimmedTrn()
+        {
+            var record = new QualifiedTeacher {Name = "TEST1", Trn = TRN, NINumber = NI};
+
+            var fullTeacherReferenceNumber = record.Trn.PadLeft(7, '0');
+            var trimmedTeacherReferenceNumber = record.Trn.TrimStart('0');
+            _qualifiedTeachersRepositoryMock
+                .Setup(q => q.FindAsync(x => x.Trn == fullTeacherReferenceNumber || x.Trn == trimmedTeacherReferenceNumber))
+                .ReturnsAsync(new List<QualifiedTeacher>{ record });
+
+            var results = await _qualifiedTeachersService.GetQualifiedTeacherRecords(trimmedTeacherReferenceNumber, NI);
+
+            Assert.Equal(results.ToList().FirstOrDefault()?.Trn, fullTeacherReferenceNumber);
         }
 
         [Fact]
