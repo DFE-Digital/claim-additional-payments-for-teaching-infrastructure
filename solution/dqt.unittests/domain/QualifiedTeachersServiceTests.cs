@@ -120,6 +120,7 @@ namespace dqt.unittests.domain
         }
 
         [Theory]
+        [InlineData("0012390", "12/03/1990", "18/07/2019", "12/09/2017")]
         [InlineData("1643404", "17/02/1991", "07/07/2016", "14/09/2015")]
         [InlineData("3968203", "02/10/1995", "31/07/2020", "16/09/2019")]
         [InlineData("1643434", "23/03/1992", "14/07/2017", "07/09/2015")]
@@ -137,16 +138,18 @@ namespace dqt.unittests.domain
                 ITTStartDate = date3
             };
 
+            var fullTeacherReferenceNumber = record.Trn.PadLeft(7, '0');
+            var trimmedTeacherReferenceNumber = record.Trn.TrimStart('0');
             _qualifiedTeachersRepositoryMock
-                .Setup(q => q.FindAsync(x => x.Trn == trn || x.Trn == trn))
+                .Setup(q => q.FindAsync(x => x.Trn == fullTeacherReferenceNumber || x.Trn == trimmedTeacherReferenceNumber))
                 .ReturnsAsync(new List<QualifiedTeacher>{ record });
 
             var result = (await _qualifiedTeachersService.GetQualifiedTeacherRecords(trn, string.Empty)).FirstOrDefault();
 
             Assert.Equal(trn, result?.Trn);
-            Assert.Equal(date1 + " 00:00:00", result?.DoB.Value.ToString(CultureInfo.CreateSpecificCulture("en-GB").DateTimeFormat));
-            Assert.Equal(date2 + " 00:00:00", result?.QTSAwardDate.Value.ToString(CultureInfo.CreateSpecificCulture("en-GB").DateTimeFormat));
-            Assert.Equal(date3 + " 00:00:00", result?.ITTStartDate.Value.ToString(CultureInfo.CreateSpecificCulture("en-GB").DateTimeFormat));
+            Assert.Equal(date1 + " 00:00:00", result?.DoB?.ToString(CultureInfo.CreateSpecificCulture("en-GB").DateTimeFormat));
+            Assert.Equal(date2 + " 00:00:00", result?.QTSAwardDate?.ToString(CultureInfo.CreateSpecificCulture("en-GB").DateTimeFormat));
+            Assert.Equal(date3 + " 00:00:00", result?.ITTStartDate?.ToString(CultureInfo.CreateSpecificCulture("en-GB").DateTimeFormat));
 
             Thread.CurrentThread.CurrentCulture = originalCulture;
         }
