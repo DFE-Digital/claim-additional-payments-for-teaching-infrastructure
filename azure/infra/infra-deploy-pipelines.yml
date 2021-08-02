@@ -20,7 +20,7 @@ stages:
     - task: charleszipp.azure-pipelines-tasks-terraform.azure-pipelines-tasks-terraform-installer.TerraformInstaller@0
       displayName: 'Installing Terraform $(Terraform.Version) for plan'
       inputs:
-        terraformVersion: 'latest'
+        terraformVersion: '0.14.9'
 
     - task: TerraformTaskV1@0
       name: TFInit
@@ -128,7 +128,7 @@ stages:
             - task: charleszipp.azure-pipelines-tasks-terraform.azure-pipelines-tasks-terraform-installer.TerraformInstaller@0
               displayName: 'Installing Terraform $(Terraform.Version) for apply'
               inputs:
-                terraformVersion: 'latest'
+                terraformVersion: '0.14.9'
 
             - checkout: self  # self represents the repo where the initial Pipelines YAML file was found
               name: RepoCheckout
@@ -235,7 +235,7 @@ stages:
     - task: charleszipp.azure-pipelines-tasks-terraform.azure-pipelines-tasks-terraform-installer.TerraformInstaller@0
       displayName: 'Installing Terraform $(Terraform.Version) for plan'
       inputs:
-        terraformVersion: 'latest'
+        terraformVersion: '0.14.9'
 
     - task: TerraformTaskV1@0
       name: TFInit
@@ -346,7 +346,7 @@ stages:
           - task: charleszipp.azure-pipelines-tasks-terraform.azure-pipelines-tasks-terraform-installer.TerraformInstaller@0
             displayName: 'Installing Terraform $(Terraform.Version) for apply'
             inputs:
-              terraformVersion: 'latest'
+              terraformVersion: '0.14.9'
 
           - checkout: self  # self represents the repo where the initial Pipelines YAML file was found
             name: RepoCheckout
@@ -443,7 +443,7 @@ stages:
     - task: charleszipp.azure-pipelines-tasks-terraform.azure-pipelines-tasks-terraform-installer.TerraformInstaller@0
       displayName: 'Installing Terraform $(Terraform.Version) for plan'
       inputs:
-        terraformVersion: 'latest'
+        terraformVersion: '0.14.9'
 
     - task: TerraformTaskV1@0
       name: TFInit
@@ -553,7 +553,7 @@ stages:
           - task: charleszipp.azure-pipelines-tasks-terraform.azure-pipelines-tasks-terraform-installer.TerraformInstaller@0
             displayName: 'Installing Terraform $(Terraform.Version) for apply'
             inputs:
-              terraformVersion: 'latest'
+              terraformVersion: '0.14.9'
 
           - checkout: self  # self represents the repo where the initial Pipelines YAML file was found
             name: RepoCheckout
