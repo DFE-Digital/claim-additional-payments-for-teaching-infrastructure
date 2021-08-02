@@ -1,16 +1,18 @@
-﻿using System.Runtime.CompilerServices;
-using System;
+﻿using System;
 using dqt.datalayer.Model;
 using dqt.datalayer.Repository;
 using dqt.domain.DTOs;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.EntityFrameworkCore;
 
 namespace dqt.domain.QTS
 {
     public class QualifiedTeachersService : IQualifiedTeachersService
     {
+        private static readonly DateTimeFormatInfo DATE_TIME_FORMAT_INFO = CultureInfo.CreateSpecificCulture("en-GB").DateTimeFormat;
         private readonly IRepository<QualifiedTeacher> _qualifiedTeachersRepository;
 
         public QualifiedTeachersService(IRepository<QualifiedTeacher> repo)
@@ -20,18 +22,22 @@ namespace dqt.domain.QTS
 
         public async Task<IEnumerable<QualifiedTeacherDTO>> GetQualifiedTeacherRecords(string teacherReferenceNumber, string nationalInsuranceNumber)
         {
-            var qts = await _qualifiedTeachersRepository.FindAsync(x => x.Trn == teacherReferenceNumber);
-            
+            var fullTeacherReferenceNumber = teacherReferenceNumber.PadLeft(7, '0');
+            var trimmedTeacherReferenceNumber = teacherReferenceNumber.TrimStart('0');
+            var qts = await _qualifiedTeachersRepository.FindAsync(x => x.Trn == fullTeacherReferenceNumber || x.Trn == trimmedTeacherReferenceNumber);
+
             if (!qts.Any())
             {
                 if (!string.IsNullOrWhiteSpace(nationalInsuranceNumber))
                 {
-                    qts = await _qualifiedTeachersRepository.FindAsync(x => x.NINumber == nationalInsuranceNumber);
+                    qts = await _qualifiedTeachersRepository.FindAsync(
+                        x => EF.Functions.ILike(x.NINumber, nationalInsuranceNumber)
+                        );
                 }
             }
             if(qts == null)
                 return null;
-            
+
             var qtsList = new List<QualifiedTeacherDTO>();
             qts.ToList().ForEach(model=> {
                 qtsList.Add(ConvertToDto(model));
@@ -47,11 +53,11 @@ namespace dqt.domain.QTS
             return new QualifiedTeacherDTO
             {
                 Id = model.Id,
-                Trn = model.Trn,
+                Trn = model.Trn.PadLeft(7, '0'),
                 Name = model.Name,
-                DoB = model.DoB,
+                DoB = StringToDate(model.DoB),
                 NINumber = model.NINumber,
-                QTSAwardDate = model.QTSAwardDate,
+                QTSAwardDate = StringToDate(model.QTSAwardDate),
                 ITTSubject1Code = model.ITTSubject1Code,
                 ITTSubject2Code = model.ITTSubject2Code,
                 ITTSubject3Code = model.ITTSubject3Code,
@@ -61,10 +67,10 @@ namespace dqt.domain.QTS
                 TeacherStatus = model.TeacherStatus
             };
         }
-        private DateTime? StringToDate(string date) {
-            if(string.IsNullOrEmpty(date)|| date.ToLower() == "NULL".ToLower())
+        private static DateTime? StringToDate(string date) {
+            if(string.IsNullOrEmpty(date)|| string.Equals(date, "NULL", StringComparison.CurrentCultureIgnoreCase))
                 return null;
-            return Convert.ToDateTime(date);
+            return Convert.ToDateTime(date, DATE_TIME_FORMAT_INFO);
         }
 
     }

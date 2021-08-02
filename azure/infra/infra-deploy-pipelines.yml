@@ -20,7 +20,7 @@ stages:
     - task: charleszipp.azure-pipelines-tasks-terraform.azure-pipelines-tasks-terraform-installer.TerraformInstaller@0
       displayName: 'Installing Terraform $(Terraform.Version) for plan'
       inputs:
-        terraformVersion: '0.14.6'
+        terraformVersion: 'latest'
 
     - task: TerraformTaskV1@0
       name: TFInit
@@ -128,7 +128,7 @@ stages:
             - task: charleszipp.azure-pipelines-tasks-terraform.azure-pipelines-tasks-terraform-installer.TerraformInstaller@0
               displayName: 'Installing Terraform $(Terraform.Version) for apply'
               inputs:
-                terraformVersion: '0.14.6'
+                terraformVersion: 'latest'
 
             - checkout: self  # self represents the repo where the initial Pipelines YAML file was found
               name: RepoCheckout
@@ -137,19 +137,19 @@ stages:
               fetchDepth: 5
               lfs: true
 
-            - task: TerraformTaskV1@0
+            - task: TerraformCLI@0
               name: TFInit
               displayName: "TerraForm init"
               inputs:
-                provider: 'azurerm'
                 command: 'init'
                 workingDirectory: '$(System.DefaultWorkingDirectory)/azure/infra/terraform'
-                commandOptions: '-backend-config="storage_account_name=s118d01dfbackendsa" -backend-config="container_name=s118d01devtfstate"'
+                backendType: 'azurerm'
                 backendServiceArm: 'azdo.pipelines.cip.S118D.armfe1ef140-8bef-4043-b5ee-c449e6f951ef'
                 backendAzureRmResourceGroupName: 's118d01-tfbackend'
                 backendAzureRmStorageAccountName: 's118d01tfbackendsa'
                 backendAzureRmContainerName: 's118d01devtfstate'
                 backendAzureRmKey: 'terraform.tfstate'
+                allowTelemetryCollection: true
 
             - task: AzurePowerShell@5
               displayName: 'Open KeyVault Firewall'
@@ -235,7 +235,7 @@ stages:
     - task: charleszipp.azure-pipelines-tasks-terraform.azure-pipelines-tasks-terraform-installer.TerraformInstaller@0
       displayName: 'Installing Terraform $(Terraform.Version) for plan'
       inputs:
-        terraformVersion: '0.14.6'
+        terraformVersion: 'latest'
 
     - task: TerraformTaskV1@0
       name: TFInit
@@ -346,7 +346,7 @@ stages:
           - task: charleszipp.azure-pipelines-tasks-terraform.azure-pipelines-tasks-terraform-installer.TerraformInstaller@0
             displayName: 'Installing Terraform $(Terraform.Version) for apply'
             inputs:
-              terraformVersion: '0.14.6'
+              terraformVersion: 'latest'
 
           - checkout: self  # self represents the repo where the initial Pipelines YAML file was found
             name: RepoCheckout
@@ -443,7 +443,7 @@ stages:
     - task: charleszipp.azure-pipelines-tasks-terraform.azure-pipelines-tasks-terraform-installer.TerraformInstaller@0
       displayName: 'Installing Terraform $(Terraform.Version) for plan'
       inputs:
-        terraformVersion: '0.14.6'
+        terraformVersion: 'latest'
 
     - task: TerraformTaskV1@0
       name: TFInit
@@ -553,7 +553,7 @@ stages:
           - task: charleszipp.azure-pipelines-tasks-terraform.azure-pipelines-tasks-terraform-installer.TerraformInstaller@0
             displayName: 'Installing Terraform $(Terraform.Version) for apply'
             inputs:
-              terraformVersion: '0.14.6'
+              terraformVersion: 'latest'
 
           - checkout: self  # self represents the repo where the initial Pipelines YAML file was found
             name: RepoCheckout

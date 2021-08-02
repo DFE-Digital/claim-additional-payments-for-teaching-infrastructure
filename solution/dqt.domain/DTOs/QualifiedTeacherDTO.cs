@@ -9,11 +9,11 @@ namespace dqt.domain.DTOs
 
         public string Name { get; set; }
 
-        public string DoB { get; set; }
+        public DateTime? DoB { get; set; }
 
         public string NINumber { get; set; }
 
-        public string QTSAwardDate { get; set; }
+        public DateTime? QTSAwardDate { get; set; }
 
         public string ITTSubject1Code { get; set; }
 
