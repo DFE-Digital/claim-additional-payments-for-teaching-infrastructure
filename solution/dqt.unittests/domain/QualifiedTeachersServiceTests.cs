@@ -8,6 +8,7 @@ using dqt.domain.QTS;
 using System.Linq;
 using System.Threading;
 using Microsoft.EntityFrameworkCore;
+using System;
 
 namespace dqt.unittests.domain
 {
@@ -152,6 +153,78 @@ namespace dqt.unittests.domain
             Assert.Equal(date3 + " 00:00:00", result?.ITTStartDate?.ToString(CultureInfo.CreateSpecificCulture("en-GB").DateTimeFormat));
 
             Thread.CurrentThread.CurrentCulture = originalCulture;
+        }
+
+        [Fact]
+        public async void Fails_WithIncorrectDoB()
+        {
+            var trn = "0012390";
+
+            var record = new QualifiedTeacher
+            {
+                Trn = trn,
+                DoB = "00:00.0",
+            };
+
+            var fullTeacherReferenceNumber = record.Trn.PadLeft(7, '0');
+            var trimmedTeacherReferenceNumber = record.Trn.TrimStart('0');
+            _qualifiedTeachersRepositoryMock
+                .Setup(q => q.FindAsync(x => x.Trn == fullTeacherReferenceNumber || x.Trn == trimmedTeacherReferenceNumber))
+                .ReturnsAsync(new List<QualifiedTeacher> { record });
+
+            var e = await Assert.ThrowsAsync<FormatException>(() =>
+                _qualifiedTeachersService.GetQualifiedTeacherRecords(trn, string.Empty)
+            );
+
+            Assert.StartsWith("DoB", e.Message);
+        }
+
+        [Fact]
+        public async void Fails_WithIncorrectQTSDate()
+        {
+            var trn = "0012390";
+
+            var record = new QualifiedTeacher
+            {
+                Trn = trn,
+                QTSAwardDate = "00:00.0",
+            };
+
+            var fullTeacherReferenceNumber = record.Trn.PadLeft(7, '0');
+            var trimmedTeacherReferenceNumber = record.Trn.TrimStart('0');
+            _qualifiedTeachersRepositoryMock
+                .Setup(q => q.FindAsync(x => x.Trn == fullTeacherReferenceNumber || x.Trn == trimmedTeacherReferenceNumber))
+                .ReturnsAsync(new List<QualifiedTeacher> { record });
+
+            var e = await Assert.ThrowsAsync<FormatException>(() =>
+                _qualifiedTeachersService.GetQualifiedTeacherRecords(trn, string.Empty)
+            );
+
+            Assert.StartsWith("QTSAwardDate", e.Message);
+        }
+
+        [Fact]
+        public async void Fails_WithIncorrectITTDate()
+        {
+            var trn = "0012390";
+
+            var record = new QualifiedTeacher
+            {
+                Trn = trn,
+                ITTStartDate = "00:00.0"
+            };
+
+            var fullTeacherReferenceNumber = record.Trn.PadLeft(7, '0');
+            var trimmedTeacherReferenceNumber = record.Trn.TrimStart('0');
+            _qualifiedTeachersRepositoryMock
+                .Setup(q => q.FindAsync(x => x.Trn == fullTeacherReferenceNumber || x.Trn == trimmedTeacherReferenceNumber))
+                .ReturnsAsync(new List<QualifiedTeacher> { record });
+
+            var e = await Assert.ThrowsAsync<FormatException>(() =>
+                _qualifiedTeachersService.GetQualifiedTeacherRecords(trn, string.Empty)
+            );
+
+            Assert.StartsWith("ITTStartDate", e.Message);
         }
     }
 }

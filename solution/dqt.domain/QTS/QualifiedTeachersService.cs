@@ -13,6 +13,7 @@ namespace dqt.domain.QTS
     public class QualifiedTeachersService : IQualifiedTeachersService
     {
         private static readonly DateTimeFormatInfo DATE_TIME_FORMAT_INFO = CultureInfo.CreateSpecificCulture("en-GB").DateTimeFormat;
+
         private readonly IRepository<QualifiedTeacher> _qualifiedTeachersRepository;
 
         public QualifiedTeachersService(IRepository<QualifiedTeacher> repo)
@@ -35,11 +36,15 @@ namespace dqt.domain.QTS
                         );
                 }
             }
-            if(qts == null)
+
+            if (qts == null)
+            {
                 return null;
+            }
 
             var qtsList = new List<QualifiedTeacherDTO>();
-            qts.ToList().ForEach(model=> {
+            qts.ToList().ForEach(model=>
+            {
                 qtsList.Add(ConvertToDto(model));
             });
 
@@ -48,29 +53,45 @@ namespace dqt.domain.QTS
 
         private QualifiedTeacherDTO ConvertToDto(QualifiedTeacher model)
         {
-            if(model == null)
-                return null;
-            return new QualifiedTeacherDTO
+            if (model == null)
             {
-                Id = model.Id,
-                Trn = model.Trn.PadLeft(7, '0'),
-                Name = model.Name,
-                DoB = StringToDate(model.DoB),
-                NINumber = model.NINumber,
-                QTSAwardDate = StringToDate(model.QTSAwardDate),
-                ITTSubject1Code = model.ITTSubject1Code,
-                ITTSubject2Code = model.ITTSubject2Code,
-                ITTSubject3Code = model.ITTSubject3Code,
-                ActiveAlert = model.ActiveAlert,
-                QualificationName = model.QualificationName,
-                ITTStartDate = StringToDate(model.ITTStartDate),
-                TeacherStatus = model.TeacherStatus
-            };
-        }
-        private static DateTime? StringToDate(string date) {
-            if(string.IsNullOrEmpty(date)|| string.Equals(date, "NULL", StringComparison.CurrentCultureIgnoreCase))
                 return null;
-            return Convert.ToDateTime(date, DATE_TIME_FORMAT_INFO);
+            }
+
+            var result = new QualifiedTeacherDTO();
+
+            result.Id = model.Id;
+            result.Trn = model.Trn.PadLeft(7, '0');
+            result.Name = model.Name;
+            result.DoB = StringToDate(model.DoB, nameof(model.DoB));
+            result.NINumber = model.NINumber;
+            result.QTSAwardDate = StringToDate(model.QTSAwardDate, nameof(model.QTSAwardDate));
+            result.ITTSubject1Code = model.ITTSubject1Code;
+            result.ITTSubject2Code = model.ITTSubject2Code;
+            result.ITTSubject3Code = model.ITTSubject3Code;
+            result.ActiveAlert = model.ActiveAlert;
+            result.QualificationName = model.QualificationName;
+            result.ITTStartDate = StringToDate(model.ITTStartDate, nameof(model.ITTStartDate));
+            result.TeacherStatus = model.TeacherStatus;
+
+            return result;
+        }
+
+        private static DateTime? StringToDate(string date, string name = "")
+        {
+            if (string.IsNullOrEmpty(date) || string.Equals(date, "NULL", StringComparison.CurrentCultureIgnoreCase))
+            {
+                return null;
+            }
+
+            try
+            {
+                return Convert.ToDateTime(date, DATE_TIME_FORMAT_INFO);
+            }
+            catch(FormatException e)
+            {
+                throw new FormatException($"{name}: {date} threw FormatException converting to DateTime", e);
+            }
         }
 
     }
