@@ -130,7 +130,6 @@ stages:
               inputs:
                 terraformVersion: '0.14.9'
 
-
             - checkout: self  # self represents the repo where the initial Pipelines YAML file was found
               name: RepoCheckout
               displayName: "Repo Checkout"
