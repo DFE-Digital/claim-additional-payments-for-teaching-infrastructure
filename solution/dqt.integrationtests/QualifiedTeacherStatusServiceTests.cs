@@ -59,7 +59,7 @@ namespace dqt.integrationtests
         [Fact]
         public async void Returns_UnauthorizedRequestResponse_WhenRequestIsUnAuthorized()
         {
-            RequestInfo requestInfo = new RequestInfo()
+            var requestInfo = new RequestInfo
             {
                 TRN = "Test-TRN",
                 NINumber = "Test-NI"
@@ -75,7 +75,7 @@ namespace dqt.integrationtests
         public async void Returns_BadRequestResponse_WhenTRNNotPresent()
         {
 
-            RequestInfo requestInfo = new RequestInfo()
+            var requestInfo = new RequestInfo
             {
                 NINumber = "Test-NI"
             };
@@ -91,7 +91,7 @@ namespace dqt.integrationtests
         [Fact]
         public async void Returns_NotFoundObjectResult_WhenRequestIsValidAndNoMatchFound()
         {
-            RequestInfo requestInfo = new RequestInfo()
+            var requestInfo = new RequestInfo
             {
                 TRN = "Test-TRN",
                 NINumber = "Test-NI"
@@ -108,7 +108,7 @@ namespace dqt.integrationtests
         [Fact]
         public async void Returns_SuccessResponseWithQualifiedTeacherRecords_WhenRequestIsValid()
         {
-            RequestInfo requestInfo = new RequestInfo()
+            var requestInfo = new RequestInfo
             {
                 TRN = "1229708",
                 NINumber = "AP558641W"
@@ -137,7 +137,7 @@ namespace dqt.integrationtests
             var resultDto = (ResultDTO<List<QualifiedTeacherDTO>>)response.Value;
 
             Assert.Equal(200, response.StatusCode);
-            Assert.Single(resultDto.Data);
+            Assert.Equal("0012345", resultDto.Data[0].Trn);
         }
 
         [Fact]
@@ -154,13 +154,13 @@ namespace dqt.integrationtests
             var resultDto = (ResultDTO<List<QualifiedTeacherDTO>>)response.Value;
 
             Assert.Equal(200, response.StatusCode);
-            Assert.Single(resultDto.Data);
+            Assert.Equal("0053100", resultDto.Data[0].Trn);
         }
 
         [Fact]
         public async void Returns_SuccessResponseWithQualifiedTeacherRecords_WhenNIMatchesCaseInsensitively()
         {
-            RequestInfo requestInfo = new RequestInfo()
+            var requestInfo = new RequestInfo
             {
                 TRN = "Test-TRN",
                 NINumber = "aP558641W"
