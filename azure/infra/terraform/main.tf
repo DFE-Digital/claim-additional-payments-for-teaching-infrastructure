@@ -163,3 +163,13 @@ module "nat_gateway" {
 
   depends_on = [module.network, module.pip]
 }
+
+#redis cache
+module "redis" {
+  source      = "./modules/redis"
+  app_rg_name = module.resource_group.app_rg_name
+  rg_prefix   = module.env_vars.rg_prefix
+  rg_location = module.resource_group.rg_location
+  common_tags = module.env_vars.common_tags
+
+}
