@@ -15,10 +15,10 @@ variable "secrets_rg_name" {
   type        = string
   description = "Secrets resource group for the storage accounts"
 }
-variable "func_rg_name" {
-  type        = string
-  description = "Function app resource group for the storage accounts"
-}
+# variable "func_rg_name" {
+#   type        = string
+#   description = "Function app resource group for the storage accounts"
+# }
 variable "rg_prefix" {
   type        = string
   description = "The prefix to be used for all resources"

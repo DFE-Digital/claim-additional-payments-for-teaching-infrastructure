@@ -38,7 +38,7 @@ variable "res_groups" {
     app        = "app",
     projcore   = "ProjectCore",
     secrets    = "secrets",
-    funcapp    = "funcapp"
+#    funcapp    = "funcapp"
     contreg    = "contreg"
   }
 }

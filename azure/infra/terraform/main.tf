@@ -16,7 +16,7 @@ module "resource_group" {
 module "storage_account" {
   source          = "./modules/storageaccount"
   secrets_rg_name = module.resource_group.secrets_rg_name
-  func_rg_name    = module.resource_group.func_rg_name
+#  func_rg_name    = module.resource_group.func_rg_name
   rg_prefix       = module.env_vars.rg_prefix
   rg_location     = module.resource_group.rg_location
   common_tags     = module.env_vars.common_tags
@@ -96,7 +96,7 @@ module "app_insights" {
 module "app_services" {
   source       = "./modules/app_services"
   app_rg_name  = module.resource_group.app_rg_name
-  func_rg_name = module.resource_group.func_rg_name
+#  func_rg_name = module.resource_group.func_rg_name
   rg_prefix    = module.env_vars.rg_prefix
   rg_location  = module.resource_group.rg_location
   common_tags  = module.env_vars.common_tags
@@ -104,17 +104,17 @@ module "app_services" {
   depends_on = [module.app_insights]
 }
 
-# Function app
-module "function_app" {
-  source       = "./modules/function_app"
-  func_rg_name = module.resource_group.func_rg_name
-  func_app_id  = module.app_services.func_app_service_plan_id
-  func_sa_name = module.storage_account.func_sa_name
-  func_sa_key  = module.storage_account.func_sa_key
-  rg_prefix    = module.env_vars.rg_prefix
-  rg_location  = module.resource_group.rg_location
-  common_tags  = module.env_vars.common_tags
-}
+# # Function app
+# module "function_app" {
+#   source       = "./modules/function_app"
+#   func_rg_name = module.resource_group.func_rg_name
+#   func_app_id  = module.app_services.func_app_service_plan_id
+#   func_sa_name = module.storage_account.func_sa_name
+#   func_sa_key  = module.storage_account.func_sa_key
+#   rg_prefix    = module.env_vars.rg_prefix
+#   rg_location  = module.resource_group.rg_location
+#   common_tags  = module.env_vars.common_tags
+# }
 
 # postgres
 module "postgres" {
@@ -142,27 +142,27 @@ module "container" {
   depends_on = [module.network_profile, module.app_insights]
 }
 
-#pip
-module "pip" {
-  source       = "./modules/public_ip"
-  func_rg_name = module.resource_group.func_rg_name
-  rg_prefix    = module.env_vars.rg_prefix
-  rg_location  = module.resource_group.rg_location
-  common_tags  = module.env_vars.common_tags
+# #pip
+# module "pip" {
+#   source       = "./modules/public_ip"
+#   func_rg_name = module.resource_group.func_rg_name
+#   rg_prefix    = module.env_vars.rg_prefix
+#   rg_location  = module.resource_group.rg_location
+#   common_tags  = module.env_vars.common_tags
 
-  depends_on = [module.network]
-}
+#   depends_on = [module.network]
+# }
 
-#nat_gateway
-module "nat_gateway" {
-  source       = "./modules/nat_gateway"
-  func_rg_name = module.resource_group.func_rg_name
-  rg_prefix    = module.env_vars.rg_prefix
-  rg_location  = module.resource_group.rg_location
-  common_tags  = module.env_vars.common_tags
+# #nat_gateway
+# module "nat_gateway" {
+#   source       = "./modules/nat_gateway"
+#   func_rg_name = module.resource_group.func_rg_name
+#   rg_prefix    = module.env_vars.rg_prefix
+#   rg_location  = module.resource_group.rg_location
+#   common_tags  = module.env_vars.common_tags
 
-  depends_on = [module.network, module.pip]
-}
+#   depends_on = [module.network, module.pip]
+# }
 
 #redis cache
 module "redis" {
