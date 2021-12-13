@@ -11,10 +11,10 @@ variable "app_rg_name" {
   type        = string
   description = "Resource group for the application"
 }
-variable "func_rg_name" {
-  type        = string
-  description = "Resource group for the function app"
-}
+# variable "func_rg_name" {
+#   type        = string
+#   description = "Resource group for the function app"
+# }
 variable "rg_prefix" {
   type        = string
   description = "The prefix to be used for all resources"
