@@ -37,20 +37,20 @@ resource "azurerm_app_service_plan" "app_asp" {
 
 # }
 
-resource "azurerm_app_service_plan" "fapp_prem_id" {
-  name                = format("%s-%s", var.func_rg_name, "premium-asp")
-  resource_group_name = var.func_rg_name
-  location            = var.rg_location
-  kind                = "app"
+# resource "azurerm_app_service_plan" "fapp_prem_id" {
+#   name                = format("%s-%s", var.func_rg_name, "premium-asp")
+#   resource_group_name = var.func_rg_name
+#   location            = var.rg_location
+#   kind                = "app"
 
-  sku {
-    tier = "Premium"
-    size = "P1"
-  }
+#   sku {
+#     tier = "Premium"
+#     size = "P1"
+#   }
 
-  tags = merge({
-    },
-    var.common_tags
-  )
+#   tags = merge({
+#     },
+#     var.common_tags
+#   )
 
-}
+# }
