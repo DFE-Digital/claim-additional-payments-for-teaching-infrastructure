@@ -11,9 +11,18 @@ variable "input_region" {
   type        = string
   description = "Location for all of the Azure resources "
 }
-variable "input_environment" {
+variable "rg_prefix" {
   type        = string
-  description = "Which environmnet is being built, Dev, Test, Prod or Infradev"
+  description = "Resource group prefix"
+}
+variable "env_tag" {
+  type        = string
+  description = "CIP 'Environment' tag value"
+}
+
+variable "azdo_sp" {
+  type        = string
+  description = "Azure Devops service principal"
 }
 
 # ---------------------------------------------------------------------------------------------------------------------
@@ -34,7 +43,13 @@ variable "input_environment" {
 # }
 
 locals {
-
-  #                            env is               "dev"                                          env is                      "test"                                            env is Production                    region is north eur                 "prod north Europe"                     else "prod West Europe"                   else "Dev"
-  sub_id = var.input_environment == "Development" ? "8655985a-2f87-44d7-a541-0be9a8c2779d" : var.input_environment == "Test" ? "e9299169-9666-4f15-9da9-5332680145af" : var.input_environment == "Production" ? (var.input_environment == "northeurope" ? "8655985a-2f87-44d7-a541-0be9a8c2779d" : "88bd392f-df19-458b-a100-22b4429060ed") : "8655985a-2f87-44d7-a541-0be9a8c2779d"
+  tags = {
+    "Environment"      = var.env_tag
+    "Parent Business"  = "Teacher Training and Qualifications"
+    "Portfolio"        = "Early Years and Schools Group"
+    "Product"          = "Claim Additional Payments for teaching"
+    "Service"          = "Teacher services"
+    "Service Line"     = "Teaching Workforce"
+    "Service Offering" = "Claim Additional Payments (for teaching)"
+  }
 }

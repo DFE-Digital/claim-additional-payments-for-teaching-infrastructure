@@ -1,6 +1,5 @@
 ##secrets keyvault
 resource "azurerm_key_vault" "secrets_kv" {
-  #name = format("%s-%s", local.small_name, "s-kv-01")
   name                            = format("%s-%s", var.secrets_rg_name, "kv")
   location                        = var.rg_location
   resource_group_name             = var.secrets_rg_name
@@ -8,13 +7,11 @@ resource "azurerm_key_vault" "secrets_kv" {
   enabled_for_disk_encryption     = false
   enabled_for_deployment          = false
   enabled_for_template_deployment = true
-  # enable_rbac_authorization       = true
   sku_name = "standard"
 
   network_acls {
     default_action = "Allow"
     bypass         = "AzureServices"
-    #    ip_rules                   = ["79.70.26.28/32", ]
     ip_rules = ["13.69.20.148/32",
       "13.69.253.198/32",
       "13.79.234.50/32",
@@ -42,8 +39,9 @@ resource "azurerm_key_vault" "secrets_kv" {
       "78.146.223.133/32",
       "81.98.192.53/32",
       "82.24.130.89/32",
-    "94.10.62.74/32", ]
-    virtual_network_subnet_ids = [var.projcore_default_sn_id] # ["/subscriptions/8655985a-2f87-44d7-a541-0be9a8c2779d/resourceGroups/s118d01-ProjectCore/providers/Microsoft.Network/virtualNetworks/s118d01-ProjectCore-wkrvn/subnets/default"] 
+      "94.10.62.74/32",
+      "217.38.175.68/32"
+    ]
   }
 
   lifecycle {
