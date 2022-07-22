@@ -1,8 +1,6 @@
 
 trigger: none
-  # branches:
-  #   include:
-  #   - main
+pr: none
 
 stages:
 - stage: devplan
@@ -69,7 +67,7 @@ stages:
         provider: 'azurerm'
         command: 'plan'
         workingDirectory: '$(System.DefaultWorkingDirectory)/azure/infra/terraform'
-        commandOptions: '-var="input_region=$(REGION)" -var="input_environment=$(environment)"'
+        commandOptions: '-var="input_region=$(REGION)" -var-file workspace_variables/development.tfvars.json'
         environmentServiceNameAzureRM: 'azdo.pipelines.cip.S118D.armfe1ef140-8bef-4043-b5ee-c449e6f951ef'
 
     - task: AzurePowerShell@5
@@ -186,7 +184,7 @@ stages:
                 runAzLogin: true
                 environmentServiceName: 'azdo.pipelines.cip.S118D.armfe1ef140-8bef-4043-b5ee-c449e6f951ef'
                 workingDirectory: '$(System.DefaultWorkingDirectory)/azure/infra/terraform'
-                commandOptions: '-var="input_region=$(REGION)" -var="input_environment=$(environment)"'
+                commandOptions: '-var="input_region=$(REGION)" -var-file workspace_variables/development.tfvars.json'
                 allowTelemetryCollection: true
 
         # - task: TerraformTaskV1@0
@@ -285,7 +283,7 @@ stages:
         provider: 'azurerm'
         command: 'plan'
         workingDirectory: '$(System.DefaultWorkingDirectory)/azure/infra/terraform'
-        commandOptions: '-var="input_region=$(REGION)" -var="input_environment=Test"'
+        commandOptions: '-var="input_region=$(REGION)" -var-file workspace_variables/test.tfvars.json'
         environmentServiceNameAzureRM: 'azdo.pipelines.cip.S118T.arm03ce3ff5-9a61-4525-a063-6ecde34874cf'
 
     - task: AzurePowerShell@5
@@ -404,7 +402,7 @@ stages:
               workingDirectory: '$(System.DefaultWorkingDirectory)/azure/infra/terraform'
               environmentServiceName: 'azdo.pipelines.cip.S118T.arm03ce3ff5-9a61-4525-a063-6ecde34874cf'
               runAzLogin: true
-              commandOptions: '-var="input_region=$(REGION)" -var="input_environment=Test"'
+              commandOptions: '-var="input_region=$(REGION)" -var-file workspace_variables/test.tfvars.json'
               allowTelemetryCollection: true
 
           - task: AzurePowerShell@5
@@ -493,7 +491,7 @@ stages:
         provider: 'azurerm'
         command: 'plan'
         workingDirectory: '$(System.DefaultWorkingDirectory)/azure/infra/terraform'
-        commandOptions: '-var="input_region=$(REGION)" -var="input_environment=Production"'
+        commandOptions: '-var="input_region=$(REGION)" -var-file workspace_variables/production.tfvars.json'
         environmentServiceNameAzureRM: 'azdo.pipelines.cip.S118P.armf895c908-777c-49ec-b814-3c50d459c6ab'
 
     - task: AzurePowerShell@5
@@ -611,7 +609,7 @@ stages:
               workingDirectory: '$(System.DefaultWorkingDirectory)/azure/infra/terraform'
               environmentServiceName: 'azdo.pipelines.cip.S118P.armf895c908-777c-49ec-b814-3c50d459c6ab'
               runAzLogin: true
-              commandOptions: '-var="input_region=$(REGION)" -var="input_environment=Production"'
+              commandOptions: '-var="input_region=$(REGION)" -var-file workspace_variables/production.tfvars.json'
               allowTelemetryCollection: true
 
           - task: AzurePowerShell@5

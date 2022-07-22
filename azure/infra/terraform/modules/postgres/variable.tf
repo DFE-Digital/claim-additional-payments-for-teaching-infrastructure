@@ -1,19 +1,6 @@
-# ---------------------------------------------------------------------------------------------------------------------
-# REQUIRED PARAMETERS
-# You must provide a value for each of these parameters.
-# ---------------------------------------------------------------------------------------------------------------------
-# variable "mandatory_variable" {
-#   type        = string
-#   description = "This is mandatory as there is no default declaration"
-# }
-
 variable "app_rg_name" {
   type        = string
   description = "Application resource group for the network profile"
-}
-variable "projcore_sn_worker_id" {
-  type        = string
-  description = "The ID of the projcore worker subnet"
 }
 variable "rg_prefix" {
   type        = string
@@ -28,13 +15,6 @@ variable "common_tags" {
   description = "Map of the mandatory standard DfE tags"
 }
 
-
-# ---------------------------------------------------------------------------------------------------------------------
-# LOCAL CALCULATED
-# ---------------------------------------------------------------------------------------------------------------------
-# locals {
-#   calculated_local_value = uuid()
-# }
 
 locals {
 
