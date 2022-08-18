@@ -62,7 +62,7 @@ resource "azurerm_key_vault_access_policy" "secret_kv_access_aas" {
   object_id = var.azdo_sp
 
   secret_permissions = [
-    "get"
+    "Get"
   ]
 
   key_permissions = [
