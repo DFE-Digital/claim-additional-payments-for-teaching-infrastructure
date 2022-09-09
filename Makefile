@@ -37,9 +37,9 @@ terraform-init: set-azure-account
 		${BACKEND_KEY}
 
 terraform-plan: terraform-init
-	terraform -chdir=azure/infra/terraform plan -var="input_region=westeurope" \
+	terraform -chdir=azure/infra/terraform plan \
 		-var-file workspace_variables/${DEPLOY_ENV}.tfvars.json
 
 terraform-apply: terraform-init
-	terraform -chdir=azure/infra/terraform apply -var="input_region=westeurope" \
+	terraform -chdir=azure/infra/terraform apply \
 		-var-file workspace_variables/${DEPLOY_ENV}.tfvars.json

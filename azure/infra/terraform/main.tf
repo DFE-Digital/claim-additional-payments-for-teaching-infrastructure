@@ -1,6 +1,6 @@
 module "resource_group" {
   source      = "./modules/resource_group"
-  region      = var.input_region
+  region      = local.input_region
   rg_prefix   = var.rg_prefix
   common_tags = local.tags
 }
@@ -62,6 +62,7 @@ module "postgres" {
   source                = "./modules/postgres"
   app_rg_name           = module.resource_group.app_rg_name
   rg_prefix             = var.rg_prefix
-  rg_location           = var.input_region
+  rg_location           = local.input_region
   common_tags           = local.tags
+  db_name               = var.db_name
 }

@@ -1,16 +1,3 @@
-# ---------------------------------------------------------------------------------------------------------------------
-# REQUIRED PARAMETERS
-# You must provide a value for each of these parameters.
-# ---------------------------------------------------------------------------------------------------------------------
-# variable "mandatory_variable" {
-#   type        = string
-#   description = "This is mandatory as there is no default declaration"
-# }
-
-variable "input_region" {
-  type        = string
-  description = "Location for all of the Azure resources "
-}
 variable "rg_prefix" {
   type        = string
   description = "Resource group prefix"
@@ -25,22 +12,11 @@ variable "azdo_sp" {
   description = "Azure Devops service principal"
 }
 
-# ---------------------------------------------------------------------------------------------------------------------
-# OPTIONAL PARAMETERS
-# These parameters have reasonable defaults.
-# ---------------------------------------------------------------------------------------------------------------------
-# variable "optional_variable" {
-#   type        = list(any)
-#   description = "Having a default declaration makes a parameter optional"
-#   default     = []
-# }
-
-# ---------------------------------------------------------------------------------------------------------------------
-# LOCAL CALCULATED
-# ---------------------------------------------------------------------------------------------------------------------
-# locals {
-#   calculated_local_value = uuid()
-# }
+variable "db_name" {
+  type        = string
+  description = "Database name in the postgres server"
+  default     = null
+}
 
 locals {
   tags = {
@@ -52,4 +28,5 @@ locals {
     "Service Line"     = "Teaching Workforce"
     "Service Offering" = "Claim Additional Payments (for teaching)"
   }
+  input_region = "westeurope"
 }
