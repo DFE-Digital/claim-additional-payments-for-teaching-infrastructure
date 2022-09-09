@@ -14,10 +14,7 @@ variable "common_tags" {
   type        = map(string)
   description = "Map of the mandatory standard DfE tags"
 }
-
-
-locals {
-
-  db_name = var.rg_prefix == "s118d01" ? "development" : var.rg_prefix == "s118t01" ? "test" : var.rg_prefix == "s118p01" ? "production" : "infradev"
-
+variable "db_name" {
+  type        = string
+  description = "Database name in the postgres server"
 }

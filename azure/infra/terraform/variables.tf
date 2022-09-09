@@ -25,6 +25,12 @@ variable "azdo_sp" {
   description = "Azure Devops service principal"
 }
 
+variable "db_name" {
+  type        = string
+  description = "Database name in the postgres server"
+  default     = null
+}
+
 # ---------------------------------------------------------------------------------------------------------------------
 # OPTIONAL PARAMETERS
 # These parameters have reasonable defaults.

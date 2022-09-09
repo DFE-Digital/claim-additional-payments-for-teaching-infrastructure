@@ -64,4 +64,5 @@ module "postgres" {
   rg_prefix             = var.rg_prefix
   rg_location           = var.input_region
   common_tags           = local.tags
+  db_name               = var.db_name
 }
