@@ -5,13 +5,6 @@ review:
 	$(eval CONTAINER_NAME=s118d02reviewtfstate)
 	$(eval DEPLOY_ENV=review)
 
-dev:
-	$(eval AZ_SUBSCRIPTION=s118-teacherpaymentsservice-development)
-	$(eval RESOURCE_GROUP_NAME=s118d01-tfbackend)
-	$(eval STORAGE_ACCOUNT_NAME=s118d01tfbackendsa)
-	$(eval CONTAINER_NAME=s118d01devtfstate)
-	$(eval DEPLOY_ENV=development)
-
 test:
 	$(eval AZ_SUBSCRIPTION=s118-teacherpaymentsservice-test)
 	$(eval RESOURCE_GROUP_NAME=s118t01-tfbackend)
@@ -42,4 +35,8 @@ terraform-plan: terraform-init
 
 terraform-apply: terraform-init
 	terraform -chdir=azure/infra/terraform apply \
+		-var-file workspace_variables/${DEPLOY_ENV}.tfvars.json
+
+terraform-destroy: terraform-init
+	terraform -chdir=azure/infra/terraform destroy \
 		-var-file workspace_variables/${DEPLOY_ENV}.tfvars.json
