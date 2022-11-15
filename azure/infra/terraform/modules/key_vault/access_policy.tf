@@ -69,5 +69,6 @@ resource "azurerm_key_vault_access_policy" "secret_kv_access_aas" {
   ]
 
   certificate_permissions = [
+    "Get"
   ]
 }
