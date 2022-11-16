@@ -15,7 +15,7 @@ Most documentation for the service can be found on the [project's Confluence wik
 - [terraform](https://www.terraform.io/) (see version in .tool-versions)
 
 ### Deployment
-Use Makefile commands to simplify manual operations. The commands are run for a single environment like "review", "development", or "production".
+Use Makefile commands to simplify manual operations. The commands are run for a single environment like "review" or "production".
 See the Makefile for the available environments.
 
 Login to Azure via the az cli:
