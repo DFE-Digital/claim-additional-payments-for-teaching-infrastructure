@@ -14,12 +14,12 @@ module "storage_account" {
 }
 
 module "key_vault" {
-  source                 = "./modules/key_vault"
-  secrets_rg_name        = module.resource_group.secrets_rg_name
-  rg_prefix              = var.rg_prefix
-  rg_location            = module.resource_group.rg_location
-  common_tags            = local.tags
-  azdo_sp                = var.azdo_sp
+  source          = "./modules/key_vault"
+  secrets_rg_name = module.resource_group.secrets_rg_name
+  rg_prefix       = var.rg_prefix
+  rg_location     = module.resource_group.rg_location
+  common_tags     = local.tags
+  azdo_sp         = var.azdo_sp
 }
 
 module "log_analytics" {
@@ -49,20 +49,21 @@ module "app_insights" {
 }
 
 module "app_services" {
-  source       = "./modules/app_services"
-  app_rg_name  = module.resource_group.app_rg_name
-  rg_prefix    = var.rg_prefix
-  rg_location  = module.resource_group.rg_location
-  common_tags  = local.tags
+  source                    = "./modules/app_services"
+  app_rg_name               = module.resource_group.app_rg_name
+  rg_prefix                 = var.rg_prefix
+  rg_location               = module.resource_group.rg_location
+  common_tags               = local.tags
+  app_service_plan_sku_name = var.app_service_plan_sku_name
 
   depends_on = [module.app_insights]
 }
 
 module "postgres" {
-  source                = "./modules/postgres"
-  app_rg_name           = module.resource_group.app_rg_name
-  rg_prefix             = var.rg_prefix
-  rg_location           = local.input_region
-  common_tags           = local.tags
-  db_name               = var.db_name
+  source      = "./modules/postgres"
+  app_rg_name = module.resource_group.app_rg_name
+  rg_prefix   = var.rg_prefix
+  rg_location = local.input_region
+  common_tags = local.tags
+  db_name     = var.db_name
 }
