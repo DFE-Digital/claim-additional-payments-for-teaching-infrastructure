@@ -17,6 +17,11 @@ variable "db_name" {
   description = "Database name in the postgres server"
   default     = null
 }
+variable "app_service_plan_sku_name" {
+  type        = string
+  description = "Size of the app service plan"
+  default     = "P1v2"
+}
 
 locals {
   tags = {

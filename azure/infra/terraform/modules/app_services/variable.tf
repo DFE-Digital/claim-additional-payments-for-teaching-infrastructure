@@ -14,3 +14,7 @@ variable "common_tags" {
   type        = map(string)
   description = "Map of the mandatory standard DfE tags"
 }
+variable "app_service_plan_sku_name" {
+  type        = string
+  description = "Size of the app service plan"
+}
