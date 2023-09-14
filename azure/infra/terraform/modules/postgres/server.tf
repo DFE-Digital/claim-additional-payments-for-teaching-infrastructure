@@ -7,7 +7,7 @@ resource "azurerm_postgresql_server" "app_postgres_11" {
 
   storage_mb                   = 5120
   backup_retention_days        = 35
-  geo_redundant_backup_enabled = false
+  geo_redundant_backup_enabled = var.geo_redundant_backup_enabled
   auto_grow_enabled            = false
 
   administrator_login          = data.azurerm_key_vault_secret.postgres_user.value

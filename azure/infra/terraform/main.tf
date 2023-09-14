@@ -60,10 +60,11 @@ module "app_services" {
 }
 
 module "postgres" {
-  source      = "./modules/postgres"
-  app_rg_name = module.resource_group.app_rg_name
-  rg_prefix   = var.rg_prefix
-  rg_location = local.input_region
-  common_tags = local.tags
-  db_name     = var.db_name
+  source                       = "./modules/postgres"
+  app_rg_name                  = module.resource_group.app_rg_name
+  rg_prefix                    = var.rg_prefix
+  rg_location                  = local.input_region
+  common_tags                  = local.tags
+  db_name                      = var.db_name
+  geo_redundant_backup_enabled = var.geo_redundant_backup_enabled
 }

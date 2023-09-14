@@ -17,6 +17,11 @@ variable "db_name" {
   description = "Database name in the postgres server"
   default     = null
 }
+variable "geo_redundant_backup_enabled" {
+  type        = string
+  description = "Turn Geo-redundant server backups on/off"
+  default     = false
+}
 variable "app_service_plan_sku_name" {
   type        = string
   description = "Size of the app service plan"

@@ -18,3 +18,7 @@ variable "db_name" {
   type        = string
   description = "Database name in the postgres server"
 }
+variable "geo_redundant_backup_enabled" {
+  type        = string
+  description = "Turn Geo-redundant server backups on/off"
+}
